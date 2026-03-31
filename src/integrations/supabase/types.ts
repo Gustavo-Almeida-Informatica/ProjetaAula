@@ -14,7 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      community_posts: {
+        Row: {
+          content: string
+          created_at: string
+          hashtags: string[] | null
+          id: string
+          likes_count: number
+          title: string
+          user_id: string
+          user_name: string
+          user_role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          hashtags?: string[] | null
+          id?: string
+          likes_count?: number
+          title: string
+          user_id: string
+          user_name?: string
+          user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          hashtags?: string[] | null
+          id?: string
+          likes_count?: number
+          title?: string
+          user_id?: string
+          user_name?: string
+          user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
+      post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
+      quiz_scores: {
+        Row: {
+          created_at: string
+          id: string
+          score: number
+          user_id: string
+          user_name: string
+          user_role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          score?: number
+          user_id: string
+          user_name?: string
+          user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          score?: number
+          user_id?: string
+          user_name?: string
+          user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +138,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "aluno" | "professor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +265,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["aluno", "professor"],
+    },
   },
 } as const
