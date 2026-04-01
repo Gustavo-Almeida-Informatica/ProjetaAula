@@ -19,6 +19,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   isAluno: boolean;
   isProfessor: boolean;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,38 +31,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
-      .single();
-    if (data) {
-      setProfile(data as Profile);
+    try {
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+      if (data) {
+        setProfile(data as Profile);
+      }
+    } catch (e) {
+      console.error("Error fetching profile:", e);
+    }
+  };
+
+  const refreshProfile = async () => {
+    if (user) {
+      await fetchProfile(user.id);
     }
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          setTimeout(() => fetchProfile(session.user.id), 0);
-        } else {
-          setProfile(null);
-        }
-        setLoading(false);
-      }
-    );
-
+    // 1. Restore session from storage first
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        fetchProfile(session.user.id).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     });
+
+    // 2. Listen for subsequent auth changes (sign in, sign out, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          // Don't await inside the listener to avoid deadlocks
+          fetchProfile(session.user.id);
+        } else {
+          setProfile(null);
+        }
+      }
+    );
 
     return () => subscription.unsubscribe();
   }, []);
@@ -69,6 +83,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     setProfile(null);
+    setSession(null);
+    setUser(null);
   };
 
   return (
@@ -81,6 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signOut,
         isAluno: profile?.role === "aluno",
         isProfessor: profile?.role === "professor",
+        refreshProfile,
       }}
     >
       {children}
