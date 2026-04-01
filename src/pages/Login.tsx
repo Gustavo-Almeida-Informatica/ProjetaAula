@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
@@ -10,17 +11,25 @@ type Role = "aluno" | "professor";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { session, loading } = useAuth();
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [role, setRole] = useState<Role>("aluno");
   const [showPw, setShowPw] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (!loading && session) {
+      navigate("/", { replace: true });
+    }
+  }, [loading, session, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
 
     try {
       if (mode === "register") {
@@ -31,24 +40,22 @@ export default function Login() {
         });
         if (error) throw error;
         if (data.user) {
-          // Update profile with role
           await supabase
             .from("profiles")
             .update({ role, full_name: fullName })
             .eq("id", data.user.id);
           toast.success("Conta criada! Verifique seu e-mail se necessário.");
-          navigate("/");
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Login realizado!");
-        navigate("/");
       }
+      // Navigation will happen automatically via the useEffect above
     } catch (err: any) {
       toast.error(err.message || "Erro na autenticação");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -59,6 +66,15 @@ export default function Login() {
     });
     if (error) toast.error(error.message);
   };
+
+  // Don't render login form if session exists (prevents flash)
+  if (loading || session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">CETEP</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
@@ -159,10 +175,10 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            disabled={loading}
+            disabled={submitting}
             className="w-full py-3 rounded-lg gradient-neon text-primary-foreground font-semibold text-sm neon-glow disabled:opacity-50 transition-opacity"
           >
-            {loading ? "Carregando..." : mode === "login" ? "Entrar" : "Criar Conta"}
+            {submitting ? "Carregando..." : mode === "login" ? "Entrar" : "Criar Conta"}
           </button>
         </form>
 
