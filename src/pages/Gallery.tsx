@@ -5,98 +5,90 @@ import { useState } from "react";
 import { MonitorPlay, Wifi } from "lucide-react";
 
 const categories = [
-  { id: "video", label: "Vídeo", icon: MonitorPlay },
-  { id: "internet", label: "Internet", icon: Wifi },
+  { id: "video", label: "Cabos de Vídeo", icon: MonitorPlay },
+  { id: "internet", label: "Cabos de Internet", icon: Wifi },
 ];
 
 interface GalleryItem {
   title: string;
-  studentDesc: string;
-  teacherDesc: string;
+  desc: string;
   specs: { label: string; value: string }[];
 }
 
 const galleryContent: Record<string, GalleryItem[]> = {
   video: [
     {
-      title: "HDMI (High-Definition Multimedia Interface)",
-      studentDesc: "O cabo mais comum para conectar PC a monitor ou TV. Transmite imagem e som pelo mesmo cabo!",
-      teacherDesc: "Padrão TMDS, versões 1.4 a 2.1. HDMI 2.1 suporta 4K@120Hz e 8K@60Hz com eARC para áudio lossless.",
+      title: "Cabo HDMI",
+      desc: "O cabo mais usado para conectar o computador ao monitor ou TV. Ele leva a imagem e o som pelo mesmo cabo, sem precisar de outros fios.",
       specs: [
-        { label: "HDMI 1.4", value: "4K@30Hz, Full HD@120Hz" },
-        { label: "HDMI 2.0", value: "4K@60Hz, HDR10" },
-        { label: "HDMI 2.1", value: "4K@120Hz, 8K@60Hz, VRR" },
-        { label: "Áudio", value: "Transmite áudio e vídeo" },
-        { label: "Comprimento máx.", value: "15m (passivo)" },
+        { label: "O que faz", value: "Transmite imagem e som juntos" },
+        { label: "Onde usar", value: "Monitores, TVs, projetores" },
+        { label: "Qualidade", value: "Suporta Full HD e 4K" },
+        { label: "Vantagem", value: "Um único cabo resolve tudo" },
+        { label: "Comprimento", value: "Até 15 metros sem perder qualidade" },
       ],
     },
     {
-      title: "DisplayPort",
-      studentDesc: "Cabo preferido por gamers! Suporta taxas de atualização altíssimas para jogos fluidos.",
-      teacherDesc: "Protocolo packetizado com micro-pacotes. Suporta daisy-chain (MST) e taxas superiores ao HDMI para monitores profissionais.",
+      title: "Cabo DisplayPort",
+      desc: "Cabo preferido por quem joga ou trabalha com edição de vídeo. Suporta imagens muito rápidas e de alta qualidade.",
       specs: [
-        { label: "DP 1.2", value: "4K@60Hz, MST" },
-        { label: "DP 1.4", value: "4K@120Hz, 8K@60Hz, DSC" },
-        { label: "DP 2.0", value: "16K@60Hz, 4K@240Hz" },
-        { label: "Vantagem", value: "FreeSync / G-Sync nativo" },
-        { label: "Mini DP", value: "Versão compacta, mesma qualidade" },
+        { label: "O que faz", value: "Transmite imagem de altíssima qualidade" },
+        { label: "Onde usar", value: "Monitores gamer e profissionais" },
+        { label: "Vantagem", value: "Suporta vários monitores com um cabo" },
+        { label: "Para gamers", value: "Imagem mais fluida nos jogos" },
+        { label: "Versão menor", value: "Mini DisplayPort para notebooks" },
       ],
     },
     {
-      title: "HDMI vs DisplayPort — Comparação",
-      studentDesc: "HDMI é mais universal (TVs e monitores). DisplayPort é melhor para gaming e múltiplos monitores.",
-      teacherDesc: "Para laboratórios: HDMI pela universalidade. Para estações de alto desempenho: DisplayPort pelo MST e adaptive sync.",
+      title: "Cabo VGA (mais antigo)",
+      desc: "Cabo antigo que só transmite imagem (sem som). Ainda encontrado em monitores e projetores mais velhos.",
       specs: [
-        { label: "Universalidade", value: "HDMI vence (TVs, projetores)" },
-        { label: "Gaming", value: "DisplayPort vence (adaptive sync)" },
-        { label: "Multi-monitor", value: "DisplayPort com daisy-chain" },
-        { label: "Áudio", value: "Ambos transmitem áudio" },
-        { label: "Custo", value: "HDMI geralmente mais barato" },
+        { label: "O que faz", value: "Transmite apenas imagem (sem som)" },
+        { label: "Qualidade", value: "Até Full HD, mas com menos nitidez" },
+        { label: "Conector", value: "Azul com parafusos laterais" },
+        { label: "Onde encontrar", value: "Projetores e monitores antigos" },
+        { label: "Dica", value: "Prefira HDMI se possível" },
       ],
     },
   ],
   internet: [
     {
-      title: "Cabo Ethernet (RJ45)",
-      studentDesc: "Conexão com fio — mais estável e rápida que Wi-Fi para jogos e downloads.",
-      teacherDesc: "Categorias Cat5e a Cat8, blindagem UTP vs STP. Configure redes em estrela no laboratório com switch gerenciável.",
+      title: "Cabo de Rede (Ethernet / RJ45)",
+      desc: "É o cabo que conecta o computador ao roteador com fio. A internet por cabo é mais rápida e estável que o Wi-Fi.",
       specs: [
-        { label: "Cat5e", value: "1 Gbps, 100m" },
-        { label: "Cat6", value: "10 Gbps (55m), 1 Gbps (100m)" },
-        { label: "Cat6a", value: "10 Gbps até 100m" },
-        { label: "Cat7", value: "10 Gbps, blindagem individual" },
-        { label: "Conector", value: "RJ45 (8P8C)" },
+        { label: "O que faz", value: "Conecta o PC à internet com fio" },
+        { label: "Vantagem", value: "Mais rápido e estável que Wi-Fi" },
+        { label: "Conector", value: "RJ45 (parece um telefone, mas maior)" },
+        { label: "Tipos", value: "Cat5e, Cat6, Cat7 (cada vez melhor)" },
+        { label: "Ideal para", value: "Jogos online, downloads e trabalho" },
       ],
     },
     {
-      title: "Wi-Fi (Wireless)",
-      studentDesc: "Internet sem fio! Prático para celulares e notebooks, mas pode ser instável.",
-      teacherDesc: "Padrões IEEE 802.11 (ac/ax/be). Configure SSIDs separados para alunos e administração com isolamento de rede.",
+      title: "Wi-Fi (Internet sem fio)",
+      desc: "Permite conectar à internet sem usar cabos. Muito prático para celulares e notebooks, mas pode ser instável.",
       specs: [
-        { label: "Wi-Fi 5 (802.11ac)", value: "até 3.5 Gbps, 5 GHz" },
-        { label: "Wi-Fi 6 (802.11ax)", value: "até 9.6 Gbps, 2.4+5 GHz" },
-        { label: "Wi-Fi 6E", value: "Adiciona banda 6 GHz" },
-        { label: "Wi-Fi 7 (802.11be)", value: "até 46 Gbps, tri-band" },
-        { label: "Alcance", value: "2.4GHz: maior | 5GHz: menor, mais rápido" },
+        { label: "O que faz", value: "Internet sem fio pelo ar" },
+        { label: "Vantagem", value: "Sem fios, muito prático" },
+        { label: "Desvantagem", value: "Pode cair ou ficar lento com paredes" },
+        { label: "Frequências", value: "2.4 GHz (alcance) e 5 GHz (velocidade)" },
+        { label: "Dica", value: "Fique perto do roteador para melhor sinal" },
       ],
     },
     {
-      title: "Wi-Fi vs Cabo — Comparação",
-      studentDesc: "Cabo = mais rápido e estável. Wi-Fi = mais prático e sem fios. Depende do uso!",
-      teacherDesc: "Para laboratórios: sempre preferir cabo para estações fixas. Wi-Fi para dispositivos móveis com QoS configurado.",
+      title: "Wi-Fi vs Cabo — Qual usar?",
+      desc: "O cabo é melhor para quem precisa de velocidade (jogos, trabalho). O Wi-Fi é melhor para quem quer praticidade (celular, tablet).",
       specs: [
-        { label: "Estabilidade", value: "Cabo vence (sem interferência)" },
-        { label: "Velocidade", value: "Cabo vence na prática" },
-        { label: "Praticidade", value: "Wi-Fi vence (sem fios)" },
-        { label: "Latência", value: "Cabo: ~1ms | Wi-Fi: 5-20ms" },
-        { label: "Recomendação", value: "Gaming/trabalho: cabo | Casual: Wi-Fi" },
+        { label: "Mais estável", value: "Cabo de rede (sem interferência)" },
+        { label: "Mais prático", value: "Wi-Fi (sem fios)" },
+        { label: "Mais rápido", value: "Cabo de rede na prática" },
+        { label: "Para jogos", value: "Use cabo sempre que possível" },
+        { label: "Para celular", value: "Wi-Fi é a única opção" },
       ],
     },
   ],
 };
 
 export default function Gallery() {
-  const { isProfessor } = useAuth();
   const [activeCategory, setActiveCategory] = useState("video");
 
   return (
@@ -109,10 +101,10 @@ export default function Gallery() {
           className="text-center mb-8"
         >
           <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">
-            Galeria Técnica
+            Conectores e Cabos
           </h1>
           <p className="text-muted-foreground text-sm mt-2">
-            {isProfessor ? "Comparativos técnicos para demonstração em aula." : "Explore conectores de vídeo e internet!"}
+            Conheça os cabos que conectam as peças do computador e a internet
           </p>
         </motion.div>
 
@@ -148,9 +140,7 @@ export default function Gallery() {
               className="glass p-6 hover:border-primary/30 transition-all"
             >
               <h3 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h3>
-              <p className="text-xs text-muted-foreground mb-4">
-                {isProfessor ? item.teacherDesc : item.studentDesc}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
               <div className="space-y-2">
                 {item.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between items-center text-xs border-b border-border/50 pb-1.5">
