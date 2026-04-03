@@ -1,13 +1,11 @@
 import { motion } from "framer-motion";
-import { useAuth } from "@/contexts/AuthContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Cpu, HardDrive, Fan, Zap, MemoryStick, CircuitBoard, Microchip, Server } from "lucide-react";
 
 interface TopicCard {
   icon: typeof Cpu;
   title: string;
-  studentDesc: string;
-  teacherDesc: string;
+  desc: string;
   details: string[];
 }
 
@@ -15,113 +13,94 @@ const topics: TopicCard[] = [
   {
     icon: Cpu,
     title: "Processador (CPU)",
-    studentDesc: "O 'cérebro' do computador que executa todas as operações.",
-    teacherDesc: "Unidade Central de Processamento — executa instruções em ciclos de clock. Aborde pipeline, branch prediction e multithreading.",
+    desc: "É o 'cérebro' do computador. Ele executa todas as tarefas e cálculos que você pede.",
     details: [
-      "Clock Speed: medido em GHz, indica ciclos por segundo",
-      "Núcleos: processadores modernos têm 4-16+ núcleos",
-      "Cache L1: ~64KB por núcleo, latência de 1-3 ciclos",
-      "Cache L2: ~256KB-1MB por núcleo, latência de ~10 ciclos",
-      "Cache L3: ~8-64MB compartilhado, latência de ~40 ciclos",
-      "Arquitetura 64-bits permite endereçar mais de 4GB de RAM",
+      "Quanto mais GHz, mais rápido ele processa",
+      "Núcleos: é como ter vários cérebros trabalhando juntos",
+      "Exemplos: Intel Core i3, i5, i7 e AMD Ryzen",
+      "Precisa de um cooler para não superaquecer",
     ],
   },
   {
     icon: MemoryStick,
     title: "Memória RAM",
-    studentDesc: "Memória temporária e ultra-rápida — pensa nela como sua mesa de trabalho.",
-    teacherDesc: "Memória volátil de acesso aleatório. Explique latência CAS, dual-channel e diferenças DDR4 vs DDR5.",
+    desc: "Funciona como a 'mesa de trabalho' do computador — guarda temporariamente o que está sendo usado.",
     details: [
-      "DDR4: 2133-5333 MHz, 1.2V",
-      "DDR5: 4800-8400+ MHz, 1.1V",
-      "Dual Channel dobra a largura de banda",
-      "Latência CAS (CL): menor = mais rápida",
-      "Capacidades comuns: 8GB, 16GB, 32GB",
+      "Quanto mais RAM, mais programas abertos ao mesmo tempo",
+      "8GB é bom para uso básico, 16GB para mais desempenho",
+      "Os dados somem quando o PC desliga (memória temporária)",
+      "Tipos: DDR4 (mais comum) e DDR5 (mais novo e rápido)",
     ],
   },
   {
     icon: HardDrive,
-    title: "Armazenamento (SSD / HDD)",
-    studentDesc: "Onde seus arquivos ficam salvos, mesmo quando o PC desliga.",
-    teacherDesc: "Compare SATA III (600MB/s) vs NVMe PCIe 4.0 (7000MB/s). Aborde TRIM, wear leveling e TBW.",
+    title: "Armazenamento (HD e SSD)",
+    desc: "Onde seus arquivos ficam guardados mesmo com o PC desligado: fotos, vídeos, programas e o Windows.",
     details: [
-      "HDD: mecânico, 80-160 MB/s, mais barato por GB",
-      "SSD SATA: sem partes móveis, até 550 MB/s",
-      "SSD NVMe: usa PCIe, até 7000+ MB/s",
-      "Fator de forma: 2.5\", M.2 2280",
-      "TBW: Total Bytes Written (vida útil do SSD)",
+      "HD: mais barato, mas mais lento (usa discos girando)",
+      "SSD: muito mais rápido, o PC liga em segundos",
+      "O ideal é ter SSD para o sistema e HD para arquivos grandes",
+      "Capacidades comuns: 256GB, 512GB, 1TB",
     ],
   },
   {
     icon: Fan,
-    title: "Coolers e Refrigeração",
-    studentDesc: "Mantém o processador frio para não superaquecer.",
-    teacherDesc: "Thermal Design Power (TDP), diferença entre air cooler e AIO liquid. Demonstre pasta térmica e instalação.",
+    title: "Cooler (Ventilador)",
+    desc: "Mantém o processador na temperatura certa. Sem ele, o PC superaquece e desliga sozinho.",
     details: [
-      "Air Cooler: dissipador de alumínio/cobre + ventoinha",
-      "AIO Liquid: radiador com líquido refrigerante",
-      "Pasta térmica: melhora condução entre CPU e cooler",
-      "TDP: indica dissipação de calor necessária (ex: 65W, 125W)",
-      "Fluxo de ar: positivo (mais entrada) vs negativo (mais saída)",
+      "Fica em cima do processador, soprando ar frio",
+      "Pasta térmica: gel que melhora a transferência de calor",
+      "Existem coolers a ar (ventoinha) e a água (mais silencioso)",
+      "Se o PC está muito quente ou barulhento, pode ser o cooler",
     ],
   },
   {
     icon: Zap,
-    title: "Fonte de Alimentação (PSU)",
-    studentDesc: "Transforma a energia da tomada para alimentar todos os componentes.",
-    teacherDesc: "Aborde certificação 80 Plus, rails 12V, eficiência e cálculo de potência para montagens.",
+    title: "Fonte de Alimentação",
+    desc: "Transforma a energia da tomada para o tipo que as peças do computador precisam.",
     details: [
-      "80 Plus: White, Bronze, Silver, Gold, Platinum, Titanium",
-      "Modular vs Semi-modular vs Não-modular",
-      "Rail 12V: principal alimentação da GPU e CPU",
-      "Potências comuns: 450W, 550W, 650W, 750W, 850W+",
-      "PFC Ativo: maior eficiência e fator de potência",
+      "Potências comuns: 450W, 550W, 650W",
+      "Certificação 80 Plus = fonte de boa qualidade",
+      "Fonte ruim pode queimar as peças do PC",
+      "Sempre compre fonte de marca confiável",
     ],
   },
   {
     icon: CircuitBoard,
     title: "Placa-Mãe",
-    studentDesc: "A 'base' que conecta todos os componentes do computador.",
-    teacherDesc: "Chipset, VRM, slots de expansão e compatibilidade de soquetes. Aborde ATX vs Micro-ATX vs Mini-ITX.",
+    desc: "É a 'base' que conecta todas as peças do computador entre si. Sem ela, nada funciona.",
     details: [
-      "Soquete: deve ser compatível com o processador",
-      "Chipset: controla comunicação entre componentes",
-      "VRM: regula voltagem para o processador",
-      "Slots PCIe: x1, x4, x8, x16 para expansão",
-      "Headers: USB, áudio, RGB, ventoinhas",
+      "Tudo se encaixa nela: processador, RAM, SSD, placa de vídeo",
+      "Deve ser compatível com o processador escolhido",
+      "Tem entradas USB, HDMI, áudio e rede",
+      "Tamanhos: ATX (grande) e Micro-ATX (compacta)",
     ],
   },
   {
     icon: Microchip,
     title: "Placa de Vídeo (GPU)",
-    studentDesc: "Responsável pelos gráficos, jogos e edição de vídeo.",
-    teacherDesc: "Shader cores, VRAM GDDR6/GDDR6X, CUDA vs OpenCL. Compare modelos para diferentes workloads.",
+    desc: "Processa tudo que aparece na tela: desde a área de trabalho até jogos pesados.",
     details: [
-      "VRAM: 4GB, 8GB, 12GB, 16GB+ (GDDR6/GDDR6X)",
-      "Clock: Base e Boost clock em MHz",
-      "TDP: consumo de energia (ex: 150W-450W)",
-      "NVIDIA: CUDA cores | AMD: Stream processors",
-      "Ray Tracing: iluminação realista em jogos",
+      "Essencial para jogos, edição de vídeo e design",
+      "Marcas: NVIDIA GeForce e AMD Radeon",
+      "Para uso básico, a placa integrada no processador basta",
+      "Quanto mais memória (VRAM), melhor para jogos",
     ],
   },
   {
     icon: Server,
-    title: "PCIe e Barramentos",
-    studentDesc: "As 'estradas' que transportam dados entre os componentes.",
-    teacherDesc: "PCIe Gen 3 vs 4 vs 5: largura de banda por lane. Explique topologia e configurações x1-x16.",
+    title: "Periféricos",
+    desc: "São os dispositivos que você conecta ao computador para interagir com ele.",
     details: [
-      "PCIe 3.0: ~1 GB/s por lane",
-      "PCIe 4.0: ~2 GB/s por lane",
-      "PCIe 5.0: ~4 GB/s por lane",
-      "x16: usado para GPUs (16 lanes)",
-      "x4: usado para SSDs NVMe (4 lanes)",
+      "Entrada: teclado, mouse, webcam, microfone",
+      "Saída: monitor, caixa de som, impressora",
+      "Armazenamento externo: pendrive, HD externo",
+      "Conectam via USB, HDMI, Bluetooth ou Wi-Fi",
     ],
   },
 ];
 
 export default function Hardware() {
-  const { isProfessor } = useAuth();
-
   return (
     <div className="min-h-screen pt-20 pb-12">
       <ScrollToTop />
@@ -135,9 +114,7 @@ export default function Hardware() {
             Hardware
           </h1>
           <p className="text-muted-foreground text-sm mt-2 max-w-lg mx-auto">
-            {isProfessor
-              ? "Conteúdo técnico avançado para uso em laboratório e sala de aula."
-              : "Conheça cada peça que faz o computador funcionar!"}
+            Conheça cada peça que faz o computador funcionar — explicado de um jeito simples!
           </p>
         </motion.div>
 
@@ -159,9 +136,7 @@ export default function Hardware() {
                   {topic.title}
                 </h3>
               </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                {isProfessor ? topic.teacherDesc : topic.studentDesc}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{topic.desc}</p>
               <ul className="space-y-1.5">
                 {topic.details.map((d) => (
                   <li key={d} className="text-xs text-foreground/80 flex items-start gap-2">

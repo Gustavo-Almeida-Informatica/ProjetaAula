@@ -3,6 +3,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Cpu, Monitor, Image, Brain, Users, Zap, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
+import gustavoImg from "@/assets/gustavo.jpg";
+import maxImg from "@/assets/max.jpg";
 
 const teamMembers = [
   {
@@ -10,34 +12,34 @@ const teamMembers = [
     role: "Desenvolvedor",
     email: "gustavoalmeidainformatica2025@gmail.com",
     insta: "@gustavo.almeida.ofc",
-    hasPhoto: true,
+    photo: gustavoImg,
   },
   {
     name: "Max Silveira",
     role: "Desenvolvedor",
     email: "maxsilveira248@gmail.com",
     insta: "@max_silveira_2023",
-    hasPhoto: true,
+    photo: maxImg,
   },
   {
     name: "Harry Anderson",
     role: "Desenvolvedor",
     insta: "@harry_potter_457557",
-    hasPhoto: false,
+    photo: null,
   },
   {
     name: "José Antônio",
     role: "Desenvolvedor",
-    hasPhoto: false,
+    photo: null,
   },
 ];
 
 const features = [
-  { icon: Cpu, label: "Hardware", desc: "Componentes, arquitetura e montagem", to: "/hardware", color: "from-blue-500 to-cyan-400" },
-  { icon: Monitor, label: "Software", desc: "Windows, drivers, programas essenciais", to: "/software", color: "from-cyan-400 to-teal-400" },
-  { icon: Image, label: "Galeria", desc: "Vídeo, internet e conectores", to: "/galeria", color: "from-teal-400 to-emerald-400" },
-  { icon: Brain, label: "Quiz", desc: "Teste seus conhecimentos", to: "/quiz", color: "from-violet-500 to-blue-500" },
-  { icon: Users, label: "Comunidade", desc: "Conecte-se com outros estudantes", to: "/comunidade", color: "from-pink-500 to-violet-500" },
+  { icon: Cpu, label: "Hardware", desc: "Conheça as peças do computador", to: "/hardware", color: "from-blue-500 to-cyan-400" },
+  { icon: Monitor, label: "Software", desc: "Windows, programas e dicas úteis", to: "/software", color: "from-cyan-400 to-teal-400" },
+  { icon: Image, label: "Conectores", desc: "Cabos de vídeo e internet", to: "/galeria", color: "from-teal-400 to-emerald-400" },
+  { icon: Brain, label: "Quiz", desc: "Teste o que você aprendeu", to: "/quiz", color: "from-violet-500 to-blue-500" },
+  { icon: Users, label: "Comunidade", desc: "Tire dúvidas com outros alunos", to: "/comunidade", color: "from-pink-500 to-violet-500" },
 ];
 
 const fadeUp = {
@@ -52,8 +54,8 @@ const fadeUp = {
 export default function Index() {
   const { profile } = useAuth();
   const greeting = profile?.role === "professor"
-    ? "Bem-vindo, Professor! Explore materiais técnicos e dicas de didática."
-    : "Bem-vindo, estudante! Aprenda informática de forma visual e interativa.";
+    ? "Bem-vindo, Professor! Explore materiais para usar em sala de aula."
+    : "Bem-vindo! Aprenda informática de um jeito fácil e divertido.";
 
   return (
     <div className="min-h-screen pt-20 pb-12">
@@ -66,15 +68,16 @@ export default function Index() {
         >
           <div className="inline-flex items-center gap-2 glass px-4 py-2 mb-6">
             <Zap className="w-4 h-4 text-primary" />
-            <span className="text-xs text-muted-foreground">Plataforma Educacional</span>
+            <span className="text-xs text-muted-foreground">Conteúdo de Informática do CETEP</span>
           </div>
           <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-black leading-tight">
-            <span className="gradient-neon-text">CETEP</span>
-            <br />
-            <span className="text-foreground">Informática</span>
+            <span className="gradient-neon-text">Projeta Aula</span>
           </h1>
-          <p className="mt-6 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">
+          <p className="mt-4 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">
             {greeting}
+          </p>
+          <p className="mt-2 text-muted-foreground/70 max-w-md mx-auto text-xs">
+            Reforce seu conhecimento em informática básica no CETEP
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
@@ -92,14 +95,13 @@ export default function Index() {
           </div>
         </motion.div>
 
-        {/* Decorative glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       </section>
 
       {/* Features Grid */}
       <section className="container py-12">
         <h2 className="font-display text-2xl font-bold text-center mb-8 neon-text text-primary">
-          Explore os Módulos
+          O que você vai aprender
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {features.map((f, i) => (
@@ -136,7 +138,7 @@ export default function Index() {
           Nossa Equipe
         </h2>
         <p className="text-center text-muted-foreground text-sm mb-10">
-          Os desenvolvedores por trás do CETEP Informática
+          Os criadores do Projeta Aula
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {teamMembers.map((member, i) => (
@@ -150,10 +152,8 @@ export default function Index() {
               className="glass p-6 text-center group hover:border-primary/30 transition-all"
             >
               <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-2 border-primary/30 neon-glow flex items-center justify-center bg-secondary">
-                {member.hasPhoto ? (
-                  <div className="w-full h-full flex items-center justify-center text-3xl font-display font-bold gradient-neon-text">
-                    {member.name.charAt(0)}
-                  </div>
+                {member.photo ? (
+                  <img src={member.photo} alt={member.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-3xl">
                     👨‍💻
@@ -165,7 +165,7 @@ export default function Index() {
               <div className="mt-3 space-y-1">
                 {member.email && (
                   <a href={`mailto:${member.email}`} className="flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
-                    <Mail className="w-3 h-3" /> {member.email.split("@")[0]}
+                    <Mail className="w-3 h-3" /> E-mail
                   </a>
                 )}
                 {member.insta && (
@@ -182,7 +182,7 @@ export default function Index() {
       {/* Footer */}
       <footer className="container py-8 border-t border-border text-center">
         <p className="text-xs text-muted-foreground">
-          © 2025 CETEP Informática. Desenvolvido por Gustavo, Max, Harry e José.
+          © 2025 Projeta Aula — CETEP. Desenvolvido por Gustavo, Max, Harry e José.
         </p>
       </footer>
     </div>

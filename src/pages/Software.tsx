@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useAuth } from "@/contexts/AuthContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useState } from "react";
 import {
@@ -7,183 +6,182 @@ import {
 } from "lucide-react";
 
 const tabs = [
-  { id: "windows", label: "Windows 10/11", icon: Monitor },
-  { id: "programas", label: "Programas Essenciais", icon: Download },
-  { id: "drivers", label: "Drivers & BIOS", icon: Settings },
-  { id: "logica", label: "Lógica de Programação", icon: Code },
+  { id: "windows", label: "Windows", icon: Monitor },
+  { id: "programas", label: "Programas Úteis", icon: Download },
+  { id: "drivers", label: "Drivers e BIOS", icon: Settings },
+  { id: "logica", label: "Lógica Básica", icon: Code },
   { id: "seguranca", label: "Segurança", icon: Shield },
 ];
 
 interface ContentSection {
   title: string;
-  studentDesc: string;
-  teacherDesc: string;
+  desc: string;
   items: string[];
 }
 
 const content: Record<string, ContentSection[]> = {
   windows: [
     {
-      title: "Instalação do Windows",
-      studentDesc: "Como instalar o Windows 10 ou 11 no seu PC passo a passo.",
-      teacherDesc: "Processo de instalação via USB bootável, particionamento GPT/MBR e chaves de ativação em ambiente educacional.",
+      title: "O que é o Windows?",
+      desc: "O Windows é o sistema operacional (programa principal) que faz o computador funcionar. Ele gerencia tudo: programas, arquivos e as peças do PC.",
       items: [
-        "Criar pendrive bootável com Rufus ou Media Creation Tool",
-        "Configurar boot pela BIOS/UEFI (prioridade USB)",
-        "Escolher edição: Home, Pro ou Education",
-        "Particionamento: GPT para UEFI, MBR para Legacy",
-        "Configuração OOBE: conta local vs conta Microsoft",
-        "Windows Update: instalar atualizações após instalação",
+        "É o sistema mais usado no mundo",
+        "Versões mais comuns: Windows 10 e Windows 11",
+        "Sem ele, o computador não faz nada",
+        "Ele gerencia tudo: teclado, mouse, tela, programas",
       ],
     },
     {
-      title: "Interface e Configurações",
-      studentDesc: "Conheça a área de trabalho, barra de tarefas e configurações do Windows.",
-      teacherDesc: "Personalizações avançadas: Group Policy, registro, gerenciamento de energia e contas de usuário para laboratório.",
+      title: "Área de Trabalho e Barra de Tarefas",
+      desc: "A área de trabalho é a tela principal que aparece quando o PC liga. A barra de tarefas fica embaixo e mostra os programas abertos.",
       items: [
-        "Barra de Tarefas: fixar apps, área de notificação",
-        "Menu Iniciar: organizar atalhos e tiles",
-        "Configurações vs Painel de Controle",
-        "Gerenciador de Tarefas (Ctrl+Shift+Esc)",
-        "Explorador de Arquivos: navegação e atalhos",
-        "Atalhos essenciais: Win+E, Win+I, Win+D, Alt+Tab",
+        "Área de trabalho: onde ficam os ícones dos programas",
+        "Barra de tarefas: mostra o que está aberto e acesso rápido",
+        "Menu Iniciar: clique para ver todos os programas",
+        "Atalhos úteis: Win+E (pastas), Alt+Tab (trocar janela)",
+      ],
+    },
+    {
+      title: "Organizando Arquivos e Pastas",
+      desc: "O Explorador de Arquivos (Win+E) permite criar pastas, mover e organizar seus arquivos como documentos, fotos e downloads.",
+      items: [
+        "Crie pastas para organizar: Documentos, Fotos, Trabalhos",
+        "Ctrl+C copia, Ctrl+X recorta, Ctrl+V cola",
+        "Clique direito no arquivo para ver opções (renomear, excluir)",
+        "Use a barra de pesquisa para encontrar arquivos rapidamente",
       ],
     },
   ],
   programas: [
     {
-      title: "Navegador - Google Chrome",
-      studentDesc: "O navegador mais usado do mundo para acessar sites.",
-      teacherDesc: "Gerenciamento de extensões, perfis de navegação e configurações de proxy para laboratórios.",
-      items: ["Download: google.com/chrome", "Extensões: AdBlock, Google Tradutor", "Atalhos: Ctrl+T (nova aba), Ctrl+W (fechar)"],
+      title: "Google Chrome",
+      desc: "O navegador mais usado para acessar sites e fazer pesquisas na internet.",
+      items: [
+        "Baixe em: google.com/chrome",
+        "Ctrl+T abre uma nova aba",
+        "Ctrl+W fecha a aba atual",
+        "Você pode salvar sites favoritos para acessar depois",
+      ],
     },
     {
       title: "Pacote Office (Word, Excel, PowerPoint)",
-      studentDesc: "Para criar documentos, planilhas e apresentações.",
-      teacherDesc: "Licenciamento educacional, alternativas gratuitas (LibreOffice) e configuração em rede.",
-      items: ["Word: documentos de texto", "Excel: planilhas e cálculos", "PowerPoint: apresentações", "Alternativa gratuita: LibreOffice"],
+      desc: "Conjunto de programas para criar textos, planilhas e apresentações.",
+      items: [
+        "Word: para escrever textos e trabalhos",
+        "Excel: para fazer planilhas e cálculos",
+        "PowerPoint: para fazer apresentações com slides",
+        "Alternativa gratuita: LibreOffice faz a mesma coisa",
+      ],
     },
     {
       title: "WinRAR",
-      studentDesc: "Compacta e descompacta arquivos ZIP e RAR.",
-      teacherDesc: "Compactação com senha, formatos suportados e integração ao Explorer.",
-      items: ["Formatos: ZIP, RAR, 7Z, TAR", "Compactação com senha", "Integração ao menu de contexto"],
+      desc: "Programa para compactar (diminuir o tamanho) e descompactar arquivos.",
+      items: [
+        "Abre arquivos ZIP e RAR",
+        "Útil para enviar vários arquivos de uma vez por e-mail",
+        "Clique direito > 'Extrair aqui' para descompactar",
+      ],
     },
     {
       title: "VLC Media Player",
-      studentDesc: "Reproduz qualquer tipo de vídeo e áudio gratuitamente.",
-      teacherDesc: "Codecs integrados, streaming de rede e conversão de formatos.",
-      items: ["Reproduz quase todos os formatos", "Gratuito e código aberto", "Funções avançadas: legendas, filtros"],
+      desc: "Reprodutor de vídeo e música gratuito que abre praticamente qualquer formato.",
+      items: [
+        "Abre vídeos MP4, AVI, MKV e muito mais",
+        "Gratuito e não tem propaganda",
+        "Pode colocar legendas nos vídeos",
+      ],
     },
     {
-      title: "Antivírus - Avast / Windows Defender",
-      studentDesc: "Protege seu computador contra vírus e malwares.",
-      teacherDesc: "Compare soluções gratuitas vs pagas. Windows Defender é suficiente para uso básico com boas práticas.",
-      items: ["Windows Defender: integrado ao Windows", "Avast Free: proteção adicional", "Verificação periódica é essencial"],
-    },
-    {
-      title: "WhatsApp Desktop",
-      studentDesc: "Use o WhatsApp diretamente no computador.",
-      teacherDesc: "Versão nativa vs WhatsApp Web. Sincronização e limitações do modo multi-dispositivo.",
-      items: ["Download na Microsoft Store", "Sincroniza com o celular", "Atalhos de teclado para produtividade"],
+      title: "WhatsApp no Computador",
+      desc: "Use o WhatsApp pelo computador para digitar mais rápido e ver fotos em tela grande.",
+      items: [
+        "Baixe na Microsoft Store ou acesse web.whatsapp.com",
+        "Sincroniza com seu celular automaticamente",
+        "Mais fácil de digitar textos longos",
+      ],
     },
   ],
   drivers: [
     {
       title: "O que são Drivers?",
-      studentDesc: "Programas que fazem o Windows 'conversar' com as peças do seu PC.",
-      teacherDesc: "Software de interface hardware-SO. Aborde INF files, assinatura digital e Device Manager para troubleshooting.",
+      desc: "Drivers são programas que fazem o Windows 'conversar' com as peças do computador. Sem eles, o PC não reconhece impressora, placa de vídeo, etc.",
       items: [
-        "Driver de vídeo: NVIDIA GeForce / AMD Radeon",
-        "Driver de áudio: Realtek HD Audio",
-        "Driver de rede: Wi-Fi e Ethernet",
-        "Gerenciador de Dispositivos: verificar status",
-        "Windows Update instala drivers básicos automaticamente",
+        "O Windows instala os drivers mais comuns sozinho",
+        "Se algo não funcionar, pode ser driver faltando",
+        "Exemplos: driver de vídeo, áudio, impressora, Wi-Fi",
+        "Gerenciador de Dispositivos mostra se tem algo com problema",
       ],
     },
     {
-      title: "BIOS / UEFI",
-      studentDesc: "O primeiro programa que roda quando você liga o PC.",
-      teacherDesc: "Firmware de inicialização: POST, boot order, Secure Boot, TPM 2.0 (requisito do Windows 11) e overclocking básico.",
+      title: "O que é o BIOS/UEFI?",
+      desc: "É o primeiro programa que aparece quando você liga o PC, antes mesmo do Windows carregar. Ele testa se tudo está funcionando.",
       items: [
-        "Acessar: Del, F2 ou F12 durante o boot",
-        "Boot Order: ordem de inicialização dos discos",
-        "Secure Boot: proteção contra malware no boot",
-        "TPM 2.0: requisito do Windows 11",
-        "UEFI vs Legacy BIOS: vantagens e compatibilidade",
-        "Atualização de BIOS: riscos e procedimentos",
+        "Para acessar: aperte Del, F2 ou F12 ao ligar o PC",
+        "Mostra informações sobre hardware instalado",
+        "Permite escolher de onde o PC inicia (HD, pendrive)",
+        "Normalmente você não precisa mexer no BIOS",
       ],
     },
   ],
   logica: [
     {
-      title: "Introdução a Algoritmos",
-      studentDesc: "Algoritmos são receitas — passos organizados para resolver um problema!",
-      teacherDesc: "Fundamentos de computação: algoritmos, complexidade e resolução de problemas. Base para qualquer linguagem de programação.",
+      title: "O que é um Algoritmo?",
+      desc: "Algoritmo é uma 'receita' — uma lista de passos organizados para resolver um problema. A receita de um bolo é um algoritmo!",
       items: [
-        "Algoritmo = sequência finita de instruções",
-        "Exemplo: receita de bolo é um algoritmo!",
-        "Entrada → Processamento → Saída",
-        "Fluxogramas: representação visual do algoritmo",
-        "Pseudocódigo: linguagem natural estruturada",
+        "Sequência de passos: faça isso, depois aquilo",
+        "Exemplo: acordar → escovar dentes → tomar café",
+        "Na programação, o computador segue esses passos",
+        "É a base de todo programa e aplicativo",
       ],
     },
     {
-      title: "Variáveis e Tipos de Dados",
-      studentDesc: "Variáveis são 'caixas' que guardam informações no programa.",
-      teacherDesc: "Tipagem, escopo, constantes vs variáveis. Utilize Portugol Studio ou Visualg para prática.",
+      title: "Variáveis",
+      desc: "Variáveis são como 'caixinhas' que guardam informações no programa. Cada caixa tem um nome e guarda um valor.",
       items: [
-        "Inteiro: números sem decimais (1, 42, -7)",
-        "Real: números com decimais (3.14, 9.99)",
-        "Texto (String): \"Olá mundo\"",
-        "Lógico (Boolean): VERDADEIRO ou FALSO",
-        "Nomeação: use nomes descritivos (idade, nome, total)",
+        "Exemplo: nome = \"Maria\" (guarda um texto)",
+        "Exemplo: idade = 25 (guarda um número)",
+        "Você pode mudar o valor a qualquer momento",
+        "Use nomes que fazem sentido: 'nota', 'total', 'nome'",
       ],
     },
     {
-      title: "Estruturas Condicionais",
-      studentDesc: "O programa toma decisões: SE acontecer isso, ENTÃO faça aquilo!",
-      teacherDesc: "IF/ELSE, switch-case, operadores relacionais e lógicos. Exercícios com múltiplas condições aninhadas.",
+      title: "Condições (SE / SENÃO)",
+      desc: "O programa toma decisões: SE acontecer isso, faça aquilo. SENÃO, faça outra coisa.",
       items: [
-        "SE (condição) ENTÃO ... SENÃO ...",
-        "Operadores: =, <>, >, <, >=, <=",
-        "Operadores lógicos: E, OU, NÃO",
-        "Condições aninhadas: SE dentro de SE",
-        "Exemplo: verificar se número é par ou ímpar",
+        "SE (nota >= 7) ENTÃO 'Aprovado'",
+        "SENÃO 'Reprovado'",
+        "É como uma bifurcação na estrada",
+        "O computador escolhe o caminho baseado na condição",
       ],
     },
     {
-      title: "Estruturas de Repetição",
-      studentDesc: "Loops repetem ações várias vezes sem precisar copiar código!",
-      teacherDesc: "FOR, WHILE, DO-WHILE. Aborde contadores, acumuladores e condições de parada para evitar loops infinitos.",
+      title: "Repetição (Loops)",
+      desc: "Loops fazem o computador repetir uma ação várias vezes sem você precisar escrever tudo de novo.",
       items: [
-        "PARA (FOR): repetição com contador",
-        "ENQUANTO (WHILE): repete enquanto condição é verdadeira",
-        "REPITA-ATÉ (DO-WHILE): executa ao menos uma vez",
-        "Contador: variável que controla as repetições",
-        "Cuidado com loop infinito!",
+        "PARA i de 1 até 10: escreva i (conta de 1 a 10)",
+        "ENQUANTO houver alunos: chame o próximo",
+        "Útil para processar listas e dados grandes",
+        "Cuidado: se a condição nunca parar, o loop é infinito!",
       ],
     },
   ],
   seguranca: [
     {
-      title: "Boas Práticas de Segurança",
-      studentDesc: "Dicas simples para proteger seus dados e seu computador.",
-      teacherDesc: "Princípios de segurança da informação: confidencialidade, integridade e disponibilidade. Implemente políticas no laboratório.",
+      title: "Dicas de Segurança no Computador",
+      desc: "Proteja seus dados e seu computador com essas dicas simples que todo mundo deveria seguir.",
       items: [
-        "Senhas fortes: mín. 12 caracteres, letras+números+símbolos",
-        "Autenticação em dois fatores (2FA)",
-        "Não clicar em links suspeitos (phishing)",
-        "Manter sistema e antivírus atualizados",
-        "Backup regular dos arquivos importantes",
-        "Cuidado com Wi-Fi público",
+        "Crie senhas fortes: misture letras, números e símbolos",
+        "Nunca use a mesma senha em todos os sites",
+        "Não clique em links suspeitos (pode ser golpe/phishing)",
+        "Mantenha o Windows e o antivírus sempre atualizados",
+        "Faça backup dos seus arquivos importantes",
+        "Cuidado com Wi-Fi público (shoppings, cafés)",
       ],
     },
   ],
 };
 
 export default function Software() {
-  const { isProfessor } = useAuth();
   const [activeTab, setActiveTab] = useState("windows");
 
   return (
@@ -197,11 +195,10 @@ export default function Software() {
         >
           <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">Software</h1>
           <p className="text-muted-foreground text-sm mt-2">
-            {isProfessor ? "Material técnico para preparação de aulas." : "Aprenda sobre sistemas e programas!"}
+            Aprenda sobre o Windows, programas úteis e segurança digital
           </p>
         </motion.div>
 
-        {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-8 justify-center">
           {tabs.map((tab) => (
             <button
@@ -219,7 +216,6 @@ export default function Software() {
           ))}
         </div>
 
-        {/* Content */}
         <motion.div
           key={activeTab}
           initial={{ opacity: 0, x: 20 }}
@@ -230,9 +226,7 @@ export default function Software() {
           {content[activeTab]?.map((section) => (
             <div key={section.title} className="glass p-6">
               <h3 className="font-display text-lg font-bold text-foreground mb-2">{section.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                {isProfessor ? section.teacherDesc : section.studentDesc}
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
               <ul className="space-y-2">
                 {section.items.map((item) => (
                   <li key={item} className="text-xs text-foreground/80 flex items-start gap-2">

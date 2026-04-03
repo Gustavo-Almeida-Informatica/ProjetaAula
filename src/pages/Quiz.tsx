@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square } from "lucide-react";
 
 interface LeaderboardEntry {
   user_name: string;
@@ -20,8 +20,6 @@ export default function Quiz() {
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [bestScore, setBestScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
   const startQuiz = useCallback(() => {
@@ -30,7 +28,6 @@ export default function Quiz() {
     setScore(0);
     setSelected(null);
     setShowResult(false);
-    setGameOver(false);
   }, []);
 
   useEffect(() => {
@@ -39,12 +36,22 @@ export default function Quiz() {
   }, [startQuiz]);
 
   const fetchLeaderboard = async () => {
+    // Get all scores, then keep only the best per user
     const { data } = await supabase
       .from("quiz_scores")
-      .select("user_name, user_role, score")
-      .order("score", { ascending: false })
-      .limit(10);
-    if (data) setLeaderboard(data as LeaderboardEntry[]);
+      .select("user_name, user_role, score, user_id")
+      .order("score", { ascending: false });
+    if (data) {
+      const bestByUser = new Map<string, LeaderboardEntry>();
+      for (const row of data) {
+        const key = row.user_id || row.user_name;
+        if (!bestByUser.has(key) || row.score > bestByUser.get(key)!.score) {
+          bestByUser.set(key, { user_name: row.user_name, user_role: row.user_role, score: row.score });
+        }
+      }
+      const sorted = Array.from(bestByUser.values()).sort((a, b) => b.score - a.score).slice(0, 10);
+      setLeaderboard(sorted);
+    }
   };
 
   const saveScore = async (finalScore: number) => {
@@ -58,6 +65,14 @@ export default function Quiz() {
     fetchLeaderboard();
   };
 
+  const handleStop = () => {
+    if (score > 0) {
+      saveScore(score);
+      toast.info(`Você parou com ${score} ponto${score > 1 ? "s" : ""}! Sua pontuação foi salva.`);
+    }
+    startQuiz();
+  };
+
   const handleAnswer = (optionIndex: number) => {
     if (showResult) return;
     setSelected(optionIndex);
@@ -68,7 +83,6 @@ export default function Quiz() {
     if (isCorrect) {
       const newScore = score + 1;
       setScore(newScore);
-      if (newScore > bestScore) setBestScore(newScore);
 
       setTimeout(() => {
         if (currentIndex + 1 < questions.length) {
@@ -76,18 +90,20 @@ export default function Quiz() {
           setSelected(null);
           setShowResult(false);
         } else {
-          setGameOver(true);
-          saveScore(newScore);
-          toast.success(`Incrível! Você completou o quiz com ${newScore} pontos!`);
+          // All questions answered — reshuffle and continue (infinite)
+          setQuestions(getShuffledQuestions());
+          setCurrentIndex(0);
+          setSelected(null);
+          setShowResult(false);
+          toast.success("Todas as perguntas respondidas! Continuando com novas perguntas...");
         }
-      }, 1500);
+      }, 1800);
     } else {
-      // Wrong answer — game over
       setTimeout(() => {
         saveScore(score);
         toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
         startQuiz();
-      }, 2000);
+      }, 2500);
     }
   };
 
@@ -100,7 +116,7 @@ export default function Quiz() {
       <div className="container py-8 max-w-4xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">Quiz Infinito</h1>
-          <p className="text-muted-foreground text-sm mt-2">Errou? Volta do zero! Prove que você sabe tudo.</p>
+          <p className="text-muted-foreground text-sm mt-2">Errou? Volta do zero! Acerte o máximo que conseguir.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -114,7 +130,7 @@ export default function Quiz() {
                 <span className="text-xs text-muted-foreground">pontos</span>
               </div>
               <span className="text-xs text-muted-foreground">
-                {currentIndex + 1} / {questions.length}
+                Pergunta {currentIndex + 1}
               </span>
               <span className="text-xs glass px-2 py-1">{current.category}</span>
             </div>
@@ -122,7 +138,7 @@ export default function Quiz() {
             {/* Question */}
             <AnimatePresence mode="wait">
               <motion.div
-                key={current.id}
+                key={current.id + "-" + currentIndex}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
@@ -160,7 +176,7 @@ export default function Quiz() {
                   <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 text-xs text-muted-foreground glass p-3"
+                    className="mt-4 text-sm md:text-base text-muted-foreground glass p-4 leading-relaxed"
                   >
                     💡 {current.explanation}
                   </motion.p>
@@ -168,17 +184,23 @@ export default function Quiz() {
               </motion.div>
             </AnimatePresence>
 
-            <button onClick={startQuiz} className="mt-4 flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-              <RotateCcw className="w-4 h-4" /> Reiniciar Quiz
-            </button>
+            <div className="mt-4 flex items-center gap-4">
+              <button onClick={startQuiz} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                <RotateCcw className="w-4 h-4" /> Reiniciar
+              </button>
+              <button onClick={handleStop} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors">
+                <Square className="w-4 h-4" /> Parar e salvar pontos
+              </button>
+            </div>
           </div>
 
           {/* Leaderboard */}
           <div className="glass p-5">
             <div className="flex items-center gap-2 mb-4">
               <Trophy className="w-5 h-5 text-primary" />
-              <h3 className="font-display text-sm font-bold">Top 10</h3>
+              <h3 className="font-display text-sm font-bold">Top 10 — Melhor Pontuação</h3>
             </div>
+            <p className="text-xs text-muted-foreground mb-3">Apenas o recorde de cada pessoa aparece aqui.</p>
             <div className="space-y-2">
               {leaderboard.length === 0 && (
                 <p className="text-xs text-muted-foreground">Nenhuma pontuação ainda.</p>

@@ -21,7 +21,6 @@ export default function Login() {
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Redirect if already logged in
   useEffect(() => {
     if (!loading && session) {
       navigate("/", { replace: true });
@@ -45,14 +44,13 @@ export default function Login() {
             .from("profiles")
             .update({ role, full_name: fullName })
             .eq("id", data.user.id);
-          toast.success("Conta criada! Verifique seu e-mail se necessário.");
+          toast.success("Conta criada com sucesso!");
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Login realizado!");
       }
-      // Navigation will happen automatically via the useEffect above
     } catch (err: any) {
       toast.error(err.message || "Erro na autenticação");
     } finally {
@@ -67,11 +65,10 @@ export default function Login() {
     if (result.error) toast.error(result.error.message);
   };
 
-  // Don't render login form if session exists (prevents flash)
   if (loading || session) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">CETEP</div>
+        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">Projeta Aula</div>
       </div>
     );
   }
@@ -84,8 +81,8 @@ export default function Login() {
         className="w-full max-w-md glass p-8 space-y-6"
       >
         <div className="text-center">
-          <h1 className="font-display text-3xl font-bold gradient-neon-text">CETEP</h1>
-          <p className="text-muted-foreground text-sm mt-2">Informática Educacional</p>
+          <h1 className="font-display text-3xl font-bold gradient-neon-text">Projeta Aula</h1>
+          <p className="text-muted-foreground text-sm mt-2">Informática para reforçar seu conhecimento no CETEP</p>
         </div>
 
         <div className="flex rounded-lg overflow-hidden border border-border">
@@ -114,7 +111,7 @@ export default function Login() {
                 <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Nome completo"
+                  placeholder="Seu nome completo"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
@@ -151,7 +148,7 @@ export default function Login() {
             <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
             <input
               type="email"
-              placeholder="E-mail"
+              placeholder="Seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -162,7 +159,7 @@ export default function Login() {
             <Lock className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
             <input
               type={showPw ? "text" : "password"}
-              placeholder="Senha"
+              placeholder="Sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

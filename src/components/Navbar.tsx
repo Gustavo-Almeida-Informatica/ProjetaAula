@@ -10,7 +10,7 @@ const navItems = [
   { to: "/", label: "Início", icon: Home },
   { to: "/hardware", label: "Hardware", icon: Cpu },
   { to: "/software", label: "Software", icon: Monitor },
-  { to: "/galeria", label: "Galeria", icon: Image },
+  { to: "/galeria", label: "Conectores", icon: Image },
   { to: "/quiz", label: "Quiz", icon: Brain },
   { to: "/comunidade", label: "Comunidade", icon: Users },
 ];
@@ -24,8 +24,7 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong">
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-display text-lg font-bold gradient-neon-text">CETEP</span>
-          <span className="text-xs text-muted-foreground hidden sm:inline">Informática</span>
+          <span className="font-display text-lg font-bold gradient-neon-text">Projeta Aula</span>
         </Link>
 
         {/* Desktop */}

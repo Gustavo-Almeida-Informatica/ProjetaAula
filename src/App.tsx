@@ -20,7 +20,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">CETEP</div>
+        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">Projeta Aula</div>
       </div>
     );
   }
@@ -39,7 +39,7 @@ function AppRoutes() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">CETEP</div>
+        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">Projeta Aula</div>
       </div>
     );
   }
