@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
-import { Cpu, HardDrive, Fan, Zap, MemoryStick, CircuitBoard, Microchip, Server } from "lucide-react";
+
+import cpuImg from "@/assets/hw-cpu.jpg";
+import ramImg from "@/assets/hw-ram.jpg";
+import storageImg from "@/assets/hw-storage.jpg";
+import coolerImg from "@/assets/hw-cooler.jpg";
+import psuImg from "@/assets/hw-psu.jpg";
+import moboImg from "@/assets/hw-mobo.jpg";
+import gpuImg from "@/assets/hw-gpu.jpg";
+import peripheralsImg from "@/assets/hw-peripherals.jpg";
 
 interface TopicCard {
-  icon: typeof Cpu;
+  image: string;
   title: string;
   desc: string;
   details: string[];
@@ -11,7 +19,7 @@ interface TopicCard {
 
 const topics: TopicCard[] = [
   {
-    icon: Cpu,
+    image: cpuImg,
     title: "Processador (CPU)",
     desc: "É o 'cérebro' do computador. Ele executa todas as tarefas e cálculos que você pede.",
     details: [
@@ -22,7 +30,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: MemoryStick,
+    image: ramImg,
     title: "Memória RAM",
     desc: "Funciona como a 'mesa de trabalho' do computador — guarda temporariamente o que está sendo usado.",
     details: [
@@ -33,7 +41,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: HardDrive,
+    image: storageImg,
     title: "Armazenamento (HD e SSD)",
     desc: "Onde seus arquivos ficam guardados mesmo com o PC desligado: fotos, vídeos, programas e o Windows.",
     details: [
@@ -44,7 +52,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: Fan,
+    image: coolerImg,
     title: "Cooler (Ventilador)",
     desc: "Mantém o processador na temperatura certa. Sem ele, o PC superaquece e desliga sozinho.",
     details: [
@@ -55,7 +63,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: Zap,
+    image: psuImg,
     title: "Fonte de Alimentação",
     desc: "Transforma a energia da tomada para o tipo que as peças do computador precisam.",
     details: [
@@ -66,7 +74,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: CircuitBoard,
+    image: moboImg,
     title: "Placa-Mãe",
     desc: "É a 'base' que conecta todas as peças do computador entre si. Sem ela, nada funciona.",
     details: [
@@ -77,7 +85,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: Microchip,
+    image: gpuImg,
     title: "Placa de Vídeo (GPU)",
     desc: "Processa tudo que aparece na tela: desde a área de trabalho até jogos pesados.",
     details: [
@@ -88,7 +96,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
-    icon: Server,
+    image: peripheralsImg,
     title: "Periféricos",
     desc: "São os dispositivos que você conecta ao computador para interagir com ele.",
     details: [
@@ -128,14 +136,17 @@ export default function Hardware() {
               transition={{ delay: i * 0.05 }}
               className="glass p-6 hover:border-primary/30 transition-all group"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2.5 rounded-lg gradient-neon">
-                  <topic.icon className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <h3 className="font-display text-base font-bold text-foreground">
-                  {topic.title}
-                </h3>
+              <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
+                <img
+                  src={topic.image}
+                  alt={topic.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
               </div>
+              <h3 className="font-display text-base font-bold text-foreground mb-2">
+                {topic.title}
+              </h3>
               <p className="text-sm text-muted-foreground mb-4">{topic.desc}</p>
               <ul className="space-y-1.5">
                 {topic.details.map((d) => (

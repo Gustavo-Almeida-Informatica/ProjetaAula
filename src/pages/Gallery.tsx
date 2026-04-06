@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
-import { useAuth } from "@/contexts/AuthContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useState } from "react";
 import { MonitorPlay, Wifi } from "lucide-react";
+
+import hdmiImg from "@/assets/cable-hdmi.jpg";
+import displayportImg from "@/assets/cable-displayport.jpg";
+import vgaImg from "@/assets/cable-vga.jpg";
+import ethernetImg from "@/assets/cable-ethernet.jpg";
+import wifiImg from "@/assets/cable-wifi.jpg";
 
 const categories = [
   { id: "video", label: "Cabos de Vídeo", icon: MonitorPlay },
@@ -12,6 +17,7 @@ const categories = [
 interface GalleryItem {
   title: string;
   desc: string;
+  image: string;
   specs: { label: string; value: string }[];
 }
 
@@ -19,6 +25,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
   video: [
     {
       title: "Cabo HDMI",
+      image: hdmiImg,
       desc: "O cabo mais usado para conectar o computador ao monitor ou TV. Ele leva a imagem e o som pelo mesmo cabo, sem precisar de outros fios.",
       specs: [
         { label: "O que faz", value: "Transmite imagem e som juntos" },
@@ -30,6 +37,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
     },
     {
       title: "Cabo DisplayPort",
+      image: displayportImg,
       desc: "Cabo preferido por quem joga ou trabalha com edição de vídeo. Suporta imagens muito rápidas e de alta qualidade.",
       specs: [
         { label: "O que faz", value: "Transmite imagem de altíssima qualidade" },
@@ -41,6 +49,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
     },
     {
       title: "Cabo VGA (mais antigo)",
+      image: vgaImg,
       desc: "Cabo antigo que só transmite imagem (sem som). Ainda encontrado em monitores e projetores mais velhos.",
       specs: [
         { label: "O que faz", value: "Transmite apenas imagem (sem som)" },
@@ -54,6 +63,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
   internet: [
     {
       title: "Cabo de Rede (Ethernet / RJ45)",
+      image: ethernetImg,
       desc: "É o cabo que conecta o computador ao roteador com fio. A internet por cabo é mais rápida e estável que o Wi-Fi.",
       specs: [
         { label: "O que faz", value: "Conecta o PC à internet com fio" },
@@ -65,6 +75,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
     },
     {
       title: "Wi-Fi (Internet sem fio)",
+      image: wifiImg,
       desc: "Permite conectar à internet sem usar cabos. Muito prático para celulares e notebooks, mas pode ser instável.",
       specs: [
         { label: "O que faz", value: "Internet sem fio pelo ar" },
@@ -76,6 +87,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
     },
     {
       title: "Wi-Fi vs Cabo — Qual usar?",
+      image: ethernetImg,
       desc: "O cabo é melhor para quem precisa de velocidade (jogos, trabalho). O Wi-Fi é melhor para quem quer praticidade (celular, tablet).",
       specs: [
         { label: "Mais estável", value: "Cabo de rede (sem interferência)" },
@@ -139,6 +151,14 @@ export default function Gallery() {
               transition={{ delay: i * 0.1 }}
               className="glass p-6 hover:border-primary/30 transition-all"
             >
+              <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h3>
               <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
               <div className="space-y-2">
