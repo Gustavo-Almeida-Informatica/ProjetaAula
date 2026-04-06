@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
 import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
+import harryImg from "@/assets/harry.jpg";
+import joseImg from "@/assets/jose.jpg";
 
 const teamMembers = [
   {
@@ -25,12 +27,12 @@ const teamMembers = [
     name: "Harry Anderson",
     role: "Desenvolvedor",
     insta: "@harry_potter_457557",
-    photo: null,
+    photo: harryImg,
   },
   {
     name: "José Antônio",
     role: "Desenvolvedor",
-    photo: null,
+    photo: joseImg,
   },
 ];
 
