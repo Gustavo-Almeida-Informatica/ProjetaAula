@@ -27,6 +27,7 @@ const topics: TopicCard[] = [
       "Núcleos: é como ter vários cérebros trabalhando juntos",
       "Exemplos: Intel Core i3, i5, i7 e AMD Ryzen",
       "Precisa de um cooler para não superaquecer",
+      "Cache L1, L2 e L3: memórias ultrarrápidas dentro do processador que guardam dados usados com frequência",
     ],
   },
   {
@@ -36,7 +37,7 @@ const topics: TopicCard[] = [
     details: [
       "Quanto mais RAM, mais programas abertos ao mesmo tempo",
       "8GB é bom para uso básico, 16GB para mais desempenho",
-      "Os dados somem quando o PC desliga (memória temporária)",
+      "Os dados somem quando o PC desliga (memória temporária/volátil)",
       "Tipos: DDR4 (mais comum) e DDR5 (mais novo e rápido)",
     ],
   },
@@ -49,6 +50,7 @@ const topics: TopicCard[] = [
       "SSD: muito mais rápido, o PC liga em segundos",
       "O ideal é ter SSD para o sistema e HD para arquivos grandes",
       "Capacidades comuns: 256GB, 512GB, 1TB",
+      "NVMe: tipo de SSD ainda mais rápido que conecta via slot M.2",
     ],
   },
   {
@@ -68,9 +70,10 @@ const topics: TopicCard[] = [
     desc: "Transforma a energia da tomada para o tipo que as peças do computador precisam.",
     details: [
       "Potências comuns: 450W, 550W, 650W",
-      "Certificação 80 Plus = fonte de boa qualidade",
+      "Certificação 80 Plus = fonte de boa qualidade e eficiente",
       "Fonte ruim pode queimar as peças do PC",
       "Sempre compre fonte de marca confiável",
+      "Converte corrente alternada (AC) da tomada em corrente contínua (DC) para os componentes",
     ],
   },
   {
@@ -79,9 +82,10 @@ const topics: TopicCard[] = [
     desc: "É a 'base' que conecta todas as peças do computador entre si. Sem ela, nada funciona.",
     details: [
       "Tudo se encaixa nela: processador, RAM, SSD, placa de vídeo",
-      "Deve ser compatível com o processador escolhido",
+      "Deve ser compatível com o processador escolhido (soquete)",
       "Tem entradas USB, HDMI, áudio e rede",
       "Tamanhos: ATX (grande) e Micro-ATX (compacta)",
+      "Slots PCIe: onde conecta placa de vídeo e outros componentes",
     ],
   },
   {
@@ -92,7 +96,7 @@ const topics: TopicCard[] = [
       "Essencial para jogos, edição de vídeo e design",
       "Marcas: NVIDIA GeForce e AMD Radeon",
       "Para uso básico, a placa integrada no processador basta",
-      "Quanto mais memória (VRAM), melhor para jogos",
+      "Quanto mais memória (VRAM), melhor para jogos e edição",
     ],
   },
   {
@@ -100,33 +104,34 @@ const topics: TopicCard[] = [
     title: "Periféricos",
     desc: "São os dispositivos que você conecta ao computador para interagir com ele.",
     details: [
-      "Entrada: teclado, mouse, webcam, microfone",
-      "Saída: monitor, caixa de som, impressora",
-      "Armazenamento externo: pendrive, HD externo",
+      "Entrada: teclado, mouse, webcam, microfone, scanner",
+      "Saída: monitor, caixa de som, impressora, fones de ouvido",
+      "Armazenamento externo: pendrive, HD externo, cartão SD",
       "Conectam via USB, HDMI, Bluetooth ou Wi-Fi",
+      "Impressora 3D: cria objetos físicos camada por camada a partir de modelos digitais",
     ],
   },
 ];
 
 export default function Hardware() {
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
-      <div className="container py-8">
+      <div className="container py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
+          className="text-center mb-12"
         >
-          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">
+          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">
             Hardware
           </h1>
-          <p className="text-muted-foreground text-sm mt-2 max-w-lg mx-auto">
+          <p className="text-muted-foreground text-sm mt-3 max-w-lg mx-auto">
             Conheça cada peça que faz o computador funcionar — explicado de um jeito simples!
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {topics.map((topic, i) => (
             <motion.div
               key={topic.title}
@@ -134,7 +139,7 @@ export default function Hardware() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="glass p-6 hover:border-primary/30 transition-all group"
+              className="glass p-6 hover:border-primary/20 transition-all"
             >
               <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
                 <img

@@ -11,6 +11,7 @@ import Software from "./pages/Software";
 import Gallery from "./pages/Gallery";
 import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
+import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,7 +21,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">Projeta Aula</div>
+        <div className="animate-pulse-warm font-display text-2xl gradient-warm-text">Projeta Aula</div>
       </div>
     );
   }
@@ -39,7 +40,7 @@ function AppRoutes() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">Projeta Aula</div>
+        <div className="animate-pulse-warm font-display text-2xl gradient-warm-text">Projeta Aula</div>
       </div>
     );
   }
@@ -48,6 +49,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={session ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+      <Route path="/historia" element={<ProtectedRoute><History /></ProtectedRoute>} />
       <Route path="/hardware" element={<ProtectedRoute><Hardware /></ProtectedRoute>} />
       <Route path="/software" element={<ProtectedRoute><Software /></ProtectedRoute>} />
       <Route path="/galeria" element={<ProtectedRoute><Gallery /></ProtectedRoute>} />

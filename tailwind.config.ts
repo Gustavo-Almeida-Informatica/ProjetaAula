@@ -51,10 +51,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        neon: {
-          blue: "hsl(var(--neon-blue))",
-          cyan: "hsl(var(--neon-cyan))",
-          purple: "hsl(var(--neon-purple))",
+        warm: {
+          orange: "hsl(var(--warm-orange))",
+          amber: "hsl(var(--warm-amber))",
+          gold: "hsl(var(--warm-gold))",
         },
         glass: {
           DEFAULT: "hsl(var(--glass-bg))",
@@ -85,9 +85,9 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "pulse-neon": {
+        "pulse-warm": {
           "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.5" },
+          "50%": { opacity: "0.6" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
@@ -97,7 +97,7 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-neon": "pulse-neon 2s ease-in-out infinite",
+        "pulse-warm": "pulse-warm 2s ease-in-out infinite",
         float: "float 3s ease-in-out infinite",
       },
     },

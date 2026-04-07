@@ -43,7 +43,6 @@ export default function Community() {
     const { data } = await query;
     if (!data) return;
 
-    // Check which posts user has liked
     if (user) {
       const { data: likes } = await supabase
         .from("post_likes")
@@ -132,12 +131,12 @@ export default function Community() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
-      <div className="container py-8 max-w-3xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">Comunidade</h1>
-          <p className="text-muted-foreground text-sm mt-2">Compartilhe conhecimento, tire dúvidas e conecte-se!</p>
+      <div className="container py-10 max-w-3xl">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
+          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">Comunidade</h1>
+          <p className="text-muted-foreground text-sm mt-3">Compartilhe conhecimento, tire dúvidas e conecte-se!</p>
         </motion.div>
 
         {/* Search & Filters */}
@@ -156,7 +155,7 @@ export default function Community() {
             <button
               onClick={() => setSort("recent")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
-                sort === "recent" ? "gradient-neon text-primary-foreground" : "glass text-muted-foreground"
+                sort === "recent" ? "gradient-warm text-primary-foreground" : "glass text-muted-foreground"
               }`}
             >
               <Clock className="w-3.5 h-3.5" /> Recentes
@@ -164,14 +163,14 @@ export default function Community() {
             <button
               onClick={() => setSort("popular")}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
-                sort === "popular" ? "gradient-neon text-primary-foreground" : "glass text-muted-foreground"
+                sort === "popular" ? "gradient-warm text-primary-foreground" : "glass text-muted-foreground"
               }`}
             >
               <TrendingUp className="w-3.5 h-3.5" /> Populares
             </button>
             <button
               onClick={() => setShowNew(!showNew)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg gradient-neon text-primary-foreground text-xs font-medium neon-glow"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg gradient-warm text-primary-foreground text-xs font-medium warm-glow-sm"
             >
               {showNew ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
               {showNew ? "Cancelar" : "Novo Post"}
@@ -219,7 +218,7 @@ export default function Community() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-5 py-2.5 rounded-lg gradient-neon text-primary-foreground text-sm font-medium neon-glow disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-5 py-2.5 rounded-lg gradient-warm text-primary-foreground text-sm font-medium warm-glow-sm disabled:opacity-50 flex items-center gap-1.5"
                 >
                   <Send className="w-4 h-4" /> Publicar
                 </button>
@@ -241,7 +240,7 @@ export default function Community() {
               key={post.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass p-5 hover:border-primary/20 transition-all"
+              className="glass p-5 hover:border-primary/15 transition-all"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -265,7 +264,7 @@ export default function Community() {
                   ))}
                 </div>
               )}
-              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/50">
+              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/30">
                 <button
                   onClick={() => toggleLike(post)}
                   className={`flex items-center gap-1 text-xs transition-colors ${
