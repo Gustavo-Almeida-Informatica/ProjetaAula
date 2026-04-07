@@ -68,43 +68,44 @@ export default function Login() {
   if (loading || session) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse-neon font-display text-2xl gradient-neon-text">Projeta Aula</div>
+        <div className="animate-pulse-warm font-display text-2xl gradient-warm-text">Projeta Aula</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md glass p-8 space-y-6"
+        className="w-full max-w-sm glass p-8 space-y-6 relative"
       >
         <div className="text-center">
-          <h1 className="font-display text-3xl font-bold gradient-neon-text">Projeta Aula</h1>
-          <p className="text-muted-foreground text-sm mt-2">Informática para reforçar seu conhecimento no CETEP</p>
+          <h1 className="font-display text-2xl font-bold gradient-warm-text">Projeta Aula</h1>
+          <p className="text-muted-foreground text-xs mt-2">Informática para reforçar seu conhecimento no CETEP</p>
         </div>
 
         <div className="flex rounded-lg overflow-hidden border border-border">
           <button
             onClick={() => setMode("login")}
-            className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-              mode === "login" ? "gradient-neon text-primary-foreground" : "text-muted-foreground"
+            className={`flex-1 py-2 text-sm font-medium transition-colors ${
+              mode === "login" ? "gradient-warm text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Entrar
           </button>
           <button
             onClick={() => setMode("register")}
-            className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-              mode === "register" ? "gradient-neon text-primary-foreground" : "text-muted-foreground"
+            className={`flex-1 py-2 text-sm font-medium transition-colors ${
+              mode === "register" ? "gradient-warm text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Criar Conta
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {mode === "register" && (
             <>
               <div className="relative">
@@ -118,13 +119,13 @@ export default function Login() {
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => setRole("aluno")}
                   className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
                     role === "aluno"
-                      ? "border-primary bg-primary/10 text-primary neon-glow"
+                      ? "border-primary bg-primary/10 text-primary"
                       : "border-border text-muted-foreground"
                   }`}
                 >
@@ -135,7 +136,7 @@ export default function Login() {
                   onClick={() => setRole("professor")}
                   className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
                     role === "professor"
-                      ? "border-primary bg-primary/10 text-primary neon-glow"
+                      ? "border-primary bg-primary/10 text-primary"
                       : "border-border text-muted-foreground"
                   }`}
                 >
@@ -173,7 +174,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-lg gradient-neon text-primary-foreground font-semibold text-sm neon-glow disabled:opacity-50 transition-opacity"
+            className="w-full py-3 rounded-lg gradient-warm text-primary-foreground font-semibold text-sm warm-glow-sm disabled:opacity-50 transition-all hover:scale-[1.01]"
           >
             {submitting ? "Carregando..." : mode === "login" ? "Entrar" : "Criar Conta"}
           </button>
@@ -190,7 +191,7 @@ export default function Login() {
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full py-3 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-secondary transition-colors flex items-center justify-center gap-2"
+          className="w-full py-2.5 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-secondary transition-colors flex items-center justify-center gap-2"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />

@@ -51,6 +51,16 @@ const content: Record<string, ContentSection[]> = {
         "Use a barra de pesquisa para encontrar arquivos rapidamente",
       ],
     },
+    {
+      title: "Gerenciador de Tarefas",
+      desc: "Ferramenta que mostra todos os programas abertos e o quanto de CPU, RAM e disco estão sendo usados.",
+      items: [
+        "Abra com Ctrl+Shift+Esc",
+        "Serve para fechar programas travados",
+        "Mostra quanto de CPU e RAM cada programa usa",
+        "Aba 'Inicializar' controla o que abre junto com o Windows",
+      ],
+    },
   ],
   programas: [
     {
@@ -100,6 +110,16 @@ const content: Record<string, ContentSection[]> = {
         "Mais fácil de digitar textos longos",
       ],
     },
+    {
+      title: "Windows Defender",
+      desc: "Antivírus que já vem instalado no Windows. Protege contra vírus e ameaças automaticamente.",
+      items: [
+        "Já vem ativado no Windows 10 e 11",
+        "Faz verificações em tempo real",
+        "Atualiza automaticamente com o Windows Update",
+        "Para uso doméstico, é suficiente — não precisa instalar outro antivírus",
+      ],
+    },
   ],
   drivers: [
     {
@@ -118,8 +138,9 @@ const content: Record<string, ContentSection[]> = {
       items: [
         "Para acessar: aperte Del, F2 ou F12 ao ligar o PC",
         "Mostra informações sobre hardware instalado",
-        "Permite escolher de onde o PC inicia (HD, pendrive)",
+        "Permite escolher de onde o PC inicia (HD, pendrive, DVD)",
         "Normalmente você não precisa mexer no BIOS",
+        "POST (Power-On Self Test): teste automático que o BIOS faz ao ligar para verificar se as peças estão OK",
       ],
     },
   ],
@@ -170,12 +191,22 @@ const content: Record<string, ContentSection[]> = {
       title: "Dicas de Segurança no Computador",
       desc: "Proteja seus dados e seu computador com essas dicas simples que todo mundo deveria seguir.",
       items: [
-        "Crie senhas fortes: misture letras, números e símbolos",
+        "Crie senhas fortes: misture letras, números e símbolos (mínimo 12 caracteres)",
         "Nunca use a mesma senha em todos os sites",
         "Não clique em links suspeitos (pode ser golpe/phishing)",
         "Mantenha o Windows e o antivírus sempre atualizados",
-        "Faça backup dos seus arquivos importantes",
-        "Cuidado com Wi-Fi público (shoppings, cafés)",
+        "Faça backup dos seus arquivos importantes (pendrive, HD externo ou nuvem)",
+        "Cuidado com Wi-Fi público (shoppings, cafés) — hackers podem espionar seus dados",
+      ],
+    },
+    {
+      title: "O que é Phishing?",
+      desc: "Phishing é quando alguém tenta enganar você com e-mails ou sites falsos para roubar seus dados.",
+      items: [
+        "Exemplo: e-mail dizendo 'Seu banco precisa que confirme sua senha'",
+        "Nunca clique em links de e-mails suspeitos",
+        "Verifique sempre o endereço do site (URL) antes de digitar senhas",
+        "Bancos e empresas nunca pedem senhas por e-mail",
       ],
     },
   ],
@@ -185,16 +216,16 @@ export default function Software() {
   const [activeTab, setActiveTab] = useState("windows");
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
-      <div className="container py-8">
+      <div className="container py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="text-center mb-10"
         >
-          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">Software</h1>
-          <p className="text-muted-foreground text-sm mt-2">
+          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">Software</h1>
+          <p className="text-muted-foreground text-sm mt-3">
             Aprenda sobre o Windows, programas úteis e segurança digital
           </p>
         </motion.div>
@@ -206,7 +237,7 @@ export default function Software() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === tab.id
-                  ? "gradient-neon text-primary-foreground neon-glow"
+                  ? "gradient-warm text-primary-foreground warm-glow-sm"
                   : "glass text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -221,7 +252,7 @@ export default function Software() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
-          className="space-y-6"
+          className="space-y-5"
         >
           {content[activeTab]?.map((section) => (
             <div key={section.title} className="glass p-6">

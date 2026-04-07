@@ -26,7 +26,7 @@ const galleryContent: Record<string, GalleryItem[]> = {
     {
       title: "Cabo HDMI",
       image: hdmiImg,
-      desc: "O cabo mais usado para conectar o computador ao monitor ou TV. Ele leva a imagem e o som pelo mesmo cabo, sem precisar de outros fios.",
+      desc: "O cabo mais usado para conectar o computador ao monitor ou TV. Ele leva a imagem e o som pelo mesmo cabo.",
       specs: [
         { label: "O que faz", value: "Transmite imagem e som juntos" },
         { label: "Onde usar", value: "Monitores, TVs, projetores" },
@@ -76,25 +76,13 @@ const galleryContent: Record<string, GalleryItem[]> = {
     {
       title: "Wi-Fi (Internet sem fio)",
       image: wifiImg,
-      desc: "Permite conectar à internet sem usar cabos. Muito prático para celulares e notebooks, mas pode ser instável.",
+      desc: "Permite conectar à internet sem usar cabos. Muito prático para celulares e notebooks.",
       specs: [
         { label: "O que faz", value: "Internet sem fio pelo ar" },
         { label: "Vantagem", value: "Sem fios, muito prático" },
         { label: "Desvantagem", value: "Pode cair ou ficar lento com paredes" },
         { label: "Frequências", value: "2.4 GHz (alcance) e 5 GHz (velocidade)" },
         { label: "Dica", value: "Fique perto do roteador para melhor sinal" },
-      ],
-    },
-    {
-      title: "Wi-Fi vs Cabo — Qual usar?",
-      image: ethernetImg,
-      desc: "O cabo é melhor para quem precisa de velocidade (jogos, trabalho). O Wi-Fi é melhor para quem quer praticidade (celular, tablet).",
-      specs: [
-        { label: "Mais estável", value: "Cabo de rede (sem interferência)" },
-        { label: "Mais prático", value: "Wi-Fi (sem fios)" },
-        { label: "Mais rápido", value: "Cabo de rede na prática" },
-        { label: "Para jogos", value: "Use cabo sempre que possível" },
-        { label: "Para celular", value: "Wi-Fi é a única opção" },
       ],
     },
   ],
@@ -104,18 +92,18 @@ export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("video");
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
-      <div className="container py-8">
+      <div className="container py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="text-center mb-10"
         >
-          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">
+          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">
             Conectores e Cabos
           </h1>
-          <p className="text-muted-foreground text-sm mt-2">
+          <p className="text-muted-foreground text-sm mt-3">
             Conheça os cabos que conectam as peças do computador e a internet
           </p>
         </motion.div>
@@ -127,7 +115,7 @@ export default function Gallery() {
               onClick={() => setActiveCategory(cat.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 activeCategory === cat.id
-                  ? "gradient-neon text-primary-foreground neon-glow"
+                  ? "gradient-warm text-primary-foreground warm-glow-sm"
                   : "glass text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -141,7 +129,7 @@ export default function Gallery() {
           key={activeCategory}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {galleryContent[activeCategory]?.map((item, i) => (
             <motion.div
@@ -149,7 +137,7 @@ export default function Gallery() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-6 hover:border-primary/30 transition-all"
+              className="glass p-6 hover:border-primary/20 transition-all"
             >
               <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
                 <img
@@ -163,7 +151,7 @@ export default function Gallery() {
               <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
               <div className="space-y-2">
                 {item.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between items-center text-xs border-b border-border/50 pb-1.5">
+                  <div key={spec.label} className="flex justify-between items-center text-xs border-b border-border/30 pb-1.5">
                     <span className="text-primary font-medium">{spec.label}</span>
                     <span className="text-foreground/80">{spec.value}</span>
                   </div>

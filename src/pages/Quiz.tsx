@@ -36,7 +36,6 @@ export default function Quiz() {
   }, [startQuiz]);
 
   const fetchLeaderboard = async () => {
-    // Get all scores, then keep only the best per user
     const { data } = await supabase
       .from("quiz_scores")
       .select("user_name, user_role, score, user_id")
@@ -90,7 +89,6 @@ export default function Quiz() {
           setSelected(null);
           setShowResult(false);
         } else {
-          // All questions answered — reshuffle and continue (infinite)
           setQuestions(getShuffledQuestions());
           setCurrentIndex(0);
           setSelected(null);
@@ -111,15 +109,15 @@ export default function Quiz() {
   if (!current) return null;
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
-      <div className="container py-8 max-w-4xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-neon-text">Quiz Infinito</h1>
-          <p className="text-muted-foreground text-sm mt-2">Errou? Volta do zero! Acerte o máximo que conseguir.</p>
+      <div className="container py-10 max-w-4xl">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
+          <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">Quiz Infinito</h1>
+          <p className="text-muted-foreground text-sm mt-3">Errou? Volta do zero! Acerte o máximo que conseguir.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Quiz Area */}
           <div className="lg:col-span-2">
             {/* Score Bar */}
@@ -132,7 +130,7 @@ export default function Quiz() {
               <span className="text-xs text-muted-foreground">
                 Pergunta {currentIndex + 1}
               </span>
-              <span className="text-xs glass px-2 py-1">{current.category}</span>
+              <span className="text-xs px-2 py-1 rounded-md bg-secondary text-muted-foreground">{current.category}</span>
             </div>
 
             {/* Question */}
@@ -149,7 +147,7 @@ export default function Quiz() {
                 </h2>
                 <div className="space-y-3">
                   {current.options.map((opt, i) => {
-                    let style = "glass hover:border-primary/40 cursor-pointer";
+                    let style = "glass hover:border-primary/30 cursor-pointer";
                     if (showResult) {
                       if (i === current.correct) style = "border-green-500 bg-green-500/10 border";
                       else if (i === selected) style = "border-destructive bg-destructive/10 border";
