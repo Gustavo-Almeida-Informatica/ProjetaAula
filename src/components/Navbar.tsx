@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import {
-  Monitor, Cpu, Image, Brain, Users, Home, LogOut, Menu, X, BookOpen,
+  Monitor, Cpu, Image, Brain, Users, Home, LogOut, Menu, X, BookOpen, UserCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -56,9 +56,13 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           {profile && (
-            <span className="text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50">
+            <Link
+              to="/perfil"
+              className="flex items-center gap-1.5 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
+            >
+              <UserCircle className="w-3.5 h-3.5" />
               {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
-            </span>
+            </Link>
           )}
           <button onClick={signOut} className="text-muted-foreground hover:text-destructive transition-colors">
             <LogOut className="w-4 h-4" />
@@ -91,13 +95,25 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <div className="border-t border-border/50 pt-2 mt-2 flex items-center justify-between">
-            {profile && (
-              <span className="text-xs text-muted-foreground">
-                {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
-              </span>
-            )}
-            <button onClick={signOut} className="text-destructive text-sm">Sair</button>
+          <div className="border-t border-border/50 pt-2 mt-2 space-y-1">
+            <Link
+              to="/perfil"
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm ${
+                pathname === "/perfil" ? "text-primary bg-primary/8" : "text-muted-foreground"
+              }`}
+            >
+              <UserCircle className="w-4 h-4" />
+              Meu Perfil
+            </Link>
+            <div className="flex items-center justify-between px-3">
+              {profile && (
+                <span className="text-xs text-muted-foreground">
+                  {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+                </span>
+              )}
+              <button onClick={signOut} className="text-destructive text-sm">Sair</button>
+            </div>
           </div>
         </motion.div>
       )}

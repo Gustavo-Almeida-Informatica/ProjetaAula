@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import {
   Search, Hash, TrendingUp, Clock, Heart, MessageSquare, Plus, X, Send,
 } from "lucide-react";
+import PostComments from "@/components/PostComments";
 
 interface Post {
   id: string;
@@ -274,6 +275,7 @@ export default function Community() {
                   <Heart className={`w-3.5 h-3.5 ${post.liked_by_me ? "fill-current" : ""}`} />
                   {post.likes_count}
                 </button>
+                <PostComments postId={post.id} />
               </div>
             </motion.div>
           ))}
