@@ -50,6 +50,41 @@ export type Database = {
         }
         Relationships: []
       }
+      post_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+          user_name?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_likes: {
         Row: {
           created_at: string
@@ -82,23 +117,29 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          city: string | null
           created_at: string
           full_name: string
           id: string
+          phone: string | null
           role: Database["public"]["Enums"]["user_role"]
         }
         Insert: {
           avatar_url?: string | null
+          city?: string | null
           created_at?: string
           full_name?: string
           id: string
+          phone?: string | null
           role?: Database["public"]["Enums"]["user_role"]
         }
         Update: {
           avatar_url?: string | null
+          city?: string | null
           created_at?: string
           full_name?: string
           id?: string
+          phone?: string | null
           role?: Database["public"]["Enums"]["user_role"]
         }
         Relationships: []
