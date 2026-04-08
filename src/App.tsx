@@ -12,6 +12,7 @@ import Gallery from "./pages/Gallery";
 import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
 import History from "./pages/History";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ function AppRoutes() {
       <Route path="/galeria" element={<ProtectedRoute><Gallery /></ProtectedRoute>} />
       <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
       <Route path="/comunidade" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+      <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
