@@ -11,7 +11,7 @@ import gpuImg from "@/assets/hw-gpu.jpg";
 import peripheralsImg from "@/assets/hw-peripherals.jpg";
 
 interface TopicCard {
-  image: string;
+  image?: string;
   title: string;
   desc: string;
   details: string[];
@@ -111,6 +111,231 @@ const topics: TopicCard[] = [
       "Impressora 3D: cria objetos físicos camada por camada a partir de modelos digitais",
     ],
   },
+  // --- Novas seções da apostila de Hardware ---
+  {
+    title: "Gabinete",
+    desc: "É a 'caixa' onde todas as peças internas do computador ficam organizadas e protegidas.",
+    details: [
+      "Tipos: Desktop (horizontal) e Minitorre/Torre (vertical)",
+      "Formato AT (antigo): botão liga/desliga manual, sem desligamento pelo Windows",
+      "Formato ATX (atual): desliga sozinho pelo sistema operacional",
+      "O gabinete protege os componentes contra poeira e impactos",
+      "Possui espaços para HD, SSD, fonte e ventoinhas extras",
+    ],
+  },
+  {
+    title: "Placa de Som",
+    desc: "Converte os dados digitais do computador em som que você pode ouvir nas caixas de som ou fones.",
+    details: [
+      "Faz a conversão digital → analógico (DAC) para reproduzir áudio",
+      "Faz a conversão analógico → digital (ADC) para gravar áudio do microfone",
+      "A maioria das placas-mãe já tem som embutido (onboard)",
+      "Placas de som dedicadas oferecem melhor qualidade para músicos e estúdios",
+    ],
+  },
+  {
+    title: "Placa de Rede (NIC)",
+    desc: "Permite que o computador se conecte à internet e a outros computadores em rede.",
+    details: [
+      "Usa conector RJ45 para cabo de rede Ethernet (par trançado)",
+      "Cada placa tem um endereço MAC único (como um 'CPF' do dispositivo na rede)",
+      "Existem placas com fio (Ethernet) e sem fio (Wi-Fi/Wireless)",
+      "A maioria das placas-mãe atuais já vem com rede embutida (onboard)",
+      "Velocidades comuns: 100 Mbps (Fast Ethernet) e 1 Gbps (Gigabit Ethernet)",
+    ],
+  },
+  {
+    title: "Placa Fax/Modem",
+    desc: "Permitia ao computador enviar e receber dados pela linha telefônica — essencial na era da internet discada.",
+    details: [
+      "Modem = MOdulador/DEModulador: converte sinais digitais em analógicos e vice-versa",
+      "Usava a linha telefônica para conectar à internet",
+      "Velocidade máxima: 56 Kbps (muito lenta pelos padrões atuais)",
+      "Também servia para enviar e receber fax pelo computador",
+      "Hoje foi substituída por conexões banda larga (fibra óptica, cabo, DSL)",
+    ],
+  },
+  {
+    title: "Flat Cable (Cabos Internos)",
+    desc: "Cabos achatados que fazem a conexão entre a placa-mãe e os dispositivos de armazenamento dentro do gabinete.",
+    details: [
+      "IDE (PATA): cabo largo e achatado com 40 ou 80 fios, usado em HDs e CDs antigos",
+      "SATA: cabo fino e moderno, mais rápido e organizado que o IDE",
+      "O cabo IDE permitia conectar 2 dispositivos (Master e Slave) no mesmo cabo",
+      "O SATA é ponto a ponto: um cabo por dispositivo",
+      "Hoje quase todos os PCs usam SATA ou NVMe (sem cabo, direto no slot M.2)",
+    ],
+  },
+  {
+    title: "Teclado (Detalhado)",
+    desc: "Principal dispositivo de entrada: permite digitar textos, comandos e atalhos no computador.",
+    details: [
+      "Teclas alfanuméricas: letras (A-Z) e números (0-9)",
+      "Teclas de função: F1 a F12, cada programa usa de um jeito",
+      "Teclas de controle: Ctrl, Alt, Shift, Esc, Tab, Enter, Caps Lock, Backspace, Delete",
+      "Teclado numérico: bloco à direita com números e operações matemáticas",
+      "Conexões: PS/2 (conector roxo, antigo), USB (atual) e Wireless (sem fio)",
+      "Tipos: membrana (mais barato e silencioso) e mecânico (mais durável e responsivo)",
+    ],
+  },
+  {
+    title: "Mouse (Detalhado)",
+    desc: "Dispositivo de entrada que controla o ponteiro na tela, permitindo clicar, arrastar e selecionar.",
+    details: [
+      "Clique simples: seleciona um item ou clica em botões",
+      "Clique duplo: abre arquivos, pastas e programas",
+      "Clique direito: abre menu de opções (renomear, copiar, excluir)",
+      "Scroll (rodinha): rola a página para cima e para baixo",
+      "Drag and Drop: clicar, segurar e arrastar para mover itens",
+      "Tipos: óptico (luz LED), laser (mais preciso), com fio (USB), sem fio (Bluetooth/receptor USB)",
+    ],
+  },
+  {
+    title: "Monitor (Detalhado)",
+    desc: "Periférico de saída que exibe as imagens, textos e vídeos do computador na tela.",
+    details: [
+      "LCD (Liquid Crystal Display): tela de cristal líquido, econômica e fina",
+      "LED: variação do LCD com iluminação por LEDs, melhor contraste e menor consumo",
+      "Resolução: quantidade de pixels na tela (Full HD = 1920x1080, 4K = 3840x2160)",
+      "Tamanhos comuns: 21\", 24\", 27\" e 32\"",
+      "Taxa de atualização: 60Hz (básico), 144Hz ou 240Hz (gamers)",
+      "Conecta via HDMI, DisplayPort ou VGA (antigo)",
+    ],
+  },
+  {
+    title: "Impressora (Tipos)",
+    desc: "Periférico de saída que transfere texto e imagens do computador para o papel.",
+    details: [
+      "Matricial: usa agulhas e fita, impressão em formulário contínuo — usada em empresas para notas fiscais",
+      "Jato de Tinta: borrifa gotículas de tinta no papel — boa para fotos e uso doméstico",
+      "Laser: usa toner (pó) e calor — impressão muito rápida e nítida para textos",
+      "Térmica: usa calor para imprimir em papel especial — cupons fiscais e etiquetas",
+      "Impressora 3D: cria objetos físicos tridimensionais camada por camada",
+      "Multifuncional: impressora + scanner + copiadora em um só aparelho",
+    ],
+  },
+  {
+    title: "Scanner (Detalhado)",
+    desc: "Periférico de entrada que digitaliza documentos e imagens físicas, transformando papel em arquivo digital.",
+    details: [
+      "Scanner de mesa: o documento é colocado sobre o vidro e a luz percorre toda a superfície",
+      "Scanner de mão: portátil, você passa manualmente sobre o documento",
+      "Formatos de saída: PDF, JPEG, PNG, TIFF",
+      "Resolução medida em DPI (pontos por polegada) — quanto maior, mais detalhado",
+      "Muitas impressoras multifuncionais já incluem scanner embutido",
+    ],
+  },
+  {
+    title: "Webcam",
+    desc: "Câmera pequena conectada ao computador para videochamadas, gravação e streaming.",
+    details: [
+      "Usa sensor CCD ou CMOS para capturar imagens",
+      "Conexão principal: USB",
+      "Resolução: 720p (HD), 1080p (Full HD) ou 4K",
+      "Notebooks já possuem webcam embutida na tela",
+      "Muito usada para aulas online, reuniões e lives",
+    ],
+  },
+  {
+    title: "Kit Multimídia",
+    desc: "Conjunto de caixa de som e microfone para reprodução e captação de áudio no computador.",
+    details: [
+      "Caixas de som: reproduzem o áudio do computador (músicas, vídeos, notificações)",
+      "Microfone: capta sua voz para chamadas, gravações e comandos",
+      "Conexão via P2 (3.5mm), USB ou Bluetooth",
+      "Headsets combinam fone + microfone em um único dispositivo",
+      "Webcams com microfone embutido dispensam microfone separado",
+    ],
+  },
+  {
+    title: "BIOS / CMOS / POST (Detalhado)",
+    desc: "Sistema fundamental que inicia o computador, testa as peças e carrega o Windows.",
+    details: [
+      "BIOS (Basic Input/Output System): firmware gravado em chip na placa-mãe",
+      "CMOS: chip que armazena as configurações do BIOS (data/hora, ordem de boot, etc.)",
+      "Bateria CR2032: mantém as configurações do CMOS quando o PC está desligado",
+      "POST (Power-On Self Test): teste automático ao ligar o PC",
+      "Bips do POST: 1 bip curto = tudo OK",
+      "2 a 4 bips = problema na memória RAM",
+      "8 bips = problema na placa de vídeo",
+      "9 bips = erro na BIOS/ROM",
+      "Bips contínuos = problema na memória ou alimentação",
+      "Para acessar: pressione Del, F2 ou F12 ao ligar o PC",
+    ],
+  },
+  {
+    title: "Interfaces e Portas",
+    desc: "São as conexões físicas na parte traseira (e frontal) do computador para ligar periféricos.",
+    details: [
+      "Serial (DB-9): porta antiga com 9 pinos, usada para mouse e modems antigos — transmite 1 bit por vez",
+      "Paralela (DB-25): porta com 25 pinos, usada para impressoras antigas — transmite 8 bits por vez",
+      "USB: porta universal que suporta até 127 periféricos conectados simultaneamente",
+      "IDE (PATA): interface interna para HD e CD/DVD (cabo flat largo)",
+      "SATA: substituiu o IDE — mais rápido e com cabo fino",
+      "SCSI: interface para servidores, suporta até 16 dispositivos em cadeia",
+      "Master/Slave: configuração dos dispositivos IDE — o Master é o principal, o Slave é o secundário",
+    ],
+  },
+  {
+    title: "Slots de Barramento",
+    desc: "São encaixes na placa-mãe onde você instala placas de expansão (vídeo, som, rede, etc.).",
+    details: [
+      "ISA (Industry Standard Architecture): barramento antigo de 8 ou 16 bits, muito lento",
+      "PCI (Peripheral Component Interconnect): barramento de 32 bits a 33 MHz, usado para placas de som e rede",
+      "AGP (Accelerated Graphics Port): slot exclusivo para placa de vídeo, mais rápido que o PCI",
+      "PCI Express (PCIe): o barramento atual — muito mais rápido, usado para GPUs, SSDs NVMe e placas de rede",
+      "PCIe tem versões: x1, x4, x8, x16 — quanto mais 'lanes', mais rápido",
+    ],
+  },
+  {
+    title: "Chipsets (Ponte Norte e Ponte Sul)",
+    desc: "São chips na placa-mãe que controlam a comunicação entre os componentes do computador.",
+    details: [
+      "Ponte Norte (Northbridge): gerencia a comunicação rápida entre CPU, RAM e placa de vídeo",
+      "Ponte Sul (Southbridge): gerencia periféricos mais lentos como USB, áudio, HD e rede",
+      "Em processadores modernos, a ponte norte foi integrada diretamente na CPU",
+      "O chipset define quais recursos a placa-mãe suporta (tipo de RAM, quantidade de USB, etc.)",
+    ],
+  },
+  {
+    title: "Memórias Avançadas (SDRAM, DDR2, DDR3)",
+    desc: "A memória RAM evoluiu ao longo dos anos, ficando mais rápida e eficiente a cada geração.",
+    details: [
+      "SDRAM: memória síncrona, primeira a acompanhar o clock da placa-mãe",
+      "DDR (Double Data Rate): transfere dados duas vezes por ciclo de clock",
+      "DDR2: mais rápida que DDR, operava a 400-800 MHz",
+      "DDR3: mais eficiente que DDR2, operava a 800-1600 MHz e menor consumo de energia",
+      "DDR4: a mais comum atualmente, 2133-3200 MHz",
+      "DDR5: a mais nova, ainda mais rápida e eficiente",
+      "Cada geração tem encaixe diferente — DDR3 não encaixa no slot de DDR4",
+    ],
+  },
+  {
+    title: "RAID (Redundant Array of Independent Disks)",
+    desc: "Sistema que combina vários HDs ou SSDs para aumentar velocidade ou proteção dos dados.",
+    details: [
+      "RAID 0 (Stripping): divide dados entre 2+ discos para maior velocidade, mas sem proteção — se um disco falhar, perde tudo",
+      "RAID 1 (Mirroring): espelha os dados em 2 discos — se um falhar, o outro tem a cópia completa",
+      "RAID 5: usa 3+ discos com dados + paridade, equilibrando velocidade e segurança",
+      "RAID é usado em servidores e empresas onde perder dados é inaceitável",
+      "Não substitui o backup — é uma camada extra de proteção",
+    ],
+  },
+  {
+    title: "Sistemas Numéricos (Binário, Bits e Bytes)",
+    desc: "O computador entende apenas 0 e 1 (binário). Toda informação é convertida para esse formato.",
+    details: [
+      "Binário: sistema de base 2, usa apenas 0 e 1",
+      "Decimal: sistema que usamos no dia a dia, base 10 (0 a 9)",
+      "Hexadecimal: base 16 (0-9 e A-F), usado em cores e endereços de memória",
+      "Bit: a menor unidade de informação (0 ou 1)",
+      "Byte: 8 bits agrupados (ex: 01001010)",
+      "1 KB (Kilobyte) = 1.024 bytes",
+      "1 MB (Megabyte) = 1.024 KB",
+      "1 GB (Gigabyte) = 1.024 MB",
+      "1 TB (Terabyte) = 1.024 GB",
+    ],
+  },
 ];
 
 export default function Hardware() {
@@ -141,14 +366,16 @@ export default function Hardware() {
               transition={{ delay: i * 0.05 }}
               className="glass p-6 hover:border-primary/20 transition-all"
             >
-              <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
-                <img
-                  src={topic.image}
-                  alt={topic.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              {topic.image && (
+                <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
+                  <img
+                    src={topic.image}
+                    alt={topic.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <h3 className="font-display text-base font-bold text-foreground mb-2">
                 {topic.title}
               </h3>

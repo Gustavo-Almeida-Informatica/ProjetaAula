@@ -112,6 +112,112 @@ export const quizQuestions: QuizQuestion[] = [
   { id: 81, category: "Conceitos", question: "O que é circuito integrado (chip)?", options: ["Um tipo de cabo", "Um componente que reúne milhares de transistores em uma peça minúscula", "Um programa de computador", "Um tipo de memória RAM"], correct: 1, explanation: "O circuito integrado (chip) foi inventado em 1958 e revolucionou a eletrônica ao colocar milhares de transistores em uma única peça minúscula." },
   { id: 82, category: "Conceitos", question: "Qual a diferença entre corrente alternada (AC) e corrente contínua (DC)?", options: ["São a mesma coisa", "AC vem da tomada, DC é o que os componentes do PC usam", "DC vem da tomada", "AC é mais fraca"], correct: 1, explanation: "AC (corrente alternada) é a energia que vem da tomada. A fonte de alimentação do PC converte para DC (corrente contínua) que os componentes precisam." },
   { id: 83, category: "Conceitos", question: "O que significa ATX na placa-mãe?", options: ["Um tipo de processador", "O formato/tamanho padrão de placas-mãe", "Um tipo de memória", "Uma marca de computador"], correct: 1, explanation: "ATX é o formato (form factor) padrão de placas-mãe. Micro-ATX é uma versão menor para gabinetes compactos." },
+
+  // ===== NOVAS PERGUNTAS DA APOSTILA DE HARDWARE =====
+
+  // Gabinete
+  { id: 84, category: "Hardware", question: "O que é o gabinete do computador?", options: ["O monitor", "A caixa que protege e organiza as peças internas", "A fonte de energia", "O teclado"], correct: 1, explanation: "O gabinete é a 'caixa' onde ficam todas as peças internas do computador (placa-mãe, HD, fonte, etc.), protegendo-as contra poeira e impactos." },
+  { id: 85, category: "Hardware", question: "Qual formato de gabinete/placa-mãe permite desligar o PC pelo sistema operacional?", options: ["AT", "ATX", "ISA", "PCI"], correct: 1, explanation: "O formato ATX (atual) permite que o sistema operacional desligue o PC automaticamente. No formato AT (antigo), era preciso apertar o botão manualmente." },
+
+  // Placa de Som
+  { id: 86, category: "Hardware", question: "O que a placa de som faz?", options: ["Processa imagens", "Converte dados digitais em áudio e vice-versa", "Conecta à internet", "Armazena arquivos"], correct: 1, explanation: "A placa de som converte dados digitais do computador em som (para caixas de som) e converte som do microfone em dados digitais." },
+
+  // Placa de Rede
+  { id: 87, category: "Hardware", question: "Qual conector a placa de rede usa para cabo Ethernet?", options: ["USB-C", "HDMI", "RJ45", "VGA"], correct: 2, explanation: "A placa de rede usa o conector RJ45 para conectar o cabo de rede Ethernet (par trançado) e acessar a internet com fio." },
+  { id: 88, category: "Hardware", question: "O que é o endereço MAC de uma placa de rede?", options: ["O preço da placa", "Um identificador único do dispositivo na rede", "A velocidade da internet", "O nome do fabricante"], correct: 1, explanation: "O endereço MAC é como um 'CPF' da placa de rede — um código único que identifica aquele dispositivo específico na rede." },
+
+  // Modem
+  { id: 89, category: "Hardware", question: "O que significa a sigla MODEM?", options: ["Monitor de Energia", "Modulador/Demodulador", "Memória Digital", "Módulo de Expansão"], correct: 1, explanation: "MODEM vem de MOdulador/DEModulador. Ele converte sinais digitais em analógicos (e vice-versa) para transmitir dados pela linha telefônica." },
+
+  // BIOS/POST bips
+  { id: 90, category: "Hardware", question: "O que significa 1 bip curto ao ligar o computador?", options: ["Erro na memória", "Tudo funcionando normalmente (POST OK)", "Erro na placa de vídeo", "Erro na BIOS"], correct: 1, explanation: "1 bip curto durante o POST significa que todos os componentes foram testados e estão funcionando normalmente. O PC vai iniciar o sistema." },
+  { id: 91, category: "Hardware", question: "8 bips ao ligar o PC indicam problema em qual componente?", options: ["Memória RAM", "Processador", "Placa de vídeo", "Disco rígido"], correct: 2, explanation: "8 bips durante o POST indicam problema na placa de vídeo (GPU). Pode ser que a placa esteja mal encaixada ou com defeito." },
+  { id: 92, category: "Hardware", question: "Para que serve a bateria CR2032 na placa-mãe?", options: ["Ligar o computador", "Manter as configurações do CMOS quando o PC está desligado", "Carregar o celular", "Alimentar o processador"], correct: 1, explanation: "A bateria CR2032 mantém as configurações da BIOS/CMOS (data, hora, ordem de boot) salvas mesmo quando o computador está desligado." },
+
+  // Interfaces
+  { id: 93, category: "Hardware", question: "O que é a porta Serial DB-9?", options: ["Porta de vídeo moderna", "Porta antiga de 9 pinos que transmitia 1 bit por vez", "Entrada de energia", "Porta USB antiga"], correct: 1, explanation: "A porta Serial DB-9 era usada para conectar mouse e modem em computadores antigos. Transmitia dados sequencialmente, 1 bit por vez." },
+  { id: 94, category: "Hardware", question: "Quantos periféricos o USB suporta conectados simultaneamente?", options: ["10", "64", "127", "256"], correct: 2, explanation: "O padrão USB suporta até 127 dispositivos conectados simultaneamente (usando hubs USB para expandir as portas)." },
+  { id: 95, category: "Hardware", question: "O que é a configuração Master/Slave em discos IDE?", options: ["Dois monitores", "O disco principal (Master) e o secundário (Slave) no mesmo cabo", "Duas fontes de alimentação", "Dois processadores"], correct: 1, explanation: "Em interfaces IDE, dois dispositivos podiam compartilhar o mesmo cabo flat. O Master era o disco principal e o Slave era o secundário." },
+
+  // Slots de barramento
+  { id: 96, category: "Hardware", question: "O que é o slot ISA?", options: ["Slot de memória RAM", "Barramento antigo de 8 ou 16 bits, muito lento", "Slot para processador", "Entrada de energia"], correct: 1, explanation: "ISA (Industry Standard Architecture) foi um dos primeiros barramentos de expansão. Era muito lento (8 ou 16 bits) e foi substituído pelo PCI." },
+  { id: 97, category: "Hardware", question: "Qual barramento substituiu o AGP para placas de vídeo?", options: ["ISA", "PCI convencional", "PCI Express (PCIe)", "SCSI"], correct: 2, explanation: "O PCI Express (PCIe) substituiu o AGP como barramento padrão para placas de vídeo, oferecendo velocidades muito superiores." },
+
+  // Chipsets
+  { id: 98, category: "Hardware", question: "O que é a ponte norte (Northbridge) do chipset?", options: ["A porta USB principal", "Chip que gerencia CPU, RAM e placa de vídeo", "O processador secundário", "A fonte de energia"], correct: 1, explanation: "A ponte norte (Northbridge) gerencia a comunicação de alta velocidade entre CPU, memória RAM e placa de vídeo. Em CPUs modernas, foi integrada ao processador." },
+
+  // Memórias avançadas
+  { id: 99, category: "Hardware", question: "Qual a diferença entre DDR2 e DDR3?", options: ["São iguais", "DDR3 é mais rápida e consome menos energia que DDR2", "DDR2 é mais rápida", "DDR3 é mais cara mas igual em velocidade"], correct: 1, explanation: "DDR3 opera em frequências maiores (800-1600 MHz vs 400-800 MHz do DDR2) e consome menos energia, sendo mais eficiente." },
+  { id: 100, category: "Hardware", question: "É possível colocar memória DDR3 no slot de DDR4?", options: ["Sim, são compatíveis", "Não, cada geração tem encaixe diferente", "Sim, com adaptador", "Depende da placa-mãe"], correct: 1, explanation: "Não! Cada geração de memória DDR tem um encaixe físico diferente (chanfro em posição diferente). DDR3 não encaixa no slot de DDR4 e vice-versa." },
+
+  // RAID
+  { id: 101, category: "Hardware", question: "O que é RAID?", options: ["Um tipo de vírus", "Sistema que combina vários discos para velocidade ou proteção", "Um programa de backup", "Um tipo de memória RAM"], correct: 1, explanation: "RAID (Redundant Array of Independent Disks) combina múltiplos HDs/SSDs para aumentar a velocidade (RAID 0), a segurança (RAID 1) ou ambos (RAID 5)." },
+  { id: 102, category: "Hardware", question: "No RAID 1, o que acontece com os dados?", options: ["São divididos entre os discos", "São espelhados (copiados) em dois discos", "São compactados", "São criptografados"], correct: 1, explanation: "RAID 1 (Mirroring) espelha todos os dados em dois discos idênticos. Se um disco falhar, o outro tem a cópia completa, garantindo segurança." },
+
+  // Sistemas numéricos
+  { id: 103, category: "Hardware", question: "Quantos bits formam 1 byte?", options: ["4", "8", "16", "32"], correct: 1, explanation: "1 byte = 8 bits. O bit é a menor unidade (0 ou 1), e 8 bits agrupados formam 1 byte, que pode representar um caractere como uma letra." },
+  { id: 104, category: "Hardware", question: "1 KB (Kilobyte) equivale a quantos bytes?", options: ["100", "512", "1.024", "1.000"], correct: 2, explanation: "1 KB = 1.024 bytes. Na informática, as unidades seguem potências de 2: 1 KB = 2¹⁰ = 1.024 bytes." },
+  { id: 105, category: "Hardware", question: "Qual sistema numérico o computador usa internamente?", options: ["Decimal (base 10)", "Binário (base 2)", "Hexadecimal (base 16)", "Octal (base 8)"], correct: 1, explanation: "O computador usa o sistema binário (base 2), com apenas dois dígitos: 0 e 1. Toda informação é convertida para sequências de 0s e 1s." },
+
+  // Flat Cable
+  { id: 106, category: "Hardware", question: "Qual cabo interno foi substituído pelo SATA?", options: ["HDMI", "USB", "IDE (cabo flat largo)", "VGA"], correct: 2, explanation: "O cabo IDE (PATA) era um cabo flat largo com 40 ou 80 fios usado para conectar HDs e CDs. Foi substituído pelo SATA, que é fino e mais rápido." },
+
+  // ===== NOVAS PERGUNTAS DA APOSTILA DE WINDOWS 11 =====
+
+  // Aero Snap e Layout Snap
+  { id: 107, category: "Windows", question: "O que é o Aero Snap no Windows?", options: ["Um programa de fotos", "Recurso que organiza janelas ao arrastá-las para as bordas da tela", "Um antivírus", "Um tipo de papel de parede"], correct: 1, explanation: "O Aero Snap permite organizar janelas arrastando-as para as bordas da tela — arraste para a lateral e a janela ocupa metade da tela automaticamente." },
+  { id: 108, category: "Windows", question: "O Layout Snap do Windows 11 organiza até quantas janelas?", options: ["2 janelas", "3 janelas", "Até 4 janelas lado a lado", "Apenas 1 janela"], correct: 2, explanation: "O Layout Snap do Windows 11 permite organizar até 4 janelas lado a lado em layouts predefinidos. Basta passar o mouse sobre o botão Maximizar." },
+
+  // Áreas de trabalho virtuais
+  { id: 109, category: "Windows", question: "Qual atalho cria uma nova área de trabalho virtual?", options: ["Ctrl+N", "Ctrl+Win+D", "Alt+F4", "Win+E"], correct: 1, explanation: "Ctrl+Win+D cria uma nova área de trabalho virtual. Use Win+Tab para ver todas as áreas e Ctrl+Win+Setas para alternar entre elas." },
+  { id: 110, category: "Windows", question: "Para que servem as áreas de trabalho virtuais?", options: ["Para ter mais monitores", "Para organizar tarefas em espaços separados", "Para aumentar a memória RAM", "Para instalar mais programas"], correct: 1, explanation: "As áreas de trabalho virtuais permitem separar suas tarefas em espaços diferentes — uma para trabalho, outra para estudos, outra para lazer." },
+
+  // Paint
+  { id: 111, category: "Windows", question: "Para que serve o Paint do Windows?", options: ["Para navegar na internet", "Para criar e editar imagens de forma simples", "Para escrever documentos", "Para fazer cálculos"], correct: 1, explanation: "O Paint é um editor de imagens simples do Windows. Permite desenhar, recortar, redimensionar e anotar imagens com ferramentas básicas." },
+
+  // Ferramenta de Captura
+  { id: 112, category: "Windows", question: "Qual atalho faz captura de tela no Windows 11?", options: ["Ctrl+P", "Win+Shift+S", "Alt+Tab", "Ctrl+Z"], correct: 1, explanation: "Win+Shift+S abre a Ferramenta de Captura para recortar uma parte da tela. Você pode escolher captura retangular, livre, de janela ou tela inteira." },
+
+  // WordPad
+  { id: 113, category: "Windows", question: "O que o WordPad permite fazer que o Bloco de Notas não permite?", options: ["Abrir arquivos", "Formatar texto com negrito, itálico e cores", "Salvar arquivos", "Digitar texto"], correct: 1, explanation: "O WordPad permite formatação básica (negrito, itálico, sublinhado, cores, inserir imagens) enquanto o Bloco de Notas só trabalha com texto puro." },
+
+  // Calculadora
+  { id: 114, category: "Windows", question: "A calculadora do Windows tem modo científico?", options: ["Não, só faz contas básicas", "Sim, com funções como raiz, potência e trigonometria", "Só na versão paga", "Só no Windows 11"], correct: 1, explanation: "Sim! A calculadora do Windows tem modo Padrão, Científico (com funções avançadas), Programador (binário/hex) e Conversor de unidades e moedas." },
+
+  // Edge
+  { id: 115, category: "Windows", question: "Qual atalho abre uma nova guia no Microsoft Edge?", options: ["Ctrl+N", "Ctrl+T", "Ctrl+W", "Alt+Tab"], correct: 1, explanation: "Ctrl+T abre uma nova guia (aba) no Microsoft Edge. Ctrl+W fecha a guia atual e Ctrl+Tab alterna entre as guias abertas." },
+
+  // Lixeira
+  { id: 116, category: "Windows", question: "O que o atalho Shift+Delete faz?", options: ["Move para a Lixeira", "Exclui permanentemente sem enviar para a Lixeira", "Copia o arquivo", "Renomeia o arquivo"], correct: 1, explanation: "Shift+Delete exclui o arquivo permanentemente, sem passar pela Lixeira. Cuidado! Não tem como recuperar facilmente depois." },
+  { id: 117, category: "Windows", question: "Como restaurar um arquivo que está na Lixeira?", options: ["Não é possível", "Clique direito no arquivo > Restaurar", "Pressione Ctrl+Z na Lixeira", "Delete o arquivo novamente"], correct: 1, explanation: "Na Lixeira, clique com o botão direito no arquivo e escolha 'Restaurar'. O arquivo volta para o local de onde foi excluído." },
+
+  // Seleção de arquivos
+  { id: 118, category: "Windows", question: "Qual atalho seleciona todos os arquivos de uma pasta?", options: ["Ctrl+S", "Ctrl+C", "Ctrl+A", "Ctrl+X"], correct: 2, explanation: "Ctrl+A seleciona todos os arquivos e pastas do local atual. Depois você pode copiar (Ctrl+C), mover (Ctrl+X) ou excluir todos de uma vez." },
+
+  // CCleaner
+  { id: 119, category: "Manutenção", question: "Para que serve o CCleaner?", options: ["Para editar fotos", "Para limpar arquivos temporários e liberar espaço no disco", "Para criar documentos", "Para navegar na internet"], correct: 1, explanation: "O CCleaner remove arquivos temporários, cache de navegadores, histórico e outros dados desnecessários para liberar espaço e melhorar o desempenho." },
+
+  // Defraggler
+  { id: 120, category: "Manutenção", question: "O que é desfragmentação de disco?", options: ["Formatar o disco", "Reorganizar dados espalhados pelo HD para leitura mais rápida", "Excluir vírus", "Aumentar o tamanho do disco"], correct: 1, explanation: "A desfragmentação reorganiza os fragmentos de arquivos espalhados pelo HD, juntando-os em sequência para que a leitura fique mais rápida." },
+  { id: 121, category: "Manutenção", question: "Deve-se desfragmentar um SSD?", options: ["Sim, melhora o desempenho", "Não, pode reduzir a vida útil do SSD", "Sim, mas só 1x por mês", "Depende da marca"], correct: 1, explanation: "NÃO! SSDs não devem ser desfragmentados. A desfragmentação é útil apenas para HDs mecânicos. Em SSDs, pode causar desgaste desnecessário." },
+
+  // Compactação
+  { id: 122, category: "Manutenção", question: "O que é compactar um arquivo?", options: ["Apagar o arquivo", "Reduzir o tamanho agrupando em .zip ou .rar", "Copiar para outro disco", "Renomear o arquivo"], correct: 1, explanation: "Compactar é reduzir o tamanho de um ou mais arquivos agrupando-os em um arquivo compactado (.zip ou .rar). Útil para economizar espaço e enviar por e-mail." },
+
+  // Impressora tipos
+  { id: 123, category: "Periféricos", question: "Qual tipo de impressora usa toner (pó) em vez de tinta líquida?", options: ["Jato de tinta", "Matricial", "Laser", "Térmica"], correct: 2, explanation: "A impressora laser usa toner (um pó fino) que é fixado no papel por calor. É mais rápida e econômica para imprimir grandes volumes de texto." },
+
+  // Scanner detalhado
+  { id: 124, category: "Periféricos", question: "O que faz um scanner de mesa?", options: ["Imprime fotos em papel", "Digitaliza documentos colocados sobre o vidro", "Conecta à internet", "Reproduz áudio"], correct: 1, explanation: "O scanner de mesa digitaliza documentos e imagens colocados sobre o vidro. Uma luz percorre a superfície e cria um arquivo digital (PDF, JPEG, etc.)." },
+
+  // Placa de rede
+  { id: 125, category: "Hardware", question: "Qual a velocidade de uma conexão Gigabit Ethernet?", options: ["100 Mbps", "500 Mbps", "1 Gbps (1.000 Mbps)", "10 Gbps"], correct: 2, explanation: "Gigabit Ethernet transmite dados a 1 Gbps (1.000 Megabits por segundo), muito mais rápido que Fast Ethernet (100 Mbps)." },
+
+  // Gerações do computador
+  { id: 126, category: "História", question: "Qual era o principal componente da 1ª geração de computadores?", options: ["Transistores", "Circuitos integrados", "Válvulas termoiônicas", "Microprocessadores"], correct: 2, explanation: "A 1ª geração (1940-1955) usava válvulas termoiônicas — componentes grandes, frágeis e que esquentavam muito. O ENIAC usava 18.000 delas!" },
+  { id: 127, category: "História", question: "Em qual geração surgiram os circuitos integrados (chips)?", options: ["1ª geração", "2ª geração", "3ª geração", "5ª geração"], correct: 2, explanation: "Os circuitos integrados surgiram na 3ª geração (1965-1975), quando Jack Kilby inventou o chip que reunia milhares de transistores em uma peça minúscula." },
+  { id: 128, category: "História", question: "O ALTAIR 8800 (1974) é considerado:", options: ["O primeiro smartphone", "Um dos primeiros computadores pessoais", "O primeiro servidor web", "O primeiro console de videogame"], correct: 1, explanation: "O ALTAIR 8800 (1974) é considerado um dos primeiros computadores pessoais. A Microsoft foi fundada em 1975 para criar software para ele!" },
+  { id: 129, category: "História", question: "O que significa ULSI na 5ª geração?", options: ["Ultra Light System Interface", "Ultra Large Scale Integration", "Universal Logic System Interface", "Unified Layer Storage Integration"], correct: 1, explanation: "ULSI (Ultra Large Scale Integration) significa integração em escala ultra grande — bilhões de transistores em um único chip, permitindo processadores multicore como i3, i5 e i7." },
 ];
 
 export function getShuffledQuestions(): QuizQuestion[] {

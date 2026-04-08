@@ -3,59 +3,76 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 const timeline = [
   {
-    year: "1945",
-    title: "ENIAC — O Primeiro Computador",
-    desc: "O ENIAC foi o primeiro computador eletrônico de grande porte. Pesava 27 toneladas, ocupava uma sala inteira e foi criado nos EUA para cálculos militares durante a Segunda Guerra Mundial.",
+    year: "1ª Geração (1940–1955)",
+    title: "Válvulas Termoiônicas — ENIAC e EDVAC",
+    desc: "Os primeiros computadores usavam válvulas termoiônicas — componentes enormes, frágeis e que esquentavam muito. O ENIAC foi o mais famoso.",
     details: [
-      "Usava válvulas termoiônicas (18.000 delas!)",
+      "ENIAC (1945): primeiro computador eletrônico de grande porte",
+      "Pesava 27 toneladas e ocupava uma sala inteira",
+      "Usava 18.000 válvulas termoiônicas",
       "Consumia tanta energia que as luzes da vizinhança piscavam",
       "Não tinha teclado nem mouse — era programado por fios e interruptores",
       "Conseguia fazer 5.000 operações por segundo (hoje um celular faz bilhões)",
+      "EDVAC (1952): evoluiu o conceito com programa armazenado na memória",
+      "Criado para cálculos militares durante a Segunda Guerra Mundial",
     ],
   },
   {
-    year: "1947–1960",
-    title: "Transistores e Circuitos Integrados",
-    desc: "O transistor substituiu as válvulas — era menor, mais rápido e esquentava menos. Depois vieram os circuitos integrados (chips), que colocaram milhares de transistores em uma única peça minúscula.",
+    year: "2ª Geração (1955–1965)",
+    title: "Transistores",
+    desc: "O transistor substituiu as válvulas — era muito menor, mais rápido, mais confiável e consumia menos energia.",
     details: [
-      "Transistor: inventado em 1947 nos Laboratórios Bell",
-      "Circuito integrado (chip): inventado em 1958 por Jack Kilby",
-      "Os computadores ficaram menores, mais baratos e mais confiáveis",
-      "Essa evolução é a base de toda tecnologia moderna",
+      "Transistor: inventado em 1947 nos Laboratórios Bell por Bardeen, Brattain e Shockley",
+      "Computadores ficaram menores (armários em vez de salas inteiras)",
+      "Peso reduziu para cerca de 150 kg",
+      "Consumo de energia caiu drasticamente",
+      "Mais confiáveis: transistores não queimavam como as válvulas",
+      "Surgimento das primeiras linguagens de programação (COBOL, FORTRAN)",
     ],
   },
   {
-    year: "1970–1980",
-    title: "Computadores Pessoais (PC)",
-    desc: "Pela primeira vez, computadores começaram a caber em uma mesa! Empresas como Apple e IBM criaram máquinas para uso pessoal e escritórios.",
+    year: "3ª Geração (1965–1975)",
+    title: "Circuitos Integrados (Chips)",
+    desc: "O circuito integrado colocou milhares de transistores em uma única peça minúscula — os computadores ficaram muito menores e baratos.",
     details: [
+      "Circuito integrado inventado em 1958 por Jack Kilby (Texas Instruments)",
+      "Milhares de transistores em um único chip de silício",
+      "Computadores ficaram muito menores e mais acessíveis",
+      "Burroughs B-2500: exemplo de computador desta geração",
+      "Surgiram os primeiros terminais com teclado e monitor",
+      "Uso comercial se expandiu para empresas e universidades",
+    ],
+  },
+  {
+    year: "4ª Geração (1975–1990)",
+    title: "VLSI e Computadores Pessoais (PC)",
+    desc: "Com a tecnologia VLSI (integração em grande escala), milhões de transistores cabem em um chip. Nasceram os PCs para uso pessoal.",
+    details: [
+      "VLSI (Very Large Scale Integration): milhões de transistores em um chip",
+      "Atari (1972): um dos primeiros computadores pessoais/consoles",
+      "ALTAIR 8800 (1974): considerado o primeiro PC de verdade",
+      "Microsoft fundada em 1975 por Bill Gates e Paul Allen",
       "Apple II (1977): um dos primeiros PCs de sucesso comercial",
       "IBM PC (1981): estabeleceu o padrão que usamos até hoje",
+      "Processadores evoluíram: 286 → 386 → 486",
       "Surgiu o sistema operacional MS-DOS da Microsoft",
-      "Os PCs ainda eram caros, mas revolucionaram escritórios",
     ],
   },
   {
-    year: "1990–2000",
-    title: "A Era da Internet",
-    desc: "A internet conectou computadores do mundo inteiro. Surgiu a World Wide Web (WWW), e-mail se popularizou, e empresas como Google e Amazon nasceram.",
+    year: "5ª Geração (1990–Hoje)",
+    title: "ULSI, Internet, Smartphones e IA",
+    desc: "Processadores com bilhões de transistores, internet global, smartphones e inteligência artificial mudaram o mundo.",
     details: [
+      "ULSI (Ultra Large Scale Integration): bilhões de transistores por chip",
+      "Processadores multicore: Dual-Core, Quad-Core, Octa-Core",
+      "Intel Core i3, i5, i7, i9 e AMD Ryzen dominam o mercado",
       "WWW criada por Tim Berners-Lee em 1991",
-      "Navegadores como Netscape e Internet Explorer popularizaram a web",
-      "Google foi fundado em 1998",
-      "A internet discada usava a linha telefônica e era bem lenta",
-      "E-mail, chats e sites mudaram a comunicação do mundo",
-    ],
-  },
-  {
-    year: "2007–Hoje",
-    title: "Smartphones, Cloud e Inteligência Artificial",
-    desc: "O iPhone (2007) mudou tudo — um computador no bolso. Hoje usamos a nuvem (cloud) para guardar arquivos e a inteligência artificial está em todo lugar.",
-    details: [
-      "Smartphones são mais potentes que os computadores dos anos 90",
-      "Cloud: seus arquivos ficam guardados na internet (Google Drive, iCloud)",
+      "Google fundado em 1998",
+      "Smartphones: o iPhone (2007) trouxe um computador para o bolso",
+      "Cloud Computing: seus arquivos ficam na internet (Google Drive, iCloud)",
       "Inteligência Artificial: assistentes como Alexa, Siri e ChatGPT",
       "Internet das Coisas (IoT): geladeiras, relógios e TVs conectados à internet",
+      "A internet discada usava a linha telefônica e era bem lenta",
     ],
   },
 ];
@@ -65,21 +82,21 @@ const peripherals = [
     category: "Periféricos de Entrada",
     desc: "São os dispositivos que você usa para enviar informações para o computador.",
     items: [
-      { name: "Teclado", detail: "Dispositivo para digitar textos, comandos e atalhos. Tipos: membrana (mais barato) e mecânico (mais durável e responsivo)." },
-      { name: "Mouse", detail: "Dispositivo para apontar e clicar na tela. Tipos: com fio (USB), sem fio (Bluetooth ou receptor USB) e trackpad (em notebooks)." },
-      { name: "Webcam", detail: "Câmera acoplada ao computador para videochamadas e gravação de vídeo." },
-      { name: "Microfone", detail: "Capta áudio para chamadas, gravações e comandos de voz." },
-      { name: "Scanner", detail: "Digitaliza documentos físicos, transformando papel em arquivo digital (PDF ou imagem)." },
+      { name: "Teclado", detail: "Dispositivo para digitar textos, comandos e atalhos. Tipos: membrana (mais barato) e mecânico (mais durável e responsivo). Conexões: PS/2 (roxo, antigo), USB e Wireless." },
+      { name: "Mouse", detail: "Dispositivo para apontar e clicar na tela. Tipos: óptico (LED), laser (mais preciso), com fio (USB) e sem fio (Bluetooth/receptor). Ações: clique simples, duplo, direito, scroll, drag and drop." },
+      { name: "Webcam", detail: "Câmera acoplada ao computador para videochamadas e gravação de vídeo. Usa sensor CCD/CMOS, conexão USB. Resoluções: 720p, 1080p, 4K." },
+      { name: "Microfone", detail: "Capta áudio para chamadas, gravações e comandos de voz. Conexão via P2 (3.5mm), USB ou Bluetooth." },
+      { name: "Scanner", detail: "Digitaliza documentos físicos em arquivo digital (PDF/imagem). Tipos: mesa (documento no vidro) e mão (portátil). Resolução em DPI." },
     ],
   },
   {
     category: "Periféricos de Saída",
     desc: "São os dispositivos que mostram ou reproduzem as informações do computador para você.",
     items: [
-      { name: "Monitor", detail: "Tela que exibe imagens e textos. Tipos: LCD, LED e OLED. Tamanhos comuns: 21\" a 27\"." },
-      { name: "Impressora", detail: "Imprime documentos e fotos. Tipos: jato de tinta (fotos) e laser (textos rápidos). Impressora 3D cria objetos físicos." },
+      { name: "Monitor", detail: "Tela que exibe imagens e textos. Tipos: LCD, LED, OLED. Resolução: HD, Full HD, 4K. Taxa de atualização: 60Hz a 240Hz." },
+      { name: "Impressora", detail: "Tipos: Matricial (agulhas, notas fiscais), Jato de Tinta (fotos), Laser (toner, textos rápidos), Térmica (cupons), 3D (objetos físicos). Multifuncional = impressora + scanner + copiadora." },
       { name: "Caixas de Som", detail: "Reproduzem áudio do computador. Podem ser com fio (P2/USB) ou Bluetooth." },
-      { name: "Fones de Ouvido", detail: "Para ouvir áudio sem incomodar os outros. Headsets incluem microfone para chamadas." },
+      { name: "Fones de Ouvido", detail: "Para ouvir áudio sem incomodar os outros. Headsets incluem microfone para chamadas e jogos." },
       { name: "Projetor", detail: "Projeta a tela do computador em paredes ou telas grandes. Usado em salas de aula e apresentações." },
     ],
   },
@@ -92,7 +109,7 @@ const peripherals = [
       { name: "Mini USB", detail: "Conector menor, usado em câmeras digitais e dispositivos antigos." },
       { name: "Micro USB", detail: "Conector fino usado em celulares Android antigos e controles de videogame." },
       { name: "USB-C", detail: "O mais moderno — reversível (encaixa dos dois lados). Usado em celulares novos, notebooks e até carregadores." },
-      { name: "USB 2.0 vs 3.0", detail: "USB 2.0 (preto) é mais lento. USB 3.0 (azul) transfere dados até 10x mais rápido." },
+      { name: "USB 2.0 vs 3.0", detail: "USB 2.0 (preto) é mais lento (480 Mbps). USB 3.0 (azul) transfere dados até 10x mais rápido (5 Gbps)." },
     ],
   },
 ];
@@ -111,7 +128,7 @@ export default function History() {
             História do Computador
           </h1>
           <p className="text-muted-foreground text-sm mt-3 max-w-lg mx-auto">
-            De máquinas gigantes até o celular no seu bolso — conheça a evolução da tecnologia
+            Das válvulas gigantes até a inteligência artificial — conheça as 5 gerações da computação
           </p>
         </motion.div>
 
