@@ -9,6 +9,24 @@ import psuImg from "@/assets/hw-psu.jpg";
 import moboImg from "@/assets/hw-mobo.jpg";
 import gpuImg from "@/assets/hw-gpu.jpg";
 import peripheralsImg from "@/assets/hw-peripherals.jpg";
+import gabineteImg from "@/assets/hw-gabinete.jpg";
+import soundcardImg from "@/assets/hw-soundcard.jpg";
+import nicImg from "@/assets/hw-nic.jpg";
+import modemCablesImg from "@/assets/hw-modem-cables.jpg";
+import keyboardImg from "@/assets/hw-keyboard.jpg";
+import mouseImg from "@/assets/hw-mouse.jpg";
+import monitorImg from "@/assets/hw-monitor.jpg";
+import printerImg from "@/assets/hw-printer.jpg";
+import scannerImg from "@/assets/hw-scanner.jpg";
+import webcamImg from "@/assets/hw-webcam.jpg";
+import multimediaImg from "@/assets/hw-multimedia.jpg";
+import biosImg from "@/assets/hw-bios.jpg";
+import portsImg from "@/assets/hw-ports.jpg";
+import slotsImg from "@/assets/hw-slots.jpg";
+import chipsetImg from "@/assets/hw-chipset.jpg";
+import memoryTypesImg from "@/assets/hw-memory-types.jpg";
+import raidImg from "@/assets/hw-raid.jpg";
+import binaryImg from "@/assets/hw-binary.jpg";
 
 interface TopicCard {
   image?: string;
@@ -111,8 +129,8 @@ const topics: TopicCard[] = [
       "Impressora 3D: cria objetos físicos camada por camada a partir de modelos digitais",
     ],
   },
-  // --- Novas seções da apostila de Hardware ---
   {
+    image: gabineteImg,
     title: "Gabinete",
     desc: "É a 'caixa' onde todas as peças internas do computador ficam organizadas e protegidas.",
     details: [
@@ -124,6 +142,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: soundcardImg,
     title: "Placa de Som",
     desc: "Converte os dados digitais do computador em som que você pode ouvir nas caixas de som ou fones.",
     details: [
@@ -134,6 +153,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: nicImg,
     title: "Placa de Rede (NIC)",
     desc: "Permite que o computador se conecte à internet e a outros computadores em rede.",
     details: [
@@ -145,6 +165,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: modemCablesImg,
     title: "Placa Fax/Modem",
     desc: "Permitia ao computador enviar e receber dados pela linha telefônica — essencial na era da internet discada.",
     details: [
@@ -156,6 +177,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: modemCablesImg,
     title: "Flat Cable (Cabos Internos)",
     desc: "Cabos achatados que fazem a conexão entre a placa-mãe e os dispositivos de armazenamento dentro do gabinete.",
     details: [
@@ -167,6 +189,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: keyboardImg,
     title: "Teclado (Detalhado)",
     desc: "Principal dispositivo de entrada: permite digitar textos, comandos e atalhos no computador.",
     details: [
@@ -179,6 +202,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: mouseImg,
     title: "Mouse (Detalhado)",
     desc: "Dispositivo de entrada que controla o ponteiro na tela, permitindo clicar, arrastar e selecionar.",
     details: [
@@ -191,6 +215,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: monitorImg,
     title: "Monitor (Detalhado)",
     desc: "Periférico de saída que exibe as imagens, textos e vídeos do computador na tela.",
     details: [
@@ -203,6 +228,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: printerImg,
     title: "Impressora (Tipos)",
     desc: "Periférico de saída que transfere texto e imagens do computador para o papel.",
     details: [
@@ -215,6 +241,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: scannerImg,
     title: "Scanner (Detalhado)",
     desc: "Periférico de entrada que digitaliza documentos e imagens físicas, transformando papel em arquivo digital.",
     details: [
@@ -226,6 +253,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: webcamImg,
     title: "Webcam",
     desc: "Câmera pequena conectada ao computador para videochamadas, gravação e streaming.",
     details: [
@@ -237,6 +265,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: multimediaImg,
     title: "Kit Multimídia",
     desc: "Conjunto de caixa de som e microfone para reprodução e captação de áudio no computador.",
     details: [
@@ -248,6 +277,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: biosImg,
     title: "BIOS / CMOS / POST (Detalhado)",
     desc: "Sistema fundamental que inicia o computador, testa as peças e carrega o Windows.",
     details: [
@@ -264,6 +294,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: portsImg,
     title: "Interfaces e Portas",
     desc: "São as conexões físicas na parte traseira (e frontal) do computador para ligar periféricos.",
     details: [
@@ -277,6 +308,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: slotsImg,
     title: "Slots de Barramento",
     desc: "São encaixes na placa-mãe onde você instala placas de expansão (vídeo, som, rede, etc.).",
     details: [
@@ -288,6 +320,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: chipsetImg,
     title: "Chipsets (Ponte Norte e Ponte Sul)",
     desc: "São chips na placa-mãe que controlam a comunicação entre os componentes do computador.",
     details: [
@@ -298,6 +331,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: memoryTypesImg,
     title: "Memórias Avançadas (SDRAM, DDR2, DDR3)",
     desc: "A memória RAM evoluiu ao longo dos anos, ficando mais rápida e eficiente a cada geração.",
     details: [
@@ -311,6 +345,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: raidImg,
     title: "RAID (Redundant Array of Independent Disks)",
     desc: "Sistema que combina vários HDs ou SSDs para aumentar velocidade ou proteção dos dados.",
     details: [
@@ -322,6 +357,7 @@ const topics: TopicCard[] = [
     ],
   },
   {
+    image: binaryImg,
     title: "Sistemas Numéricos (Binário, Bits e Bytes)",
     desc: "O computador entende apenas 0 e 1 (binário). Toda informação é convertida para esse formato.",
     details: [

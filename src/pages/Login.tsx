@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 type AuthMode = "login" | "register";
@@ -20,6 +20,7 @@ export default function Login() {
   const [role, setRole] = useState<Role>("aluno");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
     if (!loading && session) {
@@ -36,10 +37,23 @@ export default function Login() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: fullName } },
+          options: {
+            data: { full_name: fullName },
+            emailRedirectTo: window.location.origin,
+          },
         });
         if (error) throw error;
-        if (data.user) {
+
+        if (data.user && !data.session) {
+          // Email confirmation required
+          setEmailSent(true);
+          // Update profile role
+          await supabase
+            .from("profiles")
+            .update({ role, full_name: fullName })
+            .eq("id", data.user.id);
+        } else if (data.user && data.session) {
+          // Auto-confirmed (shouldn't happen now)
           await supabase
             .from("profiles")
             .update({ role, full_name: fullName })
@@ -48,8 +62,15 @@ export default function Login() {
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        toast.success("Login realizado!");
+        if (error) {
+          if (error.message.includes("Email not confirmed")) {
+            toast.error("Verifique seu e-mail antes de fazer login. Confira sua caixa de entrada.");
+          } else {
+            throw error;
+          }
+        } else {
+          toast.success("Login realizado!");
+        }
       }
     } catch (err: any) {
       toast.error(err.message || "Erro na autenticação");
@@ -69,6 +90,35 @@ export default function Login() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-pulse-warm font-display text-2xl gradient-warm-text">Projeta Aula</div>
+      </div>
+    );
+  }
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-sm glass p-8 space-y-6 text-center"
+        >
+          <CheckCircle className="w-16 h-16 text-primary mx-auto" />
+          <h2 className="font-display text-xl font-bold text-foreground">Verifique seu E-mail!</h2>
+          <p className="text-sm text-muted-foreground">
+            Enviamos um link de confirmação para <strong className="text-foreground">{email}</strong>.
+            Abra seu e-mail e clique no link para ativar sua conta.
+          </p>
+          <div className="text-xs text-muted-foreground space-y-1">
+            <p>📧 Verifique também a pasta de spam/lixo eletrônico</p>
+            <p>⏱️ O link expira em 24 horas</p>
+          </div>
+          <button
+            onClick={() => { setEmailSent(false); setMode("login"); }}
+            className="w-full py-3 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-secondary transition-colors"
+          >
+            Voltar para Login
+          </button>
+        </motion.div>
       </div>
     );
   }

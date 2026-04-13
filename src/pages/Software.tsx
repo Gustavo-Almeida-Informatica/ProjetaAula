@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useState } from "react";
 import {
-  Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench,
+  Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
 } from "lucide-react";
 
 const tabs = [
   { id: "windows", label: "Windows", icon: Monitor },
-  { id: "programas", label: "Programas Úteis", icon: Download },
+  { id: "programas", label: "Programas Essenciais", icon: Download },
   { id: "explorador", label: "Explorador de Arquivos", icon: FolderOpen },
   { id: "manutencao", label: "Manutenção", icon: Wrench },
   { id: "drivers", label: "Drivers e BIOS", icon: Settings },
@@ -20,6 +20,137 @@ interface ContentSection {
   desc: string;
   items: string[];
 }
+
+interface ProgramCard {
+  name: string;
+  desc: string;
+  features: string[];
+  downloadUrl: string;
+  icon: string;
+}
+
+const programs: ProgramCard[] = [
+  {
+    name: "Google Chrome",
+    desc: "O navegador mais usado no mundo. Rápido, seguro e com milhares de extensões.",
+    features: [
+      "Sincroniza favoritos, senhas e histórico com sua conta Google",
+      "Ctrl+T abre nova aba, Ctrl+W fecha, Ctrl+Tab alterna",
+      "Modo anônimo: Ctrl+Shift+N",
+      "Suporta extensões da Chrome Web Store",
+    ],
+    downloadUrl: "https://www.google.com/chrome/",
+    icon: "🌐",
+  },
+  {
+    name: "LibreOffice",
+    desc: "Pacote de escritório gratuito — substituto completo do Microsoft Office.",
+    features: [
+      "Writer: editor de textos (substitui o Word)",
+      "Calc: planilhas (substitui o Excel)",
+      "Impress: apresentações (substitui o PowerPoint)",
+      "100% gratuito e de código aberto",
+    ],
+    downloadUrl: "https://pt-br.libreoffice.org/baixe-ja/",
+    icon: "📝",
+  },
+  {
+    name: "VLC Media Player",
+    desc: "Reprodutor de vídeo e música gratuito que abre praticamente qualquer formato de mídia.",
+    features: [
+      "Abre MP4, AVI, MKV, MP3, FLAC e muitos outros",
+      "Gratuito, sem propagandas e sem vírus",
+      "Suporta legendas em vários formatos (SRT, SSA)",
+      "Funciona no Windows, Mac e Linux",
+    ],
+    downloadUrl: "https://www.videolan.org/vlc/",
+    icon: "🎬",
+  },
+  {
+    name: "7-Zip",
+    desc: "Compactador de arquivos gratuito — cria e abre ZIP, RAR, 7z e muitos outros formatos.",
+    features: [
+      "Compacta e descompacta arquivos em vários formatos",
+      "Formato 7z tem melhor compressão que ZIP e RAR",
+      "Integra com o menu de clique direito do Windows",
+      "100% gratuito e de código aberto",
+    ],
+    downloadUrl: "https://www.7-zip.org/",
+    icon: "📦",
+  },
+  {
+    name: "WinRAR",
+    desc: "Compactador de arquivos popular para criar e extrair arquivos RAR e ZIP.",
+    features: [
+      "Abre e cria arquivos ZIP e RAR",
+      "Clique direito > 'Extrair aqui' para descompactar",
+      "Pode proteger arquivos com senha",
+      "Útil para enviar vários arquivos por e-mail",
+    ],
+    downloadUrl: "https://www.win-rar.com/download.html",
+    icon: "🗜️",
+  },
+  {
+    name: "WhatsApp Desktop",
+    desc: "Use o WhatsApp pelo computador para digitar mais rápido e compartilhar arquivos.",
+    features: [
+      "Sincroniza mensagens com o celular automaticamente",
+      "Mais fácil de digitar textos longos pelo teclado",
+      "Envie e receba fotos e documentos em tela grande",
+      "Disponível na Microsoft Store ou site oficial",
+    ],
+    downloadUrl: "https://www.whatsapp.com/download",
+    icon: "💬",
+  },
+  {
+    name: "Zoom",
+    desc: "Plataforma de videochamadas para aulas online, reuniões e webinars.",
+    features: [
+      "Reuniões com até 100 participantes na versão gratuita",
+      "Compartilhamento de tela para apresentações",
+      "Chat durante a reunião",
+      "Gravação de reuniões (versão paga)",
+    ],
+    downloadUrl: "https://zoom.us/download",
+    icon: "📹",
+  },
+  {
+    name: "CCleaner",
+    desc: "Programa de limpeza que remove arquivos temporários e libera espaço no disco.",
+    features: [
+      "Remove arquivos temporários do Windows e navegadores",
+      "Limpa cache, histórico e cookies",
+      "Gerencia programas que iniciam com o Windows",
+      "Versão gratuita é suficiente para uso básico",
+    ],
+    downloadUrl: "https://www.ccleaner.com/pt-br/ccleaner/download",
+    icon: "🧹",
+  },
+  {
+    name: "Windows Defender",
+    desc: "Antivírus gratuito que já vem no Windows. Proteção em tempo real contra vírus.",
+    features: [
+      "Já vem ativado no Windows 10 e 11",
+      "Faz verificações em tempo real automaticamente",
+      "Atualiza com o Windows Update",
+      "Para uso doméstico, é suficiente — não precisa de outro antivírus",
+    ],
+    downloadUrl: "https://www.microsoft.com/pt-br/windows/comprehensive-security",
+    icon: "🛡️",
+  },
+  {
+    name: "Canva",
+    desc: "Ferramenta online para criar designs, apresentações, posts e muito mais — sem precisar instalar.",
+    features: [
+      "Milhares de templates prontos para editar",
+      "Crie posts para redes sociais, cartões, apresentações",
+      "Funciona direto no navegador (não precisa instalar)",
+      "Versão gratuita com muitos recursos",
+    ],
+    downloadUrl: "https://www.canva.com/",
+    icon: "🎨",
+  },
+];
 
 const content: Record<string, ContentSection[]> = {
   windows: [
@@ -185,65 +316,6 @@ const content: Record<string, ContentSection[]> = {
         "Ctrl+L: seleciona a barra de endereço para digitar um site",
         "Suporta extensões da Chrome Web Store",
         "Modo InPrivate: navegação anônima (Ctrl+Shift+N)",
-      ],
-    },
-  ],
-  programas: [
-    {
-      title: "Google Chrome",
-      desc: "O navegador mais usado para acessar sites e fazer pesquisas na internet.",
-      items: [
-        "Baixe em: google.com/chrome",
-        "Ctrl+T abre uma nova aba",
-        "Ctrl+W fecha a aba atual",
-        "Você pode salvar sites favoritos para acessar depois",
-      ],
-    },
-    {
-      title: "Pacote Office (Word, Excel, PowerPoint)",
-      desc: "Conjunto de programas para criar textos, planilhas e apresentações.",
-      items: [
-        "Word: para escrever textos e trabalhos",
-        "Excel: para fazer planilhas e cálculos",
-        "PowerPoint: para fazer apresentações com slides",
-        "Alternativa gratuita: LibreOffice faz a mesma coisa",
-      ],
-    },
-    {
-      title: "WinRAR",
-      desc: "Programa para compactar (diminuir o tamanho) e descompactar arquivos.",
-      items: [
-        "Abre arquivos ZIP e RAR",
-        "Útil para enviar vários arquivos de uma vez por e-mail",
-        "Clique direito > 'Extrair aqui' para descompactar",
-      ],
-    },
-    {
-      title: "VLC Media Player",
-      desc: "Reprodutor de vídeo e música gratuito que abre praticamente qualquer formato.",
-      items: [
-        "Abre vídeos MP4, AVI, MKV e muito mais",
-        "Gratuito e não tem propaganda",
-        "Pode colocar legendas nos vídeos",
-      ],
-    },
-    {
-      title: "WhatsApp no Computador",
-      desc: "Use o WhatsApp pelo computador para digitar mais rápido e ver fotos em tela grande.",
-      items: [
-        "Baixe na Microsoft Store ou acesse web.whatsapp.com",
-        "Sincroniza com seu celular automaticamente",
-        "Mais fácil de digitar textos longos",
-      ],
-    },
-    {
-      title: "Windows Defender",
-      desc: "Antivírus que já vem instalado no Windows. Protege contra vírus e ameaças automaticamente.",
-      items: [
-        "Já vem ativado no Windows 10 e 11",
-        "Faz verificações em tempo real",
-        "Atualiza automaticamente com o Windows Update",
-        "Para uso doméstico, é suficiente — não precisa instalar outro antivírus",
       ],
     },
   ],
@@ -518,22 +590,74 @@ export default function Software() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
-          className="space-y-5"
         >
-          {content[activeTab]?.map((section) => (
-            <div key={section.title} className="glass p-6">
-              <h3 className="font-display text-lg font-bold text-foreground mb-2">{section.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
-              <ul className="space-y-2">
-                {section.items.map((item) => (
-                  <li key={item} className="text-xs text-foreground/80 flex items-start gap-2">
-                    <span className="text-primary mt-0.5">▸</span>
-                    {item}
-                  </li>
+          {activeTab === "programas" ? (
+            <div className="space-y-6">
+              <div className="glass p-6 text-center">
+                <h2 className="font-display text-xl font-bold text-foreground mb-2">
+                  📥 Programas Essenciais para Iniciantes
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Estes são os programas que toda pessoa precisa ter no computador. Clique em "Baixar" para ir ao site oficial de cada programa.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {programs.map((prog, i) => (
+                  <motion.div
+                    key={prog.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    className="glass p-6 hover:border-primary/20 transition-all"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-3xl">{prog.icon}</span>
+                      <div>
+                        <h3 className="font-display text-base font-bold text-foreground">{prog.name}</h3>
+                        <p className="text-xs text-muted-foreground">{prog.desc}</p>
+                      </div>
+                    </div>
+                    <ul className="space-y-1.5 mb-4">
+                      {prog.features.map((f) => (
+                        <li key={f} className="text-xs text-foreground/80 flex items-start gap-2">
+                          <span className="text-primary mt-0.5">▸</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href={prog.downloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg gradient-warm text-primary-foreground text-xs font-semibold warm-glow-sm hover:scale-[1.02] transition-transform"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Baixar {prog.name}
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
-          ))}
+          ) : (
+            <div className="space-y-5">
+              {content[activeTab]?.map((section) => (
+                <div key={section.title} className="glass p-6">
+                  <h3 className="font-display text-lg font-bold text-foreground mb-2">{section.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
+                  <ul className="space-y-2">
+                    {section.items.map((item) => (
+                      <li key={item} className="text-xs text-foreground/80 flex items-start gap-2">
+                        <span className="text-primary mt-0.5">▸</span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
