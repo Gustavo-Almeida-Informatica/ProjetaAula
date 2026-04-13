@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { User, Mail, Phone, MapPin, Save, LogOut } from "lucide-react";
+import { User, Mail, Phone, MapPin, Save, LogOut, Camera } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -14,11 +15,14 @@ export default function Profile() {
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!profile || !user) return;
     setFullName(profile.full_name || "");
-    // Fetch extended profile fields
+    setAvatarUrl(profile.avatar_url || null);
     supabase
       .from("profiles")
       .select("phone, city")
@@ -31,6 +35,53 @@ export default function Profile() {
         }
       });
   }, [profile, user]);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selecione apenas arquivos de imagem");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("A imagem deve ter no máximo 2MB");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const filePath = `${user.id}/avatar.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(filePath);
+
+      const publicUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ avatar_url: publicUrl })
+        .eq("id", user.id);
+
+      if (updateError) throw updateError;
+
+      setAvatarUrl(publicUrl);
+      await refreshProfile();
+      toast.success("Foto de perfil atualizada!");
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao enviar foto");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSave = async () => {
     if (!user) return;
@@ -53,6 +104,15 @@ export default function Profile() {
     navigate("/login", { replace: true });
   };
 
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  };
+
   const inputClass =
     "w-full pl-10 pr-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring";
 
@@ -66,6 +126,42 @@ export default function Profile() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass p-6 space-y-4">
+          {/* Avatar */}
+          <div className="flex flex-col items-center gap-3">
+            <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+              <Avatar className="w-24 h-24 border-2 border-primary/20">
+                {avatarUrl ? (
+                  <AvatarImage src={avatarUrl} alt={fullName} />
+                ) : null}
+                <AvatarFallback className="text-lg font-bold gradient-warm text-primary-foreground">
+                  {getInitials(fullName || "U")}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Camera className="w-6 h-6 text-white" />
+              </div>
+              {uploading && (
+                <div className="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center">
+                  <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                </div>
+              )}
+            </div>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="text-xs text-primary hover:underline"
+              disabled={uploading}
+            >
+              {uploading ? "Enviando..." : "Trocar Foto"}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              className="hidden"
+            />
+          </div>
+
           {/* Role badge */}
           <div className="text-center">
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold gradient-warm text-primary-foreground">

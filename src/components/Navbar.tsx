@@ -5,6 +5,7 @@ import {
   Monitor, Cpu, Image, Brain, Users, Home, LogOut, Menu, X, BookOpen, UserCircle,
 } from "lucide-react";
 import { useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const navItems = [
   { to: "/", label: "Início", icon: Home },
@@ -20,6 +21,15 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const { profile, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-2xl border-b border-border/50">
@@ -58,9 +68,16 @@ export default function Navbar() {
           {profile && (
             <Link
               to="/perfil"
-              className="flex items-center gap-1.5 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
             >
-              <UserCircle className="w-3.5 h-3.5" />
+              <Avatar className="w-6 h-6">
+                {profile.avatar_url ? (
+                  <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
+                ) : null}
+                <AvatarFallback className="text-[10px] font-bold bg-primary/20 text-primary">
+                  {getInitials(profile.full_name || "U")}
+                </AvatarFallback>
+              </Avatar>
               {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
             </Link>
           )}
@@ -103,7 +120,16 @@ export default function Navbar() {
                 pathname === "/perfil" ? "text-primary bg-primary/8" : "text-muted-foreground"
               }`}
             >
-              <UserCircle className="w-4 h-4" />
+              {profile?.avatar_url ? (
+                <Avatar className="w-5 h-5">
+                  <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
+                  <AvatarFallback className="text-[8px]">
+                    {getInitials(profile?.full_name || "U")}
+                  </AvatarFallback>
+                </Avatar>
+              ) : (
+                <UserCircle className="w-4 h-4" />
+              )}
               Meu Perfil
             </Link>
             <div className="flex items-center justify-between px-3">
