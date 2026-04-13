@@ -1,118 +1,94 @@
 
 
-# Plano: Alimentar Site com Apostilas + Sincronizar Quiz
+# Plano: Fotos Reais, Programas com Download, Foto de Perfil e Verificação de Login
 
 ## Resumo
 
-Adicionar todo o conteudo das apostilas de Hardware e Windows 11 no site, e criar perguntas no quiz para cada tema adicionado. Total estimado: ~40 novas perguntas (chegando a ~120+).
+Quatro entregas: (1) adicionar imagens reais nas seções de Hardware que estão sem foto, (2) criar área de "Programas Essenciais" com explicações, prints e links de download, (3) foto de perfil com upload e integração com Google, (4) desativar auto-confirm de email para exigir verificação no cadastro.
 
 ---
 
-## Novos conteudos a adicionar
+## 1. Adicionar fotos reais nas seções sem imagem (Hardware)
 
-### Hardware.tsx (novas secoes)
-- **Gabinete**: desktop vs minitorre, formatos AT e ATX
-- **Placa de Som**: converte digital/analogico
-- **Placa de Rede (NIC)**: RJ45, par trancado, wireless
-- **Placa Fax/Modem**: modulacao/demodulacao de sinais
-- **Flat Cable**: cabos internos IDE/SATA
-- **Teclado detalhado**: tipos de teclas (alfanumericas, funcao, controle), PS/2 vs USB vs wireless
-- **Mouse detalhado**: optico, laser, clique duplo, scroll, drag and drop
-- **Monitor**: LCD vs LED, resolucao, tamanho
-- **Impressora detalhada**: matricial, jato de tinta, laser, termica
-- **Scanner**: mesa vs mao, digitalizacao
-- **Webcam**: CCD, conexao USB
-- **Kit Multimidia**: caixas de som + microfone
-- **BIOS/CMOS/POST detalhado**: chips PLCC, bateria, bips de erro (1 bip = OK, 2-4 = memoria, 8 = video, 9 = BIOS)
-- **Interfaces**: Serial DB-9, Paralela DB-25, USB, SCSI, IDE, Master/Slave
-- **Slots de barramento**: ISA (8/16 bits), PCI (33MHz), AGP (video dedicado), PCI Express
-- **Chipsets**: ponte norte (CPU, RAM, video) e ponte sul (USB, audio, disco)
-- **Memorias avancadas**: SDRAM, DDR2, DDR3, diferencas de velocidade
-- **RAID**: conceito, niveis 0, 1, 5
-- **Sistemas numericos**: binario, decimal, hexadecimal, bits/bytes/KB/MB/GB/TB
+Atualmente, apenas as 8 primeiras seções do Hardware têm fotos. As 15 seções novas (Gabinete, Placa de Som, Placa de Rede, Teclado, Mouse, Monitor, Impressora, Scanner, Webcam, Kit Multimídia, BIOS/POST, Interfaces, Slots, Chipsets, Memórias, RAID, Binário) estão **sem imagem**.
 
-### Software.tsx (novas secoes na tab Windows)
-- **Layout do Windows 11**: menu iniciar centralizado, barra de tarefas no centro
-- **Aero Snap**: arrastar janela para extremidade para organizar tela
-- **Layout Snap**: botao Maximizar com layouts predefinidos (ate 4 janelas)
-- **Areas de trabalho virtuais**: Win+Tab, criar nova area, alternar com Ctrl+setas
-- **Atalhos completos**: Alt+Tab (alternar janelas), Win+E (explorador), Win+Shift+S (captura)
-- **Paint**: ferramentas basicas, Ctrl+Z desfaz, salvar projeto
-- **Ferramenta de Captura**: Win+Shift+S, tipos (retangular, livre, janela, tela inteira)
-- **WordPad**: digitacao, formatacao, Localizar e Substituir, inserir imagem/data
-- **Bloco de Notas**: editor simples, extensao .txt
-- **Sticky Notes**: notas autoadesivas, lembretes
-- **Calculadora**: padrao, cientifica, conversor de unidades/moedas
-- **Microsoft Edge**: navegador nativo, Ctrl+T nova guia, Ctrl+W fecha, Ctrl+Tab alterna
+**Solução**: Buscar imagens reais de alta qualidade (Unsplash/Pexels, royalty-free) para cada seção e adicioná-las como assets. Serão ~15 novas imagens cobrindo:
+- Gabinete (desktop e torre)
+- Placa de som, placa de rede, modem
+- Teclado, mouse, monitor, impressora, scanner, webcam
+- Kit multimídia, BIOS/POST na tela
+- Interfaces/portas traseiras do PC
+- Slots de expansão, chipset, memórias RAM
+- Discos em RAID, código binário
 
-Nova tab "Explorador de Arquivos":
-- **Layout do programa**: painel navegacao, barra classificacao
-- **Selecao de arquivos**: clicar+arrastar, Ctrl+A, Shift+clique, Ctrl+clique
-- **Lixeira**: esvaziar, restaurar, Shift+Delete (excluir permanentemente)
-- **Copiar/Colar/Recortar**: metodos e atalhos
-- **Pastas pessoais**: Documentos, Downloads, Imagens, Videos
-- **Bibliotecas**: adicionar/remover locais
+**Arquivo**: `src/pages/Hardware.tsx` — adicionar campo `image` em cada TopicCard que está faltando.
 
-Nova tab "Manutencao":
-- **Configuracoes do Windows**: Sistema, Personalizacao, Aplicativos, Contas
-- **Disco Rigido e Unidades**: C:, D:, ferramentas
-- **CCleaner**: limpeza de arquivos temporarios
-- **Defraggler**: desfragmentacao de disco
-- **Compactacao**: WinRAR, pasta compactada do Windows
-- **Seguranca**: Windows Defender, atualizacao, Avast
+---
 
-### History.tsx (expandir timeline)
-- Detalhar as 5 geracoes com dados das apostilas:
-  - 1a: valvulas, ENIAC 27 ton, 18.000 valvulas, EDVAC 1952
-  - 2a: transistores anos 50, 150kg, menor consumo
-  - 3a: circuitos integrados 1959 Jack Kilby, Burroughs B-2500
-  - 4a: VLSI, Atari 1972, ALTAIR 1974, Microsoft 1975, 286/386/486
-  - 5a: ULSI, processadores paralelos, Dual-Core, i3/i5/i7
+## 2. Programas Essenciais com Explicação e Área de Download
 
-### quizData.ts (~40 novas perguntas)
-Cada tema acima tera 1-2 perguntas. Exemplos:
-- Gabinete: "O que e o gabinete do computador?" / "Qual formato de placa-mae e padrao atualmente?"
-- BIOS bips: "O que significa 1 bip ao ligar o PC?" / "8 bips indicam problema em qual componente?"
-- CMOS: "Para que serve a bateria da placa-mae?"
-- Interfaces: "O que e a porta Serial DB-9?" / "Quantos perifericos o USB suporta simultaneamente?"
-- Slots: "O que e o slot ISA?" / "Qual barramento substituiu o AGP?"
-- Memorias: "Qual a diferenca entre DDR2 e DDR3?"
-- RAID: "O que e RAID?"
-- Binario: "Quantos bits formam 1 byte?" / "1 KB equivale a quantos bytes?"
-- Aero Snap: "O que e o Aero Snap no Windows?"
-- Layout Snap: "Quantas janelas o Layout Snap organiza?"
-- Areas virtuais: "Qual atalho cria nova area de trabalho?"
-- Paint: "Para que serve o Paint?"
-- Captura: "Qual atalho faz captura de tela no Windows 11?"
-- WordPad: "O que o WordPad faz?"
-- Calculadora: "A calculadora do Windows tem modo cientifico?"
-- Edge: "Qual atalho abre nova guia no Edge?"
-- Lixeira: "O que Shift+Delete faz?" / "Como restaurar arquivo da Lixeira?"
-- Selecao: "Qual tecla seleciona todos os arquivos?"
-- CCleaner: "Para que serve o CCleaner?"
-- Defraggler: "O que e desfragmentacao de disco?"
-- Compactacao: "O que e compactar um arquivo?"
-- Impressora tipos: "Qual tipo de impressora usa toner?"
-- Scanner: "O que faz um scanner de mesa?"
-- Placa de rede: "Qual conector a placa de rede usa?"
-- Placa de som: "O que a placa de som faz?"
-- Chipsets: "O que e a ponte norte do chipset?"
+Transformar a tab "Programas Úteis" do Software.tsx em uma seção mais completa com:
+- **Imagens reais** (screenshots dos programas)
+- **Link de download** direto para cada programa
+- **Explicação simples** de para que serve
+
+Programas a incluir (com link de download):
+- Google Chrome, LibreOffice, VLC, WinRAR, WhatsApp Desktop, Windows Defender, CCleaner, 7-Zip, Zoom, Canva
+
+Cada programa terá: nome, ícone/screenshot, descrição, lista de funcionalidades e botão "Baixar".
+
+**Arquivo**: `src/pages/Software.tsx` — reformular a tab "programas" com cards que incluem imagem e botão de download.
+
+---
+
+## 3. Foto de Perfil (Upload + Google como padrão)
+
+### Banco de dados
+- Criar storage bucket `avatars` (público) com RLS para upload/delete pelo dono
+- O campo `avatar_url` já existe na tabela `profiles`
+
+### Lógica
+- Se o usuário logou com Google, usar a foto do Google como avatar padrão (extrair de `user.user_metadata.avatar_url`)
+- O trigger `handle_new_user` será atualizado para salvar `avatar_url` do Google automaticamente
+- Na página de Perfil: exibir foto atual com botão "Trocar Foto"
+- Upload via input file → enviar para storage bucket → salvar URL no perfil
+- Exibir avatar na Navbar ao lado do nome
+
+### Arquivos modificados
+- **Migration SQL**: criar bucket `avatars` + atualizar trigger
+- **`src/pages/Profile.tsx`**: adicionar upload de foto com preview
+- **`src/contexts/AuthContext.tsx`**: incluir `avatar_url` no Profile interface (já existe)
+- **`src/components/Navbar.tsx`**: exibir avatar do usuário
+
+---
+
+## 4. Desativar Auto-Confirm de Email (Verificação no Login)
+
+A memória do projeto indica que auto-confirm está ativado. A suspeita do usuário é correta: atualmente qualquer pessoa pode criar conta e entrar sem verificar o email.
+
+**Solução**:
+- Usar `configure_auth` para desativar auto-confirm (`enable_signup: true`, `double_confirm_changes: true`, sem auto-confirm)
+- Atualizar `Login.tsx` para mostrar mensagem "Verifique seu email" após registro, em vez de logar automaticamente
+- Adicionar verificação `email_confirmed_at` antes de permitir login
 
 ---
 
 ## Arquivos modificados
 
-| Arquivo | Mudanca |
+| Arquivo | Mudança |
 |---|---|
-| `src/pages/Hardware.tsx` | +15 novas secoes (gabinete, interfaces, slots, RAID, binario, etc.) |
-| `src/pages/Software.tsx` | +2 novas tabs + ~12 secoes (Win11, Paint, WordPad, Lixeira, CCleaner, etc.) |
-| `src/pages/History.tsx` | Expandir timeline com 5 geracoes detalhadas |
-| `src/lib/quizData.ts` | +40 perguntas novas (total ~120+) |
+| `src/pages/Hardware.tsx` | Adicionar ~15 imagens reais nas seções sem foto |
+| `src/pages/Software.tsx` | Reformular tab Programas com screenshots e links de download |
+| `src/pages/Profile.tsx` | Upload de foto de perfil com preview e troca |
+| `src/components/Navbar.tsx` | Exibir avatar do usuário logado |
+| `src/contexts/AuthContext.tsx` | Garantir avatar_url no perfil |
+| `src/pages/Login.tsx` | Mensagem de verificação de email após cadastro |
+| **Migration SQL** | Bucket avatars + RLS + atualizar trigger para foto Google |
+| **Auth config** | Desativar auto-confirm de email |
 
-## O que NAO muda
-- Visual/estilo atual (glass/ambar)
-- Equipe, fotos, links
-- Quiz logica (infinito, parar, leaderboard)
-- Autenticacao, comunidade, perfil
-- Conteudo existente (apenas adicoes)
+## O que NÃO muda
+- Conteúdo educacional existente
+- Quiz e lógica de pontuação
+- Equipe e comunidade
+- Visual glass/âmbar
 
