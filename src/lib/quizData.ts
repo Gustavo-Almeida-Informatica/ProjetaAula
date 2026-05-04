@@ -220,6 +220,19 @@ export const quizQuestions: QuizQuestion[] = [
   { id: 129, category: "História", question: "O que significa ULSI na 5ª geração?", options: ["Ultra Light System Interface", "Ultra Large Scale Integration", "Universal Logic System Interface", "Unified Layer Storage Integration"], correct: 1, explanation: "ULSI (Ultra Large Scale Integration) significa integração em escala ultra grande — bilhões de transistores em um único chip, permitindo processadores multicore como i3, i5 e i7." },
 ];
 
+function shuffleOptions(q: QuizQuestion): QuizQuestion {
+  const indices = q.options.map((_, i) => i);
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  const newOptions = indices.map((i) => q.options[i]);
+  const newCorrect = indices.indexOf(q.correct);
+  return { ...q, options: newOptions, correct: newCorrect };
+}
+
 export function getShuffledQuestions(): QuizQuestion[] {
-  return [...quizQuestions].sort(() => Math.random() - 0.5);
+  return [...quizQuestions]
+    .sort(() => Math.random() - 0.5)
+    .map(shuffleOptions);
 }
