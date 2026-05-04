@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { toast } from "sonner";
 import {
   Search, Hash, TrendingUp, Clock, Heart, MessageSquare, Plus, X, Send,
+  Image as ImageIcon, Trash2,
 } from "lucide-react";
 import PostComments from "@/components/PostComments";
 
@@ -19,6 +20,7 @@ interface Post {
   hashtags: string[];
   likes_count: number;
   created_at: string;
+  image_url?: string | null;
   liked_by_me?: boolean;
 }
 
@@ -33,7 +35,10 @@ export default function Community() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [hashtags, setHashtags] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPosts = async () => {
     let query = supabase
@@ -71,6 +76,35 @@ export default function Community() {
     return p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q);
   });
 
+  const handleImagePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selecione um arquivo de imagem.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Imagem muito grande (máx. 5MB).");
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const clearImage = () => {
+    setImageFile(null);
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setContent("");
+    setHashtags("");
+    clearImage();
+  };
+
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !profile) return;
@@ -81,6 +115,22 @@ export default function Community() {
       .map((t) => t.trim().replace("#", ""))
       .filter(Boolean);
 
+    let image_url: string | null = null;
+    if (imageFile) {
+      const ext = imageFile.name.split(".").pop() || "jpg";
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from("post-images")
+        .upload(path, imageFile, { cacheControl: "3600", upsert: false });
+      if (upErr) {
+        toast.error("Erro ao enviar imagem");
+        setLoading(false);
+        return;
+      }
+      const { data } = supabase.storage.from("post-images").getPublicUrl(path);
+      image_url = data.publicUrl;
+    }
+
     const { error } = await supabase.from("community_posts").insert({
       user_id: user.id,
       user_name: profile.full_name || "Anônimo",
@@ -88,19 +138,40 @@ export default function Community() {
       title,
       content,
       hashtags: tags,
+      image_url,
     });
 
     if (error) {
       toast.error("Erro ao publicar");
     } else {
       toast.success("Post publicado!");
-      setTitle("");
-      setContent("");
-      setHashtags("");
+      resetForm();
       setShowNew(false);
       fetchPosts();
     }
     setLoading(false);
+  };
+
+  const handleDelete = async (post: Post) => {
+    if (!user || post.user_id !== user.id) return;
+    if (!confirm("Deletar este post? Essa ação é permanente.")) return;
+
+    if (post.image_url) {
+      const marker = "/post-images/";
+      const idx = post.image_url.indexOf(marker);
+      if (idx !== -1) {
+        const path = post.image_url.substring(idx + marker.length);
+        await supabase.storage.from("post-images").remove([path]);
+      }
+    }
+
+    const { error } = await supabase.from("community_posts").delete().eq("id", post.id);
+    if (error) {
+      toast.error("Erro ao deletar");
+    } else {
+      toast.success("Post deletado");
+      setPosts((prev) => prev.filter((p) => p.id !== post.id));
+    }
   };
 
   const toggleLike = async (post: Post) => {
@@ -205,8 +276,24 @@ export default function Community() {
                 rows={4}
                 className="w-full px-4 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
               />
-              <div className="flex items-center gap-3">
-                <div className="relative flex-1">
+
+              {/* Image preview */}
+              {imagePreview && (
+                <div className="relative rounded-lg overflow-hidden border border-border/40">
+                  <img src={imagePreview} alt="Preview" className="w-full aspect-video object-cover" />
+                  <button
+                    type="button"
+                    onClick={clearImage}
+                    className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 hover:bg-background text-foreground"
+                    aria-label="Remover imagem"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="relative flex-1 min-w-[180px]">
                   <Hash className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
                   <input
                     type="text"
@@ -216,12 +303,26 @@ export default function Community() {
                     className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImagePick}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-4 py-2.5 rounded-lg glass text-muted-foreground text-sm font-medium flex items-center gap-1.5 hover:text-foreground transition-colors"
+                >
+                  <ImageIcon className="w-4 h-4" /> Foto
+                </button>
                 <button
                   type="submit"
                   disabled={loading}
                   className="px-5 py-2.5 rounded-lg gradient-warm text-primary-foreground text-sm font-medium warm-glow-sm disabled:opacity-50 flex items-center gap-1.5"
                 >
-                  <Send className="w-4 h-4" /> Publicar
+                  <Send className="w-4 h-4" /> {loading ? "Enviando..." : "Publicar"}
                 </button>
               </div>
             </motion.form>
@@ -248,10 +349,32 @@ export default function Community() {
                   <span className="text-sm font-semibold text-foreground">{post.user_name || "Anônimo"}</span>
                   <span className="text-xs">{post.user_role === "professor" ? "👨‍🏫" : "🎓"}</span>
                 </div>
-                <span className="text-xs text-muted-foreground">{timeAgo(post.created_at)}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">{timeAgo(post.created_at)}</span>
+                  {user?.id === post.user_id && (
+                    <button
+                      onClick={() => handleDelete(post)}
+                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      aria-label="Deletar post"
+                      title="Deletar post"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
               <h3 className="text-sm font-bold text-foreground mb-1">{post.title}</h3>
               <p className="text-xs text-muted-foreground whitespace-pre-wrap">{post.content}</p>
+              {post.image_url && (
+                <div className="mt-3 rounded-lg overflow-hidden border border-border/30">
+                  <img
+                    src={post.image_url}
+                    alt={post.title}
+                    loading="lazy"
+                    className="w-full aspect-video object-cover"
+                  />
+                </div>
+              )}
               {post.hashtags && post.hashtags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {post.hashtags.map((tag) => (
