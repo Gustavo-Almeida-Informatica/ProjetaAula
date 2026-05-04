@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, KeyRound, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 type AuthMode = "login" | "register";
 type Role = "aluno" | "professor";
@@ -20,13 +21,32 @@ export default function Login() {
   const [role, setRole] = useState<Role>("aluno");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
+  const [otpStep, setOtpStep] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [resendIn, setResendIn] = useState(0);
+  const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!loading && session) {
       navigate("/", { replace: true });
     }
   }, [loading, session, navigate]);
+
+  const startResendTimer = () => {
+    setResendIn(60);
+    if (timerRef.current) window.clearInterval(timerRef.current);
+    timerRef.current = window.setInterval(() => {
+      setResendIn((s) => {
+        if (s <= 1) {
+          if (timerRef.current) window.clearInterval(timerRef.current);
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+  };
+
+  useEffect(() => () => { if (timerRef.current) window.clearInterval(timerRef.current); }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,15 +65,16 @@ export default function Login() {
         if (error) throw error;
 
         if (data.user && !data.session) {
-          // Email confirmation required
-          setEmailSent(true);
-          // Update profile role
-          await supabase
-            .from("profiles")
-            .update({ role, full_name: fullName })
-            .eq("id", data.user.id);
+          setOtpStep(true);
+          startResendTimer();
+          toast.success("Código de verificação enviado para seu e-mail!");
+          if (data.user.id) {
+            await supabase
+              .from("profiles")
+              .update({ role, full_name: fullName })
+              .eq("id", data.user.id);
+          }
         } else if (data.user && data.session) {
-          // Auto-confirmed (shouldn't happen now)
           await supabase
             .from("profiles")
             .update({ role, full_name: fullName })
@@ -64,7 +85,10 @@ export default function Login() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
           if (error.message.includes("Email not confirmed")) {
-            toast.error("Verifique seu e-mail antes de fazer login. Confira sua caixa de entrada.");
+            toast.error("Verifique seu e-mail antes de fazer login. Reenviando código...");
+            await supabase.auth.resend({ type: "signup", email });
+            setOtpStep(true);
+            startResendTimer();
           } else {
             throw error;
           }
@@ -76,6 +100,40 @@ export default function Login() {
       toast.error(err.message || "Erro na autenticação");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otpCode.length !== 6) {
+      toast.error("Digite o código de 6 dígitos.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email,
+        token: otpCode,
+        type: "signup",
+      });
+      if (error) throw error;
+      toast.success("Conta verificada com sucesso!");
+    } catch (err: any) {
+      toast.error(err.message || "Código inválido ou expirado");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendIn > 0) return;
+    try {
+      const { error } = await supabase.auth.resend({ type: "signup", email });
+      if (error) throw error;
+      toast.success("Novo código enviado!");
+      startResendTimer();
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao reenviar código");
     }
   };
 
@@ -94,30 +152,71 @@ export default function Login() {
     );
   }
 
-  if (emailSent) {
+  if (otpStep) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-sm glass p-8 space-y-6 text-center"
+          className="w-full max-w-sm glass p-8 space-y-6 relative"
         >
-          <CheckCircle className="w-16 h-16 text-primary mx-auto" />
-          <h2 className="font-display text-xl font-bold text-foreground">Verifique seu E-mail!</h2>
-          <p className="text-sm text-muted-foreground">
-            Enviamos um link de confirmação para <strong className="text-foreground">{email}</strong>.
-            Abra seu e-mail e clique no link para ativar sua conta.
-          </p>
-          <div className="text-xs text-muted-foreground space-y-1">
-            <p>📧 Verifique também a pasta de spam/lixo eletrônico</p>
-            <p>⏱️ O link expira em 24 horas</p>
+          <div className="text-center space-y-3">
+            <div className="w-14 h-14 rounded-full gradient-warm flex items-center justify-center mx-auto warm-glow-sm">
+              <KeyRound className="w-7 h-7 text-primary-foreground" />
+            </div>
+            <h2 className="font-display text-xl font-bold text-foreground">Verifique sua conta</h2>
+            <p className="text-sm text-muted-foreground">
+              Digite o código de 6 dígitos enviado para
+              <br />
+              <strong className="text-foreground">{email}</strong>
+            </p>
           </div>
+
+          <form onSubmit={handleVerifyOtp} className="space-y-5">
+            <div className="flex justify-center">
+              <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode}>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} className="w-11 h-12 text-lg" />
+                  <InputOTPSlot index={1} className="w-11 h-12 text-lg" />
+                  <InputOTPSlot index={2} className="w-11 h-12 text-lg" />
+                  <InputOTPSlot index={3} className="w-11 h-12 text-lg" />
+                  <InputOTPSlot index={4} className="w-11 h-12 text-lg" />
+                  <InputOTPSlot index={5} className="w-11 h-12 text-lg" />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting || otpCode.length !== 6}
+              className="w-full py-3 rounded-lg gradient-warm text-primary-foreground font-semibold text-sm warm-glow-sm disabled:opacity-50 transition-all hover:scale-[1.01]"
+            >
+              {submitting ? "Verificando..." : "Verificar código"}
+            </button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={resendIn > 0}
+                className="text-xs text-muted-foreground hover:text-primary disabled:opacity-50 disabled:hover:text-muted-foreground transition-colors"
+              >
+                {resendIn > 0 ? `Reenviar código em ${resendIn}s` : "Reenviar código"}
+              </button>
+            </div>
+          </form>
+
           <button
-            onClick={() => { setEmailSent(false); setMode("login"); }}
-            className="w-full py-3 rounded-lg border border-border text-foreground text-sm font-medium hover:bg-secondary transition-colors"
+            onClick={() => { setOtpStep(false); setOtpCode(""); }}
+            className="w-full flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            Voltar para Login
+            <ArrowLeft className="w-3 h-3" /> Voltar
           </button>
+
+          <p className="text-[11px] text-center text-muted-foreground">
+            📧 Verifique também a pasta de spam
+          </p>
         </motion.div>
       </div>
     );
