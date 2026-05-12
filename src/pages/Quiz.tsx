@@ -21,18 +21,29 @@ export default function Quiz() {
   const [selected, setSelected] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [countdown, setCountdown] = useState(0);
+  const advanceTimerRef = useRef<number | null>(null);
+  const tickRef = useRef<number | null>(null);
+
+  const clearTimers = () => {
+    if (advanceTimerRef.current) { window.clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null; }
+    if (tickRef.current) { window.clearInterval(tickRef.current); tickRef.current = null; }
+  };
 
   const startQuiz = useCallback(() => {
+    clearTimers();
     setQuestions(getShuffledQuestions());
     setCurrentIndex(0);
     setScore(0);
     setSelected(null);
     setShowResult(false);
+    setCountdown(0);
   }, []);
 
   useEffect(() => {
     startQuiz();
     fetchLeaderboard();
+    return () => clearTimers();
   }, [startQuiz]);
 
   const fetchLeaderboard = async () => {
@@ -65,6 +76,7 @@ export default function Quiz() {
   };
 
   const handleStop = () => {
+    clearTimers();
     if (score > 0) {
       saveScore(score);
       toast.info(`Você parou com ${score} ponto${score > 1 ? "s" : ""}! Sua pontuação foi salva.`);
@@ -72,36 +84,53 @@ export default function Quiz() {
     startQuiz();
   };
 
+  const goNext = useCallback(() => {
+    clearTimers();
+    setCountdown(0);
+    setSelected(null);
+    setShowResult(false);
+    setCurrentIndex((i) => {
+      if (i + 1 < questions.length) return i + 1;
+      setQuestions(getShuffledQuestions());
+      toast.success("Todas as perguntas respondidas! Continuando com novas perguntas...");
+      return 0;
+    });
+  }, [questions.length]);
+
   const handleAnswer = (optionIndex: number) => {
     if (showResult) return;
     setSelected(optionIndex);
     setShowResult(true);
 
     const isCorrect = optionIndex === questions[currentIndex].correct;
+    const DELAY_MS = 5000;
+    setCountdown(Math.ceil(DELAY_MS / 1000));
+    tickRef.current = window.setInterval(() => {
+      setCountdown((s) => (s > 1 ? s - 1 : 0));
+    }, 1000);
 
     if (isCorrect) {
-      const newScore = score + 1;
-      setScore(newScore);
-
-      setTimeout(() => {
-        if (currentIndex + 1 < questions.length) {
-          setCurrentIndex((i) => i + 1);
-          setSelected(null);
-          setShowResult(false);
-        } else {
-          setQuestions(getShuffledQuestions());
-          setCurrentIndex(0);
-          setSelected(null);
-          setShowResult(false);
-          toast.success("Todas as perguntas respondidas! Continuando com novas perguntas...");
-        }
-      }, 1800);
+      setScore((s) => s + 1);
+      advanceTimerRef.current = window.setTimeout(goNext, DELAY_MS);
     } else {
-      setTimeout(() => {
+      advanceTimerRef.current = window.setTimeout(() => {
         saveScore(score);
         toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
         startQuiz();
-      }, 2500);
+      }, DELAY_MS);
+    }
+  };
+
+  const handleSkip = () => {
+    if (!showResult) return;
+    const wasCorrect = selected === questions[currentIndex].correct;
+    clearTimers();
+    if (wasCorrect) {
+      goNext();
+    } else {
+      saveScore(score);
+      toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
+      startQuiz();
     }
   };
 
