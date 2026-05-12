@@ -5,7 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface LeaderboardEntry {
   user_name: string;
@@ -15,6 +16,7 @@ interface LeaderboardEntry {
 
 export default function Quiz() {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -208,6 +210,13 @@ export default function Quiz() {
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                       Dica: {current.explanation}
                     </p>
+                    <button
+                      onClick={() => navigate("/software")}
+                      className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Conheça os Programas Essenciais
+                    </button>
                     <div className="flex items-center justify-between gap-3 pt-1">
                       <span className="text-xs text-muted-foreground">
                         Avançando em <span className="font-bold text-primary">{countdown}s</span>...
