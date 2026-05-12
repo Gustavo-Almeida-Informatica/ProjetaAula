@@ -5,7 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface LeaderboardEntry {
   user_name: string;
