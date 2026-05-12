@@ -200,13 +200,26 @@ export default function Quiz() {
                   })}
                 </div>
                 {showResult && (
-                  <motion.p
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 text-sm md:text-base text-muted-foreground glass p-4 leading-relaxed"
+                    className="mt-4 glass p-4 space-y-3"
                   >
-                    💡 {current.explanation}
-                  </motion.p>
+                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                      Dica: {current.explanation}
+                    </p>
+                    <div className="flex items-center justify-between gap-3 pt-1">
+                      <span className="text-xs text-muted-foreground">
+                        Avançando em <span className="font-bold text-primary">{countdown}s</span>...
+                      </span>
+                      <button
+                        onClick={handleSkip}
+                        className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg gradient-warm text-primary-foreground font-semibold warm-glow-sm hover:scale-[1.02] transition-all"
+                      >
+                        Pular para a próxima →
+                      </button>
+                    </div>
+                  </motion.div>
                 )}
               </motion.div>
             </AnimatePresence>
