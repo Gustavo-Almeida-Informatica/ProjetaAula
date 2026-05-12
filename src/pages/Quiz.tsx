@@ -16,6 +16,7 @@ interface LeaderboardEntry {
 
 export default function Quiz() {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
