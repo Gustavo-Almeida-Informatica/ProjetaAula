@@ -210,6 +210,13 @@ export default function Quiz() {
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                       Dica: {current.explanation}
                     </p>
+                    <button
+                      onClick={() => navigate("/software")}
+                      className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Conheça os Programas Essenciais
+                    </button>
                     <div className="flex items-center justify-between gap-3 pt-1">
                       <span className="text-xs text-muted-foreground">
                         Avançando em <span className="font-bold text-primary">{countdown}s</span>...
