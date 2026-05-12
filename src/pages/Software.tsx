@@ -31,6 +31,42 @@ interface ProgramCard {
 
 const programs: ProgramCard[] = [
   {
+    name: "Steam",
+    desc: "Plataforma de jogos mais popular do mundo — compre, baixe e jogue milhares de títulos.",
+    features: [
+      "Biblioteca digital: seus jogos ficam salvos na conta, pode baixar em qualquer PC",
+      "Ofertas frequentes com descontos de até 90%",
+      "Modo offline: jogue sem internet depois de baixar",
+      "Suporte a controle e jogos multiplayer online",
+    ],
+    downloadUrl: "https://store.steampowered.com/about/",
+    icon: "🎮",
+  },
+  {
+    name: "Epic Games",
+    desc: "Loja de jogos com títulos exclusivos e jogos gratuitos toda semana.",
+    features: [
+      "Jogos gratuitos toda semana — permanentes na sua biblioteca",
+      "Exclusivos como Fortnite e Rocket League",
+      "Integra com Unreal Engine para criadores",
+      "Amigos e convites para jogar juntos",
+    ],
+    downloadUrl: "https://www.epicgames.com/store/download",
+    icon: "🎯",
+  },
+  {
+    name: "Discord",
+    desc: "Aplicativo de conversa por voz, vídeo e texto — ideal para jogar e estudar em grupo.",
+    features: [
+      "Chamadas de voz em grupo com qualidade alta e baixo delay",
+      "Crie servidores privados para amigos ou turmas",
+      "Compartilhamento de tela para apresentações",
+      "Gratuito e funciona no PC, celular e navegador",
+    ],
+    downloadUrl: "https://discord.com/download",
+    icon: "🎧",
+  },
+  {
     name: "Google Chrome",
     desc: "O navegador mais usado no mundo. Rápido, seguro e com milhares de extensões.",
     features: [
@@ -43,6 +79,54 @@ const programs: ProgramCard[] = [
     icon: "🌐",
   },
   {
+    name: "Brave",
+    desc: "Navegador rápido que bloqueia anúncios e rastreadores automaticamente.",
+    features: [
+      "Bloqueia anúncios e pop-ups sem precisar instalar extensões",
+      "Carrega sites até 3x mais rápido que outros navegadores",
+      "Modo nocturno e leitor integrado",
+      "Baseado no Chrome — funciona com todas as extensões",
+    ],
+    downloadUrl: "https://brave.com/download/",
+    icon: "🦁",
+  },
+  {
+    name: "Opera GX",
+    desc: "Navegador feito para gamers, com controles de CPU, RAM e rede.",
+    features: [
+      "Limitador de RAM e CPU — o navegador não trava seu jogo",
+      "Twitch, Discord e WhatsApp integrados na barra lateral",
+      "Temas escuros e sons personalizáveis",
+      "VPN gratuita integrada para mais privacidade",
+    ],
+    downloadUrl: "https://www.opera.com/gx",
+    icon: "🕹️",
+  },
+  {
+    name: "Spotify",
+    desc: "O maior serviço de streaming de música do mundo — milhões de músicas e podcasts.",
+    features: [
+      "Escute música e podcasts online e offline (com Premium)",
+      "Crie playlists personalizadas e compartilhe com amigos",
+      "Descoberta semanal com músicas baseadas no seu gosto",
+      "Disponível para PC, celular, TV e videogame",
+    ],
+    downloadUrl: "https://www.spotify.com/download/",
+    icon: "🎵",
+  },
+  {
+    name: "OBS Studio",
+    desc: "Gravador de tela e transmissão ao vivo gratuito — ideal para aulas e jogos.",
+    features: [
+      "Grave a tela do computador com ou sem webcam",
+      "Transmita ao vivo para YouTube, Twitch e outras plataformas",
+      "Cenas e fontes personalizáveis (webcam, tela, imagens)",
+      "100% gratuito, sem marcas d'água e de código aberto",
+    ],
+    downloadUrl: "https://obsproject.com/download",
+    icon: "📺",
+  },
+  {
     name: "LibreOffice",
     desc: "Pacote de escritório gratuito — substituto completo do Microsoft Office.",
     features: [
@@ -53,6 +137,30 @@ const programs: ProgramCard[] = [
     ],
     downloadUrl: "https://pt-br.libreoffice.org/baixe-ja/",
     icon: "📝",
+  },
+  {
+    name: "Notion",
+    desc: "Ferramenta tudo-em-um para anotações, tarefas, projetos e colaboração.",
+    features: [
+      "Crie páginas com textos, listas, tabelas e calendários",
+      "Templates prontos para estudos, projetos e hábitos",
+      "Compartilhe páginas com colegas para trabalhar junto",
+      "Sincroniza em todos os dispositivos — PC, celular e web",
+    ],
+    downloadUrl: "https://www.notion.so/desktop",
+    icon: "📋",
+  },
+  {
+    name: "Trello",
+    desc: "Organize tarefas e projetos com quadros visuais estilo cartões.",
+    features: [
+      "Crie quadros com listas e cartões para organizar qualquer projeto",
+      "Arraste os cartões entre colunas: A Fazer, Fazendo, Feito",
+      "Adicione prazos, etiquetas e checklists dentro dos cartões",
+      "Ideal para trabalho em equipe e estudos",
+    ],
+    downloadUrl: "https://trello.com/platforms",
+    icon: "🗂️",
   },
   {
     name: "VLC Media Player",
