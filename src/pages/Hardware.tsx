@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
+import { SearchBar } from "@/components/SearchBar";
+import { useState } from "react";
+import { Search } from "lucide-react";
 
 import cpuImg from "@/assets/hw-cpu.jpg";
 import ramImg from "@/assets/hw-ram.jpg";
