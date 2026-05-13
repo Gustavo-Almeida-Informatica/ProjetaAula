@@ -1,8 +1,11 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { Cpu, Monitor, Image, Brain, Users, BookOpen, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Cpu, Monitor, Image, Brain, Users, BookOpen, ChevronRight, ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
+import { useMemo, useState } from "react";
+import { SearchBar } from "@/components/SearchBar";
+import { searchAll } from "@/lib/searchIndex";
 import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
 import harryImg from "@/assets/harry.jpg";
@@ -56,6 +59,10 @@ const fadeUp = {
 
 export default function Index() {
   const { profile } = useAuth();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const results = useMemo(() => searchAll(searchQuery), [searchQuery]);
+  const isSearching = searchQuery.trim().length > 0;
   const greeting = profile?.role === "professor"
     ? "Bem-vindo, Professor! Explore materiais para usar em sala de aula."
     : "Bem-vindo! Aprenda informática de um jeito fácil e divertido.";
@@ -99,38 +106,103 @@ export default function Index() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[150px] pointer-events-none" />
       </section>
 
-      {/* Features Grid */}
-      <section className="container py-16">
-        <h2 className="font-display text-xl md:text-2xl font-bold text-center mb-10 text-foreground">
-          O que você vai aprender
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {features.map((f, i) => (
+      {/* Global Search */}
+      <section className="container -mt-8 md:-mt-12 mb-8 relative z-10">
+        <SearchBar
+          placeholder="Pesquise por Hardware ou Software (ex: SSD, Discord...)"
+          onSearch={setSearchQuery}
+          value={searchQuery}
+        />
+      </section>
+
+      {/* Features Grid OR Search Results */}
+      <section className="container py-8">
+        <AnimatePresence mode="wait">
+          {isSearching ? (
             <motion.div
-              key={f.label}
-              custom={i}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
+              key="results"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
             >
-              <Link
-                to={f.to}
-                className="glass p-6 flex items-start gap-4 group hover:border-primary/20 transition-all block"
-              >
-                <div className="p-2.5 rounded-lg bg-primary/10 shrink-0">
-                  <f.icon className="w-5 h-5 text-primary" />
+              <div className="flex items-center justify-between mb-6 max-w-3xl mx-auto">
+                <h2 className="font-display text-base md:text-lg font-bold text-foreground">
+                  {results.length} resultado{results.length === 1 ? "" : "s"} para "{searchQuery}"
+                </h2>
+              </div>
+              {results.length === 0 ? (
+                <div className="glass p-8 text-center rounded-xl max-w-3xl mx-auto">
+                  <p className="text-muted-foreground text-sm">
+                    Nenhum resultado encontrado em Hardware, Software, História ou Conectores. Tente outro termo!
+                  </p>
                 </div>
-                <div>
-                  <h3 className="font-display text-sm font-bold text-foreground group-hover:text-primary transition-colors">
-                    {f.label}
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-1">{f.desc}</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-3xl mx-auto">
+                  {results.map((r, i) => (
+                    <motion.button
+                      key={`${r.category}-${r.title}-${i}`}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.02 }}
+                      onClick={() => navigate(r.route)}
+                      className="glass p-4 text-left group hover:border-primary/30 transition-all flex flex-col gap-2"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full border ${r.badgeClass}`}>
+                          {r.category}
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      <h3 className="font-display text-sm font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                        {r.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{r.desc}</p>
+                    </motion.button>
+                  ))}
                 </div>
-              </Link>
+              )}
             </motion.div>
-          ))}
-        </div>
+          ) : (
+            <motion.div
+              key="features"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <h2 className="font-display text-xl md:text-2xl font-bold text-center mb-10 text-foreground">
+                O que você vai aprender
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {features.map((f, i) => (
+                  <motion.div
+                    key={f.label}
+                    custom={i}
+                    variants={fadeUp}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                  >
+                    <Link
+                      to={f.to}
+                      className="glass p-6 flex items-start gap-4 group hover:border-primary/20 transition-all block"
+                    >
+                      <div className="p-2.5 rounded-lg bg-primary/10 shrink-0">
+                        <f.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-display text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                          {f.label}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mt-1">{f.desc}</p>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
 
       {/* Team */}

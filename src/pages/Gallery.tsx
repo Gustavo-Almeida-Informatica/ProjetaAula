@@ -21,7 +21,7 @@ interface GalleryItem {
   specs: { label: string; value: string }[];
 }
 
-const galleryContent: Record<string, GalleryItem[]> = {
+export const galleryContent: Record<string, GalleryItem[]> = {
   video: [
     {
       title: "Cabo HDMI",

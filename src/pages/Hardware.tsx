@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
 
 import cpuImg from "@/assets/hw-cpu.jpg";
@@ -38,7 +39,7 @@ interface TopicCard {
   details: string[];
 }
 
-const topics: TopicCard[] = [
+export const topics: TopicCard[] = [
   {
     image: cpuImg,
     title: "Processador (CPU)",
@@ -378,7 +379,8 @@ const topics: TopicCard[] = [
 ];
 
 export default function Hardware() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [params] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(params.get("q") ?? "");
 
   const filteredTopics = topics.filter(
     (topic) =>

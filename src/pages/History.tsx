@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 
-const timeline = [
+export const timeline = [
   {
     year: "1ª Geração (1940–1955)",
     title: "Válvulas Termoiônicas — ENIAC e EDVAC",
@@ -77,7 +77,7 @@ const timeline = [
   },
 ];
 
-const peripherals = [
+export const peripherals = [
   {
     category: "Periféricos de Entrada",
     desc: "São os dispositivos que você usa para enviar informações para o computador.",
