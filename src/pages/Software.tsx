@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
+import { SearchBar } from "@/components/SearchBar";
 import { useState } from "react";
 import {
   Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
+  Search,
 } from "lucide-react";
 
 const tabs = [
@@ -660,6 +662,32 @@ const content: Record<string, ContentSection[]> = {
 
 export default function Software() {
   const [activeTab, setActiveTab] = useState("windows");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredPrograms = programs.filter(
+    (prog) =>
+      prog.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prog.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredContent = (tabContent: ContentSection[] | undefined) => {
+    if (!tabContent) return [];
+    return tabContent.filter(
+      (section) =>
+        section.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        section.desc.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  const currentContent =
+    activeTab === "programas"
+      ? filteredPrograms
+      : filteredContent(content[activeTab]);
+
+  const hasResults =
+    activeTab === "programas"
+      ? filteredPrograms.length > 0
+      : filteredContent(content[activeTab]).length > 0;
 
   return (
     <div className="min-h-screen pt-16 pb-12">
@@ -668,13 +696,21 @@ export default function Software() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
+          className="text-center mb-8"
         >
           <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">Software</h1>
           <p className="text-muted-foreground text-sm mt-3">
             Aprenda sobre o Windows, programas úteis e segurança digital
           </p>
         </motion.div>
+
+        <div className="mb-6">
+          <SearchBar
+            placeholder="Pesquise por um programa ou tema (ex: Steam, Windows, RAM)..."
+            onSearch={setSearchQuery}
+            value={searchQuery}
+          />
+        </div>
 
         <div className="flex flex-wrap gap-2 mb-8 justify-center">
           {tabs.map((tab) => (
@@ -699,7 +735,18 @@ export default function Software() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {activeTab === "programas" ? (
+          {!hasResults ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="glass p-8 text-center rounded-xl"
+            >
+              <Search className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+              <p className="text-muted-foreground text-sm">
+                Nenhum componente encontrado com este nome. Tente outro termo!
+              </p>
+            </motion.div>
+          ) : activeTab === "programas" ? (
             <div className="space-y-6">
               <div className="glass p-6 text-center">
                 <h2 className="font-display text-xl font-bold text-foreground mb-2">
@@ -710,7 +757,7 @@ export default function Software() {
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {programs.map((prog, i) => (
+                {filteredPrograms.map((prog, i) => (
                   <motion.div
                     key={prog.name}
                     initial={{ opacity: 0, y: 20 }}
@@ -750,7 +797,7 @@ export default function Software() {
             </div>
           ) : (
             <div className="space-y-5">
-              {content[activeTab]?.map((section) => (
+              {filteredContent(content[activeTab])?.map((section) => (
                 <div key={section.title} className="glass p-6">
                   <h3 className="font-display text-lg font-bold text-foreground mb-2">{section.title}</h3>
                   <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
