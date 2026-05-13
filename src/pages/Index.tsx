@@ -1,8 +1,11 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { Cpu, Monitor, Image, Brain, Users, BookOpen, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Cpu, Monitor, Image, Brain, Users, BookOpen, ChevronRight, ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
+import { useMemo, useState } from "react";
+import { SearchBar } from "@/components/SearchBar";
+import { searchAll } from "@/lib/searchIndex";
 import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
 import harryImg from "@/assets/harry.jpg";
