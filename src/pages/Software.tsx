@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
   Search,
@@ -661,8 +662,11 @@ export const content: Record<string, ContentSection[]> = {
 };
 
 export default function Software() {
-  const [activeTab, setActiveTab] = useState("windows");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [params] = useSearchParams();
+  const initialQ = params.get("q") ?? "";
+  // If a query was passed (likely from global search for a program), default to programs tab
+  const [activeTab, setActiveTab] = useState(initialQ ? "programas" : "windows");
+  const [searchQuery, setSearchQuery] = useState(initialQ);
 
   const filteredPrograms = programs.filter(
     (prog) =>
