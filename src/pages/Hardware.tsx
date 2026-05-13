@@ -378,6 +378,14 @@ const topics: TopicCard[] = [
 ];
 
 export default function Hardware() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredTopics = topics.filter(
+    (topic) =>
+      topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      topic.desc.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
@@ -385,7 +393,7 @@ export default function Hardware() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <h1 className="font-display text-3xl md:text-4xl font-bold gradient-warm-text">
             Hardware
@@ -395,41 +403,62 @@ export default function Hardware() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {topics.map((topic, i) => (
-            <motion.div
-              key={topic.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="glass p-6 hover:border-primary/20 transition-all"
-            >
-              {topic.image && (
-                <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
-                  <img
-                    src={topic.image}
-                    alt={topic.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              <h3 className="font-display text-base font-bold text-foreground mb-2">
-                {topic.title}
-              </h3>
-              <p className="text-sm text-muted-foreground mb-4">{topic.desc}</p>
-              <ul className="space-y-1.5">
-                {topic.details.map((d) => (
-                  <li key={d} className="text-xs text-foreground/80 flex items-start gap-2">
-                    <span className="text-primary mt-0.5">▸</span>
-                    {d}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+        <div className="mb-8">
+          <SearchBar
+            placeholder="Pesquise por um componente (ex: RAM, CPU, Placa-Mãe)..."
+            onSearch={setSearchQuery}
+            value={searchQuery}
+          />
         </div>
+
+        {filteredTopics.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass p-8 text-center rounded-xl"
+          >
+            <Search className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground text-sm">
+              Nenhum componente encontrado com este nome. Tente outro termo!
+            </p>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {filteredTopics.map((topic, i) => (
+              <motion.div
+                key={topic.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="glass p-6 hover:border-primary/20 transition-all"
+              >
+                {topic.image && (
+                  <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
+                    <img
+                      src={topic.image}
+                      alt={topic.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <h3 className="font-display text-base font-bold text-foreground mb-2">
+                  {topic.title}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">{topic.desc}</p>
+                <ul className="space-y-1.5">
+                  {topic.details.map((d) => (
+                    <li key={d} className="text-xs text-foreground/80 flex items-start gap-2">
+                      <span className="text-primary mt-0.5">▸</span>
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
