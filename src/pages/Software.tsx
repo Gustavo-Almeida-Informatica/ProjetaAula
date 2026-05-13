@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
+import { SearchBar } from "@/components/SearchBar";
 import { useState } from "react";
 import {
   Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
+  Search,
 } from "lucide-react";
 
 const tabs = [
