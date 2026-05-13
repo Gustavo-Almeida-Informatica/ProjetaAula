@@ -59,6 +59,10 @@ const fadeUp = {
 
 export default function Index() {
   const { profile } = useAuth();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const results = useMemo(() => searchAll(searchQuery), [searchQuery]);
+  const isSearching = searchQuery.trim().length > 0;
   const greeting = profile?.role === "professor"
     ? "Bem-vindo, Professor! Explore materiais para usar em sala de aula."
     : "Bem-vindo! Aprenda informática de um jeito fácil e divertido.";
