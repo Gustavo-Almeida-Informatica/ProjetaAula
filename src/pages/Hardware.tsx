@@ -38,7 +38,7 @@ interface TopicCard {
   details: string[];
 }
 
-const topics: TopicCard[] = [
+export const topics: TopicCard[] = [
   {
     image: cpuImg,
     title: "Processador (CPU)",

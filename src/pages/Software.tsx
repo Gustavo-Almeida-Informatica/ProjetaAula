@@ -31,7 +31,7 @@ interface ProgramCard {
   icon: string;
 }
 
-const programs: ProgramCard[] = [
+export const programs: ProgramCard[] = [
   {
     name: "Steam",
     desc: "Plataforma de jogos mais popular do mundo — compre, baixe e jogue milhares de títulos.",
@@ -262,7 +262,7 @@ const programs: ProgramCard[] = [
   },
 ];
 
-const content: Record<string, ContentSection[]> = {
+export const content: Record<string, ContentSection[]> = {
   windows: [
     {
       title: "O que é o Windows?",
