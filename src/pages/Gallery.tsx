@@ -143,10 +143,11 @@ export default function Gallery() {
           {galleryContent[activeCategory]?.map((item, i) => (
             <motion.div
               key={item.title}
+              id={slugify(item.title)}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-6 hover:border-primary/20 transition-all"
+              className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
             >
               <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
                 <img
