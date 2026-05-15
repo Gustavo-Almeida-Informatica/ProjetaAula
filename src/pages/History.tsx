@@ -118,6 +118,9 @@ export const peripherals = [
 ];
 
 export default function History() {
+  const [params] = useSearchParams();
+  const itemParam = params.get("item");
+  useScrollToItem(itemParam);
   return (
     <div className="min-h-screen pt-16 pb-12">
       <ScrollToTop />
@@ -153,7 +156,7 @@ export default function History() {
               {/* Dot */}
               <div className="absolute left-2.5 md:left-1/2 md:-translate-x-1/2 top-1 w-3 h-3 rounded-full bg-primary border-2 border-background" />
 
-              <div className="glass p-6">
+              <div id={slugify(item.title)} className="glass p-6 scroll-mt-24 rounded-xl border border-transparent">
                 <span className="inline-block text-xs font-display font-bold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
                   {item.year}
                 </span>
@@ -190,7 +193,7 @@ export default function History() {
                 <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {section.items.map((item) => (
-                    <div key={item.name} className="bg-secondary/50 rounded-lg p-4">
+                    <div key={item.name} id={slugify(item.name)} className="bg-secondary/50 rounded-lg p-4 scroll-mt-24 border border-transparent">
                       <h4 className="text-sm font-bold text-primary mb-1">{item.name}</h4>
                       <p className="text-xs text-foreground/80 leading-relaxed">{item.detail}</p>
                     </div>
