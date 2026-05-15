@@ -7,6 +7,8 @@ import {
   Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
   Search,
 } from "lucide-react";
+import { slugify } from "@/lib/slug";
+import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 const tabs = [
   { id: "windows", label: "Windows", icon: Monitor },
@@ -664,9 +666,18 @@ export const content: Record<string, ContentSection[]> = {
 export default function Software() {
   const [params] = useSearchParams();
   const initialQ = params.get("q") ?? "";
-  // If a query was passed (likely from global search for a program), default to programs tab
-  const [activeTab, setActiveTab] = useState(initialQ ? "programas" : "windows");
+  const tabParam = params.get("tab");
+  const itemParam = params.get("item");
+  const validTabs = tabs.map((t) => t.id);
+  const initialTab = tabParam && validTabs.includes(tabParam)
+    ? tabParam
+    : initialQ
+      ? "programas"
+      : "windows";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [searchQuery, setSearchQuery] = useState(initialQ);
+
+  useScrollToItem(itemParam, [activeTab]);
 
   const filteredPrograms = programs.filter(
     (prog) =>
@@ -682,11 +693,6 @@ export default function Software() {
         section.desc.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
-
-  const currentContent =
-    activeTab === "programas"
-      ? filteredPrograms
-      : filteredContent(content[activeTab]);
 
   const hasResults =
     activeTab === "programas"
