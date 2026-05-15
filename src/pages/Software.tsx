@@ -809,7 +809,7 @@ export default function Software() {
           ) : (
             <div className="space-y-5">
               {filteredContent(content[activeTab])?.map((section) => (
-                <div key={section.title} className="glass p-6">
+                <div key={section.title} id={slugify(section.title)} className="glass p-6 scroll-mt-24 rounded-xl border border-transparent">
                   <h3 className="font-display text-lg font-bold text-foreground mb-2">{section.title}</h3>
                   <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
                   <ul className="space-y-2">
