@@ -2,6 +2,7 @@ import { topics as hardwareTopics } from "@/pages/Hardware";
 import { programs as softwarePrograms, content as softwareContent } from "@/pages/Software";
 import { timeline as historyTimeline, peripherals as historyPeripherals } from "@/pages/History";
 import { galleryContent } from "@/pages/Gallery";
+import { slugify } from "@/lib/slug";
 
 export type SearchCategory = "Hardware" | "Software" | "História" | "Conectores";
 
@@ -20,10 +21,6 @@ const badgeClasses: Record<SearchCategory, string> = {
   Conectores: "bg-purple-500/15 text-purple-300 border-purple-500/30",
 };
 
-function makeRoute(base: string, query?: string) {
-  return query ? `${base}?q=${encodeURIComponent(query)}` : base;
-}
-
 function build(): SearchItem[] {
   const items: SearchItem[] = [];
 
@@ -32,7 +29,7 @@ function build(): SearchItem[] {
       title: t.title,
       desc: t.desc,
       category: "Hardware",
-      route: makeRoute("/hardware", t.title),
+      route: `/hardware?item=${slugify(t.title)}`,
       badgeClass: badgeClasses.Hardware,
     }),
   );
@@ -42,18 +39,18 @@ function build(): SearchItem[] {
       title: p.name,
       desc: p.desc,
       category: "Software",
-      route: makeRoute("/software", p.name),
+      route: `/software?tab=programas&item=${slugify(p.name)}`,
       badgeClass: badgeClasses.Software,
     }),
   );
 
-  Object.values(softwareContent).forEach((sections) =>
+  Object.entries(softwareContent).forEach(([tabId, sections]) =>
     sections.forEach((s) =>
       items.push({
         title: s.title,
         desc: s.desc,
         category: "Software",
-        route: makeRoute("/software", s.title),
+        route: `/software?tab=${tabId}&item=${slugify(s.title)}`,
         badgeClass: badgeClasses.Software,
       }),
     ),
@@ -64,7 +61,7 @@ function build(): SearchItem[] {
       title: t.title,
       desc: t.desc,
       category: "História",
-      route: "/historia",
+      route: `/historia?item=${slugify(t.title)}`,
       badgeClass: badgeClasses["História"],
     }),
   );
@@ -75,19 +72,19 @@ function build(): SearchItem[] {
         title: it.name,
         desc: it.detail,
         category: "História",
-        route: "/historia",
+        route: `/historia?item=${slugify(it.name)}`,
         badgeClass: badgeClasses["História"],
       }),
     ),
   );
 
-  Object.values(galleryContent).forEach((arr) =>
+  Object.entries(galleryContent).forEach(([catId, arr]) =>
     arr.forEach((g) =>
       items.push({
         title: g.title,
         desc: g.desc,
         category: "Conectores",
-        route: "/galeria",
+        route: `/galeria?cat=${catId}&item=${slugify(g.title)}`,
         badgeClass: badgeClasses.Conectores,
       }),
     ),
