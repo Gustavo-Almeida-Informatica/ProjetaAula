@@ -770,11 +770,12 @@ export default function Software() {
                 {filteredPrograms.map((prog, i) => (
                   <motion.div
                     key={prog.name}
+                    id={slugify(prog.name)}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="glass p-6 hover:border-primary/20 transition-all"
+                    className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <span className="text-3xl">{prog.icon}</span>
