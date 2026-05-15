@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
+import { useSearchParams } from "react-router-dom";
+import { slugify } from "@/lib/slug";
+import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 export const timeline = [
   {
