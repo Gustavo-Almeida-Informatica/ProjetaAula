@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { MonitorPlay, Wifi } from "lucide-react";
+import { slugify } from "@/lib/slug";
+import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 import hdmiImg from "@/assets/cable-hdmi.jpg";
 import displayportImg from "@/assets/cable-displayport.jpg";
@@ -89,7 +92,13 @@ export const galleryContent: Record<string, GalleryItem[]> = {
 };
 
 export default function Gallery() {
-  const [activeCategory, setActiveCategory] = useState("video");
+  const [params] = useSearchParams();
+  const catParam = params.get("cat");
+  const itemParam = params.get("item");
+  const [activeCategory, setActiveCategory] = useState(
+    catParam && galleryContent[catParam] ? catParam : "video",
+  );
+  useScrollToItem(itemParam, [activeCategory]);
 
   return (
     <div className="min-h-screen pt-16 pb-12">
@@ -134,10 +143,11 @@ export default function Gallery() {
           {galleryContent[activeCategory]?.map((item, i) => (
             <motion.div
               key={item.title}
+              id={slugify(item.title)}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-6 hover:border-primary/20 transition-all"
+              className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
             >
               <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
                 <img

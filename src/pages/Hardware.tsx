@@ -4,6 +4,8 @@ import { SearchBar } from "@/components/SearchBar";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
+import { slugify } from "@/lib/slug";
+import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 import cpuImg from "@/assets/hw-cpu.jpg";
 import ramImg from "@/assets/hw-ram.jpg";
@@ -380,7 +382,10 @@ export const topics: TopicCard[] = [
 
 export default function Hardware() {
   const [params] = useSearchParams();
+  const itemParam = params.get("item");
   const [searchQuery, setSearchQuery] = useState(params.get("q") ?? "");
+
+  useScrollToItem(itemParam, []);
 
   const filteredTopics = topics.filter(
     (topic) =>
@@ -429,11 +434,12 @@ export default function Hardware() {
             {filteredTopics.map((topic, i) => (
               <motion.div
                 key={topic.title}
+                id={slugify(topic.title)}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="glass p-6 hover:border-primary/20 transition-all"
+                className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
               >
                 {topic.image && (
                   <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
@@ -465,3 +471,4 @@ export default function Hardware() {
     </div>
   );
 }
+

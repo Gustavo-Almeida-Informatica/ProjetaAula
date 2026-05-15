@@ -1,5 +1,5 @@
 import { Search, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -13,6 +13,10 @@ export function SearchBar({
   value,
 }: SearchBarProps) {
   const [query, setQuery] = useState(value);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;

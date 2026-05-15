@@ -102,4 +102,16 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Highlight effect when navigating from global search */
+  .search-highlight {
+    animation: search-pulse 2.2s ease-out;
+    border-color: hsl(var(--primary)) !important;
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.45), 0 0 28px hsl(var(--primary) / 0.35);
+  }
+  @keyframes search-pulse {
+    0%   { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.0); }
+    20%  { box-shadow: 0 0 0 4px hsl(var(--primary) / 0.55), 0 0 32px hsl(var(--primary) / 0.5); }
+    100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+  }
 }

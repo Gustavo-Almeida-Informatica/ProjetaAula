@@ -7,6 +7,8 @@ import {
   Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
   Search,
 } from "lucide-react";
+import { slugify } from "@/lib/slug";
+import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 const tabs = [
   { id: "windows", label: "Windows", icon: Monitor },
@@ -664,9 +666,18 @@ export const content: Record<string, ContentSection[]> = {
 export default function Software() {
   const [params] = useSearchParams();
   const initialQ = params.get("q") ?? "";
-  // If a query was passed (likely from global search for a program), default to programs tab
-  const [activeTab, setActiveTab] = useState(initialQ ? "programas" : "windows");
+  const tabParam = params.get("tab");
+  const itemParam = params.get("item");
+  const validTabs = tabs.map((t) => t.id);
+  const initialTab = tabParam && validTabs.includes(tabParam)
+    ? tabParam
+    : initialQ
+      ? "programas"
+      : "windows";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [searchQuery, setSearchQuery] = useState(initialQ);
+
+  useScrollToItem(itemParam, [activeTab]);
 
   const filteredPrograms = programs.filter(
     (prog) =>
@@ -682,11 +693,6 @@ export default function Software() {
         section.desc.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
-
-  const currentContent =
-    activeTab === "programas"
-      ? filteredPrograms
-      : filteredContent(content[activeTab]);
 
   const hasResults =
     activeTab === "programas"
@@ -764,11 +770,12 @@ export default function Software() {
                 {filteredPrograms.map((prog, i) => (
                   <motion.div
                     key={prog.name}
+                    id={slugify(prog.name)}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="glass p-6 hover:border-primary/20 transition-all"
+                    className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <span className="text-3xl">{prog.icon}</span>
@@ -802,7 +809,7 @@ export default function Software() {
           ) : (
             <div className="space-y-5">
               {filteredContent(content[activeTab])?.map((section) => (
-                <div key={section.title} className="glass p-6">
+                <div key={section.title} id={slugify(section.title)} className="glass p-6 scroll-mt-24 rounded-xl border border-transparent">
                   <h3 className="font-display text-lg font-bold text-foreground mb-2">{section.title}</h3>
                   <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
                   <ul className="space-y-2">
