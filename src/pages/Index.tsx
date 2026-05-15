@@ -145,7 +145,10 @@ export default function Index() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.02 }}
-                      onClick={() => navigate(r.route)}
+                      onClick={() => {
+                        setSearchQuery("");
+                        navigate(r.route);
+                      }}
                       className="glass p-4 text-left group hover:border-primary/30 transition-all flex flex-col gap-2"
                     >
                       <div className="flex items-center justify-between gap-2">
