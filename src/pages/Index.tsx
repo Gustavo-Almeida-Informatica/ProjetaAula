@@ -35,6 +35,7 @@ const teamMembers = [
   {
     name: "José Antônio",
     role: "Desenvolvedor",
+    insta: "@joseantoniofilho365",
     photo: joseImg,
   },
 ];
