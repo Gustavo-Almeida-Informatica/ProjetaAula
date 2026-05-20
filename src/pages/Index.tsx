@@ -244,7 +244,7 @@ export default function Index() {
                   </a>
                 )}
                 {member.insta && (
-                  <a href={`https://instagram.com/${member.insta.replace("@", "")}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
+                  <a href={`https://www.instagram.com/${member.insta.replace("@", "")}/`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors">
                     <Instagram className="w-3 h-3" /> {member.insta}
                   </a>
                 )}
