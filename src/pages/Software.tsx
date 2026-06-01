@@ -1105,6 +1105,48 @@ export default function Software() {
                   </motion.div>
                 ))}
               </div>
+
+              {/* Catálogo completo por categoria */}
+              <div className="glass p-6 mt-8">
+                <h2 className="font-display text-xl font-bold text-foreground mb-2">
+                  📚 Catálogo Completo por Categoria
+                </h2>
+                <p className="text-sm text-muted-foreground mb-5">
+                  Mais de 180 programas organizados por uso. Itens marcados com <span className="text-primary font-bold">★</span> são considerados essenciais.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {programCategories
+                    .filter((cat) =>
+                      !searchQuery ||
+                      cat.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      cat.programs.some((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                    )
+                    .map((cat) => (
+                      <div key={cat.id} className="glass p-4 rounded-xl border border-transparent hover:border-primary/20 transition-all">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-xl">{cat.icon}</span>
+                          <h3 className="font-display text-sm font-bold text-foreground">{cat.label}</h3>
+                          <span className="ml-auto text-[10px] text-muted-foreground">{cat.programs.length}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cat.programs.map((p) => (
+                            <span
+                              key={p.name}
+                              className={`text-[11px] px-2 py-1 rounded-md border transition-colors ${
+                                p.essential
+                                  ? "bg-primary/15 text-primary border-primary/30 font-semibold"
+                                  : "bg-secondary/50 text-foreground/80 border-border/50"
+                              }`}
+                            >
+                              {p.essential && <span className="mr-0.5">★</span>}
+                              {p.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="space-y-5">
