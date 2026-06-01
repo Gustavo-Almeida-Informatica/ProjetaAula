@@ -263,6 +263,306 @@ export const programs: ProgramCard[] = [
     downloadUrl: "https://www.canva.com/",
     icon: "🎨",
   },
+  {
+    name: "Firefox",
+    desc: "Navegador independente da Mozilla com foco em privacidade e personalização.",
+    features: [
+      "Open source mantido por uma fundação sem fins lucrativos",
+      "Bloqueio inteligente de rastreadores por padrão",
+      "Sincroniza abas, senhas e favoritos entre dispositivos",
+      "Suporta milhares de extensões da AMO",
+    ],
+    downloadUrl: "https://www.mozilla.org/firefox/new/",
+    icon: "🦊",
+  },
+  {
+    name: "VS Code",
+    desc: "Editor de código mais popular do mundo — leve, rápido e cheio de extensões.",
+    features: [
+      "Suporta dezenas de linguagens de programação",
+      "Marketplace com milhares de extensões",
+      "Terminal integrado, Git embutido e IntelliSense",
+      "Gratuito, open source e multiplataforma",
+    ],
+    downloadUrl: "https://code.visualstudio.com/Download",
+    icon: "💻",
+  },
+  {
+    name: "ShareX",
+    desc: "Captura de tela e gravação avançada com upload automático para a nuvem.",
+    features: [
+      "Captura por região, janela, tela inteira ou rolagem",
+      "Anota, borra e edita o print logo após a captura",
+      "Grava tela em vídeo ou GIF com facilidade",
+      "100% gratuito, open source e sem marca d'água",
+    ],
+    downloadUrl: "https://getsharex.com/",
+    icon: "📸",
+  },
+  {
+    name: "Anki",
+    desc: "App de flashcards inteligentes com repetição espaçada — estude qualquer assunto.",
+    features: [
+      "Algoritmo de repetição espaçada que melhora a memorização",
+      "Sincroniza entre PC, celular e web (AnkiWeb)",
+      "Comunidade compartilha decks prontos para qualquer matéria",
+      "Suporta imagens, áudio e até LaTeX nos cards",
+    ],
+    downloadUrl: "https://apps.ankiweb.net/",
+    icon: "🧠",
+  },
+  {
+    name: "PowerToys",
+    desc: "Conjunto oficial de utilitários da Microsoft que turbinam o Windows.",
+    features: [
+      "FancyZones: layouts avançados para organizar janelas",
+      "PowerRename: renomeia muitos arquivos de uma vez",
+      "PowerToys Run: lançador rápido estilo Spotlight (Alt+Espaço)",
+      "Gratuito, open source e mantido pela Microsoft",
+    ],
+    downloadUrl: "https://learn.microsoft.com/windows/powertoys/",
+    icon: "🧰",
+  },
+  {
+    name: "f.lux",
+    desc: "Ajusta a temperatura de cor da tela para reduzir o cansaço visual à noite.",
+    features: [
+      "Deixa a tela mais quente automaticamente ao anoitecer",
+      "Reduz a luz azul e ajuda a dormir melhor",
+      "Configurável por horário e localização",
+      "Gratuito e silencioso — roda em segundo plano",
+    ],
+    downloadUrl: "https://justgetflux.com/",
+    icon: "🌙",
+  },
+  {
+    name: "Shotcut",
+    desc: "Editor de vídeo gratuito e open source com suporte a 4K e dezenas de formatos.",
+    features: [
+      "Edição em timeline com múltiplas trilhas",
+      "Centenas de filtros e efeitos visuais",
+      "Suporta 4K e quase todos os formatos via FFmpeg",
+      "Gratuito, sem marca d'água e multiplataforma",
+    ],
+    downloadUrl: "https://shotcut.org/download/",
+    icon: "🎞️",
+  },
+  {
+    name: "Audacity",
+    desc: "Editor de áudio gratuito mais popular — grave, corte, mixe e aplique efeitos.",
+    features: [
+      "Gravação multipista de microfones e fontes do sistema",
+      "Remoção de ruído, normalização e dezenas de efeitos",
+      "Exporta em MP3, WAV, OGG, FLAC e mais",
+      "Open source, gratuito e multiplataforma",
+    ],
+    downloadUrl: "https://www.audacityteam.org/download/",
+    icon: "🎙️",
+  },
+  {
+    name: "Blender",
+    desc: "Suíte 3D completa: modelagem, animação, renderização e até edição de vídeo.",
+    features: [
+      "Modelagem 3D, escultura e animação profissional",
+      "Renderização realista com Cycles e Eevee",
+      "Usado em filmes, jogos e curtas independentes",
+      "Gratuito, open source e mantido pela Blender Foundation",
+    ],
+    downloadUrl: "https://www.blender.org/download/",
+    icon: "🧊",
+  },
+  {
+    name: "Bitwarden",
+    desc: "Gerenciador de senhas open source — guarde todas as suas senhas em segurança.",
+    features: [
+      "Sincroniza senhas entre PC, celular e navegador",
+      "Geração automática de senhas fortes",
+      "Criptografia ponta a ponta — nem o servidor lê suas senhas",
+      "Plano gratuito generoso e versão self-hosted",
+    ],
+    downloadUrl: "https://bitwarden.com/download/",
+    icon: "🔐",
+  },
+  {
+    name: "Malwarebytes",
+    desc: "Anti-malware que detecta ameaças que muitos antivírus deixam passar.",
+    features: [
+      "Excelente contra adware, spyware e PUPs",
+      "Funciona em conjunto com seu antivírus principal",
+      "Versão gratuita com escaneamento sob demanda",
+      "Limpeza rápida e interface simples",
+    ],
+    downloadUrl: "https://www.malwarebytes.com/mwb-download",
+    icon: "🦠",
+  },
+  {
+    name: "qBittorrent",
+    desc: "Cliente torrent leve, sem anúncios e open source — alternativa ao uTorrent.",
+    features: [
+      "Interface limpa, sem propagandas",
+      "Busca integrada de torrents em vários sites",
+      "Controle de velocidade, filas e RSS",
+      "Multiplataforma e 100% gratuito",
+    ],
+    downloadUrl: "https://www.qbittorrent.org/download",
+    icon: "⬇️",
+  },
+  {
+    name: "HandBrake",
+    desc: "Conversor de vídeo gratuito — comprime e converte para vários formatos.",
+    features: [
+      "Converte para MP4, MKV e WebM com facilidade",
+      "Presets prontos para celular, TV e web",
+      "Reduz tamanho de arquivos sem perder muita qualidade",
+      "Open source, multiplataforma e sem custo",
+    ],
+    downloadUrl: "https://handbrake.fr/downloads.php",
+    icon: "🎬",
+  },
+  {
+    name: "Rufus",
+    desc: "Cria pendrives bootáveis em minutos — instale Windows ou Linux pelo USB.",
+    features: [
+      "Grava ISO do Windows e Linux em pendrives",
+      "Muito mais rápido que outras ferramentas",
+      "Portátil — não precisa instalar",
+      "Gratuito e open source",
+    ],
+    downloadUrl: "https://rufus.ie/",
+    icon: "💾",
+  },
+  {
+    name: "Telegram",
+    desc: "Mensageiro rápido com grupos enormes, canais públicos e envio de arquivos grandes.",
+    features: [
+      "Grupos com até 200 mil membros",
+      "Envio de arquivos de até 2 GB",
+      "Canais públicos para divulgação e estudo",
+      "Funciona no celular, PC e navegador",
+    ],
+    downloadUrl: "https://desktop.telegram.org/",
+    icon: "✈️",
+  },
+];
+
+// ===== BANCO COMPLETO DE PROGRAMAS POR CATEGORIA =====
+export interface CategoryProgram {
+  name: string;
+  essential?: boolean;
+}
+
+export interface ProgramCategory {
+  id: string;
+  label: string;
+  icon: string;
+  programs: CategoryProgram[];
+}
+
+export const programCategories: ProgramCategory[] = [
+  { id: "navegadores", label: "Navegadores", icon: "🌐", programs: [
+    { name: "Brave" }, { name: "Vivaldi" }, { name: "Firefox", essential: true }, { name: "Mullvad" },
+    { name: "Chrome" }, { name: "LibreWolf" }, { name: "Ungoogled", essential: true }, { name: "Zen Browser" },
+  ]},
+  { id: "documentos", label: "Documentos", icon: "📄", programs: [
+    { name: "Scribus" }, { name: "OnlyOffice" }, { name: "LibreOffice" }, { name: "WPS Office" },
+    { name: "Sumatra PDF" }, { name: "Foxit Reader" },
+  ]},
+  { id: "editor-texto", label: "Editor de Texto", icon: "📝", programs: [
+    { name: "VS Code" }, { name: "VSCodium" }, { name: "Notepad++" }, { name: "Sublime Text" },
+  ]},
+  { id: "multimidia", label: "Multimídia", icon: "🎬", programs: [
+    { name: "VLC", essential: true }, { name: "AIMP" }, { name: "KODI", essential: true }, { name: "iTunes" },
+    { name: "Spotify", essential: true }, { name: "Stremio", essential: true }, { name: "Spotube", essential: true },
+    { name: "SMPlayer" }, { name: "MPC - HC" }, { name: "Clementine" }, { name: "K-Lite Mega" }, { name: "Foobar2000" },
+  ]},
+  { id: "aprendizagem", label: "Aprendizagem", icon: "🧠", programs: [
+    { name: "Anki" }, { name: "Kindle", essential: true }, { name: "Keyviz", essential: true },
+    { name: "Scratch", essential: true }, { name: "Klavaro", essential: true }, { name: "Espanso" },
+    { name: "Hydrogen" }, { name: "TuxGuitar", essential: true }, { name: "AppFlowy" },
+    { name: "Balabolka" }, { name: "Notesnook" }, { name: "Virtual Piano" }, { name: "Detran" },
+  ]},
+  { id: "utilitarios", label: "Utilitários", icon: "🧰", programs: [
+    { name: "f.lux", essential: true }, { name: "AltSnap" }, { name: "SuperF4" }, { name: "UniGetUI" },
+    { name: "dupeGuru", essential: true }, { name: "LocalSend" }, { name: "Everything" }, { name: "WinDirStat" },
+    { name: "PowerToys", essential: true }, { name: "Twinkle Tray", essential: true }, { name: "Touch Portal" }, { name: "SoundSwitch" },
+  ]},
+  { id: "video", label: "Edição de Vídeo", icon: "🎞️", programs: [
+    { name: "Olive" }, { name: "VSDC" }, { name: "Filmora" }, { name: "Capcut" },
+    { name: "Shotcut", essential: true }, { name: "Kdenlive" }, { name: "Lightworks" }, { name: "DaVinci Resolve" },
+  ]},
+  { id: "modelagem", label: "Modelagem", icon: "🧊", programs: [
+    { name: "Natron" }, { name: "Friction" }, { name: "Blender" }, { name: "FreeCAD" },
+    { name: "OpenSCAD" }, { name: "Blockbench" },
+  ]},
+  { id: "captura", label: "Captura de Tela", icon: "📸", programs: [
+    { name: "ShareX", essential: true }, { name: "Captura", essential: true }, { name: "Flameshot" }, { name: "OBS Studio" },
+  ]},
+  { id: "downloads-cat", label: "Downloads", icon: "⬇️", programs: [
+    { name: "IDM", essential: true }, { name: "Motrix" }, { name: "AB DM" }, { name: "Free DM" },
+    { name: "Neat DM" }, { name: "qBittorrent" }, { name: "TubeDigger" }, { name: "JDownloader" },
+    { name: "Transmission" }, { name: "Persepolis DM" }, { name: "YTDownloader" }, { name: "Open Video DL" },
+  ]},
+  { id: "personalizacao", label: "Personalização", icon: "🎨", programs: [
+    { name: "Files" }, { name: "Rainmeter" }, { name: "Windhawk" }, { name: "Open Shell", essential: true },
+    { name: "Nilesoft Shell", essential: true }, { name: "Cairo Desktop", essential: true }, { name: "TranslucentTB" },
+    { name: "Flow Launcher" }, { name: "ModernFlyouts" }, { name: "Lively Wallpaper" }, { name: "Sigma File Manag" }, { name: "7+ Taskbar Tweak" },
+  ]},
+  { id: "manutencao-cat", label: "Manutenção", icon: "🔧", programs: [
+    { name: "CPU-Z", essential: true }, { name: "Dism++" }, { name: "Recuva" }, { name: "BleachBit" },
+    { name: "LockHunter" }, { name: "ShutUp10++" }, { name: "UniExtractor" }, { name: "FreeFileSync" },
+    { name: "Angry IP Scan" }, { name: "Winaero Tweak" }, { name: "Revo Uninstaller", essential: true }, { name: "Bulk Crap Uninst" },
+  ]},
+  { id: "imagem", label: "Edição de Imagem", icon: "🖼️", programs: [
+    { name: "Krita" }, { name: "Gimp" }, { name: "Canva", essential: true }, { name: "MyPaint" },
+    { name: "Darktable" }, { name: "Photopea" }, { name: "Paint.NET" }, { name: "RawTherapee" },
+  ]},
+  { id: "vetoriais", label: "Gráficos Vetoriais", icon: "✏️", programs: [
+    { name: "Affinity", essential: true }, { name: "draw.io" }, { name: "Graphite", essential: true },
+    { name: "Inkscape" }, { name: "LibreCAD" }, { name: "Glaxnimate" },
+  ]},
+  { id: "visualizadores", label: "Visualizadores", icon: "👁️", programs: [
+    { name: "XnView" }, { name: "IrfanView" }, { name: "QuickLook" }, { name: "ImageGlass" },
+  ]},
+  { id: "gamer", label: "Gamer", icon: "🎮", programs: [
+    { name: "Hydra", essential: true }, { name: "Steam", essential: true }, { name: "GPU-Z" }, { name: "Playnite" },
+    { name: "HWiNFO" }, { name: "Fan Control" }, { name: "CapFrameX" }, { name: "Epic Games" },
+    { name: "Voice Meeter" }, { name: "Heroic Games" }, { name: "MSI Afterburner" }, { name: "OP Auto Clicker" },
+  ]},
+  { id: "emuladores", label: "Emuladores", icon: "🕹️", programs: [
+    { name: "PuTTY" }, { name: "Parsec" }, { name: "Dolphin", essential: true }, { name: "RaiDrive" },
+    { name: "AnyDesk" }, { name: "RetroArch", essential: true }, { name: "VirtualBox", essential: true }, { name: "Spacedesk" },
+    { name: "BlueStacks", essential: true }, { name: "Genymotion" }, { name: "TeamViewer" }, { name: "Daemon Tools" },
+  ]},
+  { id: "conversores", label: "Conversores", icon: "🔄", programs: [
+    { name: "Calibre" }, { name: "Mp3tag", essential: true }, { name: "Upscayl" }, { name: "PDFsam" },
+    { name: "HandBrake" }, { name: "ExifCleaner" }, { name: "Subtitle Edit" }, { name: "MKVToolNix" },
+    { name: "File Converter" }, { name: "Format Factory" }, { name: "XMedia Recode" }, { name: "Shutter Encoder" },
+  ]},
+  { id: "audio", label: "Edição de Áudio", icon: "🎙️", programs: [
+    { name: "LMMS" }, { name: "Reaper" }, { name: "Bespoke" }, { name: "Audacity", essential: true },
+    { name: "FL Studio" }, { name: "Cakewalk" }, { name: "MuseScore" }, { name: "Bitwig Studio" },
+  ]},
+  { id: "seguranca-cat", label: "Segurança", icon: "🔐", programs: [
+    { name: "Bitwarden", essential: true }, { name: "Portmaster" }, { name: "Malwarebytes", essential: true },
+    { name: "Bitdefender AV" }, { name: "Kaspersky Free", essential: true }, { name: "VirusTotal Upload" },
+  ]},
+  { id: "compactadores", label: "Compactadores", icon: "📦", programs: [
+    { name: "7-Zip" }, { name: "PeaZip" }, { name: "WinRAR", essential: true }, { name: "CompactGUI", essential: true },
+  ]},
+  { id: "bibliotecas", label: "Bibliotecas", icon: "📚", programs: [
+    { name: "Python" }, { name: "DirectX" }, { name: ".NET 8.0" }, { name: "C++ 2005 até 2015+" },
+    { name: "Java 8 (JRE)" }, { name: "Java 21 (JDK)" }, { name: "XNA Framework" },
+  ]},
+  { id: "mensageiros", label: "Mensageiros", icon: "💬", programs: [
+    { name: "Stoat" }, { name: "Slack" }, { name: "Zoom" }, { name: "Signal" }, { name: "Trillian" },
+    { name: "Discord" }, { name: "Session" }, { name: "Element" }, { name: "Telegram" }, { name: "WhatsApp" },
+    { name: "TeamSpeak" }, { name: "Thunderbird" },
+  ]},
+  { id: "dispositivo", label: "Dispositivo", icon: "💾", programs: [
+    { name: "Rufus" }, { name: "Ventoy" }, { name: "AnyBurn" }, { name: "ValiDrive", essential: true },
+    { name: "TeraCopy" }, { name: "balenaEtcher" }, { name: "HD Tune Pro", essential: true }, { name: "CrystalDiskInfo" },
+    { name: "Remote Mouse" }, { name: "Win32 Disk Img" }, { name: "Partition Assistant", essential: true }, { name: "Hard Disk Sentinel", essential: true },
+  ]},
 ];
 
 export const content: Record<string, ContentSection[]> = {
