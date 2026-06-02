@@ -266,6 +266,7 @@ export default function Community() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                maxLength={200}
                 className="w-full px-4 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               />
               <textarea
@@ -274,6 +275,7 @@ export default function Community() {
                 onChange={(e) => setContent(e.target.value)}
                 required
                 rows={4}
+                maxLength={10000}
                 className="w-full px-4 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-none"
               />
 
