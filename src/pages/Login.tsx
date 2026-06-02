@@ -139,45 +139,18 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {mode === "register" && (
-            <>
-              <div className="relative">
-                <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Seu nome completo"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                  maxLength={120}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRole("aluno")}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                    role === "aluno"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  🎓 Aluno
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole("professor")}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                    role === "professor"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  👨‍🏫 Professor
-                </button>
-              </div>
-            </>
+            <div className="relative">
+              <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Seu nome completo"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                maxLength={120}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
           )}
           <div className="relative">
             <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
