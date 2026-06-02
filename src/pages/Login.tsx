@@ -8,7 +8,6 @@ import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 type AuthMode = "login" | "register";
-type Role = "aluno" | "professor";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,7 +16,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState<Role>("aluno");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
