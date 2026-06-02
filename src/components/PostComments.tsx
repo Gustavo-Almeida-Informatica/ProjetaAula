@@ -103,6 +103,7 @@ export default function PostComments({ postId }: { postId: string }) {
                 placeholder="Escreva um comentário..."
                 value={text}
                 onChange={(e) => setText(e.target.value)}
+                maxLength={2000}
                 className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
               />
               <button

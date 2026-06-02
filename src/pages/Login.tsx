@@ -8,7 +8,6 @@ import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 type AuthMode = "login" | "register";
-type Role = "aluno" | "professor";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,7 +16,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState<Role>("aluno");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -46,7 +44,7 @@ export default function Login() {
         if (data.user) {
           await supabase
             .from("profiles")
-            .update({ role, full_name: fullName })
+            .update({ full_name: fullName })
             .eq("id", data.user.id);
         }
 
@@ -141,43 +139,18 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {mode === "register" && (
-            <>
-              <div className="relative">
-                <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Seu nome completo"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRole("aluno")}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                    role === "aluno"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  🎓 Aluno
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole("professor")}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                    role === "professor"
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-muted-foreground"
-                  }`}
-                >
-                  👨‍🏫 Professor
-                </button>
-              </div>
-            </>
+            <div className="relative">
+              <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Seu nome completo"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                maxLength={120}
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
           )}
           <div className="relative">
             <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
