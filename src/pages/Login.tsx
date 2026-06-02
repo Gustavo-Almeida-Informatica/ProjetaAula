@@ -44,7 +44,7 @@ export default function Login() {
         if (data.user) {
           await supabase
             .from("profiles")
-            .update({ role, full_name: fullName })
+            .update({ full_name: fullName })
             .eq("id", data.user.id);
         }
 
