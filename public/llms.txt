@@ -1,0 +1,19 @@
+# Projeta Aula
+
+> Plataforma educacional de informática criada por alunos do CETEP. Aprenda hardware, software, história dos computadores e teste seus conhecimentos de forma interativa.
+
+Projeta Aula é um projeto acadêmico desenvolvido por estudantes do CETEP para facilitar o aprendizado de informática. A plataforma oferece conteúdo didático organizado em módulos, quizzes interativos, uma galeria de conectores e uma comunidade para tirar dúvidas.
+
+## Pages
+
+- [/](/): Página inicial com visão geral dos módulos, busca global e apresentação da equipe.
+- [/historia](/historia): A evolução dos computadores desde os primeiros dispositivos mecânicos até os sistemas modernos.
+- [/hardware](/hardware): Peças e componentes do computador — processador, memória, armazenamento, placa-mãe e periféricos.
+- [/software](/software): Sistemas operacionais, programas essenciais e dicas de produtividade com foco em Windows 11.
+- [/galeria](/galeria): Conectores de vídeo (HDMI, DisplayPort, VGA, DVI) e cabos de rede.
+- [/quiz](/quiz): Quiz interativo com mais de 120 questões sobre informática.
+- [/comunidade](/comunidade): Fórum da comunidade para publicar dúvidas, compartilhar conhecimento e comentar posts.
+
+## Optional
+
+- [/perfil](/perfil): Área do aluno/professor para editar dados pessoais e visualizar progresso.
