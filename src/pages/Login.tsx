@@ -187,6 +187,6 @@ export default function Login() {
           </button>
         </form>
       </motion.div>
-    </div>
+    </main>
   );
 }
