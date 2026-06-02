@@ -84,7 +84,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+    <main className="min-h-screen flex items-center justify-center p-4 bg-background relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -187,6 +187,6 @@ export default function Login() {
           </button>
         </form>
       </motion.div>
-    </div>
+    </main>
   );
 }
