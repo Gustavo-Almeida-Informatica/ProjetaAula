@@ -148,8 +148,10 @@ export default function Login() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
+                  maxLength={120}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 />
+              </div>
               </div>
               <div className="flex gap-2">
                 <button
