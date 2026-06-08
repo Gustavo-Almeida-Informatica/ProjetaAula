@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
+import { Seo } from "@/components/Seo";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -1001,6 +1002,19 @@ export default function Software() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Software — Windows 11, Programas e Segurança | Projeta Aula"
+        description="Windows 11, programas essenciais, manutenção, drivers, lógica básica e segurança digital explicados para iniciantes."
+        path="/software"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "Software — Windows 11, Programas e Segurança",
+          description: "Guia de software para iniciantes em informática.",
+          author: { "@type": "Organization", name: "Equipe Projeta Aula" },
+          publisher: { "@type": "Organization", name: "Projeta Aula" },
+        }}
+      />
       <ScrollToTop />
       <div className="container py-10">
         <motion.div

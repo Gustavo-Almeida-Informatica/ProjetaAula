@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Seo } from "@/components/Seo";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { User, Mail, Phone, MapPin, Save, LogOut, Camera } from "lucide-react";
@@ -118,6 +119,11 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Meu Perfil | Projeta Aula"
+        description="Edite suas informações pessoais e gerencie sua conta na plataforma Projeta Aula."
+        path="/perfil"
+      />
       <ScrollToTop />
       <div className="container py-10 max-w-md">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">

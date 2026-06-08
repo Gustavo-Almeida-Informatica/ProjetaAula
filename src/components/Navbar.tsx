@@ -81,13 +81,22 @@ export default function Navbar() {
               {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
             </Link>
           )}
-          <button onClick={signOut} className="text-muted-foreground hover:text-destructive transition-colors">
+          <button
+            onClick={signOut}
+            aria-label="Sair da conta"
+            className="text-muted-foreground hover:text-destructive transition-colors"
+          >
             <LogOut className="w-4 h-4" />
           </button>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
+        <button
+          className="md:hidden text-foreground"
+          onClick={() => setOpen(!open)}
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={open}
+        >
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>

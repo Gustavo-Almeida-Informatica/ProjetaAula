@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import {
   Search, Hash, TrendingUp, Clock, Heart, MessageSquare, Plus, X, Send,
@@ -204,6 +205,11 @@ export default function Community() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Comunidade — Tire Dúvidas de Informática | Projeta Aula"
+        description="Fórum da comunidade Projeta Aula: publique dúvidas, compartilhe conhecimento e comente posts de outros alunos."
+        path="/comunidade"
+      />
       <ScrollToTop />
       <div className="container py-10 max-w-3xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
