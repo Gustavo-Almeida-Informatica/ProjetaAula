@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Seo } from "@/components/Seo";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { MonitorPlay, Wifi } from "lucide-react";
@@ -102,6 +103,11 @@ export default function Gallery() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Conectores e Cabos — HDMI, DisplayPort, VGA, RJ45 | Projeta Aula"
+        description="Galeria de conectores de vídeo (HDMI, DisplayPort, VGA) e cabos de rede para conectar seu computador."
+        path="/galeria"
+      />
       <ScrollToTop />
       <div className="container py-10">
         <motion.div
@@ -157,7 +163,7 @@ export default function Gallery() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <h3 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h3>
+              <h2 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h2>
               <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
               <div className="space-y-2">
                 {item.specs.map((spec) => (

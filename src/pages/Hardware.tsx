@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
+import { Seo } from "@/components/Seo";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
@@ -395,6 +396,19 @@ export default function Hardware() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Hardware do Computador — Peças e Componentes | Projeta Aula"
+        description="CPU, RAM, SSD, placa-mãe, GPU e periféricos: aprenda cada peça do computador explicada de forma simples."
+        path="/hardware"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "Hardware do Computador — Peças e Componentes",
+          description: "Guia completo de hardware para iniciantes em informática.",
+          author: { "@type": "Organization", name: "Equipe Projeta Aula" },
+          publisher: { "@type": "Organization", name: "Projeta Aula" },
+        }}
+      />
       <ScrollToTop />
       <div className="container py-10">
         <motion.div
@@ -451,9 +465,9 @@ export default function Hardware() {
                     />
                   </div>
                 )}
-                <h3 className="font-display text-base font-bold text-foreground mb-2">
+                <h2 className="font-display text-base font-bold text-foreground mb-2">
                   {topic.title}
-                </h3>
+                </h2>
                 <p className="text-sm text-muted-foreground mb-4">{topic.desc}</p>
                 <ul className="space-y-1.5">
                   {topic.details.map((d) => (

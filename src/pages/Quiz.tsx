@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -141,6 +142,11 @@ export default function Quiz() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Quiz Infinito de Informática | Projeta Aula"
+        description="Mais de 120 questões aleatórias de informática. Teste seus conhecimentos e entre no ranking dos melhores."
+        path="/quiz"
+      />
       <ScrollToTop />
       <div className="container py-10 max-w-4xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
