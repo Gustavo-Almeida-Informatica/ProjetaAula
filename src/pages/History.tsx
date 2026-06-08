@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
+import { Seo } from "@/components/Seo";
 import { useSearchParams } from "react-router-dom";
 import { slugify } from "@/lib/slug";
 import { useScrollToItem } from "@/hooks/useScrollToItem";
@@ -123,6 +124,11 @@ export default function History() {
   useScrollToItem(itemParam);
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="História do Computador — As 5 Gerações | Projeta Aula"
+        description="Conheça as 5 gerações da computação: das válvulas do ENIAC à inteligência artificial moderna."
+        path="/historia"
+      />
       <ScrollToTop />
       <div className="container py-10 max-w-4xl">
         <motion.div
@@ -160,7 +166,7 @@ export default function History() {
                 <span className="inline-block text-xs font-display font-bold text-primary bg-primary/10 px-3 py-1 rounded-full mb-3">
                   {item.year}
                 </span>
-                <h3 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h3>
+                <h2 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h2>
                 <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
                 <ul className="space-y-1.5">
                   {item.details.map((d) => (
@@ -189,7 +195,7 @@ export default function History() {
           <div className="space-y-8">
             {peripherals.map((section) => (
               <div key={section.category} className="glass p-6">
-                <h3 className="font-display text-base font-bold text-foreground mb-2">{section.category}</h3>
+                <h2 className="font-display text-base font-bold text-foreground mb-2">{section.category}</h2>
                 <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {section.items.map((item) => (
