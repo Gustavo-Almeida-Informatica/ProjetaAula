@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SearchBar } from "@/components/SearchBar";
+import { Seo } from "@/components/Seo";
 import { searchAll } from "@/lib/searchIndex";
 import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
@@ -70,6 +71,11 @@ export default function Index() {
 
   return (
     <div className="min-h-screen pt-16 pb-12">
+      <Seo
+        title="Projeta Aula — Informática Básica para o CETEP"
+        description="Aprenda informática de um jeito fácil: hardware, software, história dos computadores, conectores e quiz interativo."
+        path="/"
+      />
       {/* Hero */}
       <section className="container py-20 md:py-32 text-center relative">
         <motion.div
