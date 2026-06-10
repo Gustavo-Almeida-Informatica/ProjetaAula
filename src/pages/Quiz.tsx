@@ -27,6 +27,7 @@ export default function Quiz() {
   const [countdown, setCountdown] = useState(0);
   const advanceTimerRef = useRef<number | null>(null);
   const tickRef = useRef<number | null>(null);
+  const answersRef = useRef<{ id: number; selected: number }[]>([]);
 
   const clearTimers = () => {
     if (advanceTimerRef.current) { window.clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null; }
