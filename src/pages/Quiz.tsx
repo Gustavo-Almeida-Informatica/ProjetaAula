@@ -138,7 +138,7 @@ export default function Quiz() {
     if (wasCorrect) {
       goNext();
     } else {
-      saveScore(score);
+      saveScore();
       toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
       startQuiz();
     }
