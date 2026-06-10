@@ -1011,6 +1011,7 @@ export default function Software() {
           "@type": "Article",
           headline: "Software — Windows 11, Programas e Segurança",
           description: "Guia de software para iniciantes em informática.",
+          image: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/73d829a0-0810-4fd5-ba2a-7ea4362b1c21/id-preview-f5694e5e--865c5095-4c20-4522-a423-bd0277f444cd.lovable.app-1775506888859.png",
           author: { "@type": "Organization", name: "Equipe Projeta Aula" },
           publisher: { "@type": "Organization", name: "Projeta Aula" },
         }}

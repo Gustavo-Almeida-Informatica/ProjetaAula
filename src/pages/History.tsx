@@ -128,6 +128,15 @@ export default function History() {
         title="História do Computador — As 5 Gerações | Projeta Aula"
         description="Conheça as 5 gerações da computação: das válvulas do ENIAC à inteligência artificial moderna."
         path="/historia"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "História do Computador — As 5 Gerações",
+          description: "Linha do tempo das 5 gerações de computadores: válvulas, transistores, circuitos integrados, microprocessadores e inteligência artificial.",
+          image: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/73d829a0-0810-4fd5-ba2a-7ea4362b1c21/id-preview-f5694e5e--865c5095-4c20-4522-a423-bd0277f444cd.lovable.app-1775506888859.png",
+          author: { "@type": "Organization", name: "Equipe Projeta Aula" },
+          publisher: { "@type": "Organization", name: "Projeta Aula" },
+        }}
       />
       <ScrollToTop />
       <div className="container py-10 max-w-4xl">

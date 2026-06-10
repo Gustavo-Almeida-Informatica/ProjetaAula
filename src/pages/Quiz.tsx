@@ -153,6 +153,16 @@ export default function Quiz() {
         title="Quiz Infinito de Informática | Projeta Aula"
         description="Mais de 120 questões aleatórias de informática. Teste seus conhecimentos e entre no ranking dos melhores."
         path="/quiz"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "LearningResource",
+          name: "Quiz Infinito de Informática",
+          description: "Quiz interativo com mais de 120 questões aleatórias sobre hardware, software, Windows 11 e história dos computadores.",
+          learningResourceType: "Quiz",
+          educationalLevel: "Beginner",
+          inLanguage: "pt-BR",
+          provider: { "@type": "Organization", name: "Projeta Aula" },
+        }}
       />
       <ScrollToTop />
       <div className="container py-10 max-w-4xl">
