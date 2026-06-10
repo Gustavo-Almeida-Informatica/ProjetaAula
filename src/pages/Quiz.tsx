@@ -42,6 +42,7 @@ export default function Quiz() {
     setSelected(null);
     setShowResult(false);
     setCountdown(0);
+    answersRef.current = [];
   }, []);
 
   useEffect(() => {
