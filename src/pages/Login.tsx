@@ -62,7 +62,17 @@ export default function Login() {
         toast.success("Login realizado!");
       }
     } catch (err: any) {
-      toast.error(err.message || "Erro na autenticação");
+      console.error("Auth error:", err);
+      const generic =
+        mode === "register"
+          ? "Não foi possível criar a conta. Verifique os dados e tente novamente."
+          : "E-mail ou senha inválidos.";
+      // Only surface safe, non-enumerating validation messages
+      const safe =
+        typeof err?.message === "string" && /password|senha/i.test(err.message) && /short|6|character|caractere/i.test(err.message)
+          ? "A senha deve ter pelo menos 6 caracteres."
+          : generic;
+      toast.error(safe);
     } finally {
       setSubmitting(false);
     }
