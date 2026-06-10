@@ -69,21 +69,23 @@ export default function Quiz() {
     }
   };
 
-  const saveScore = async (finalScore: number) => {
+  const saveScore = async () => {
     if (!user || !profile) return;
-    await supabase.from("quiz_scores").insert({
-      user_id: user.id,
-      user_name: profile.full_name || "Anônimo",
-      user_role: profile.role,
-      score: finalScore,
+    const answers = answersRef.current;
+    if (answers.length === 0) return;
+    const { error } = await supabase.functions.invoke("submit-quiz-score", {
+      body: { answers },
     });
+    if (error) {
+      console.error("Score save failed", error);
+    }
     fetchLeaderboard();
   };
 
   const handleStop = () => {
     clearTimers();
     if (score > 0) {
-      saveScore(score);
+      saveScore();
       toast.info(`Você parou com ${score} ponto${score > 1 ? "s" : ""}! Sua pontuação foi salva.`);
     }
     startQuiz();
@@ -107,7 +109,8 @@ export default function Quiz() {
     setSelected(optionIndex);
     setShowResult(true);
 
-    const isCorrect = optionIndex === questions[currentIndex].correct;
+    const q = questions[currentIndex];
+    const isCorrect = optionIndex === q.correct;
     const DELAY_MS = 5000;
     setCountdown(Math.ceil(DELAY_MS / 1000));
     tickRef.current = window.setInterval(() => {
@@ -115,16 +118,18 @@ export default function Quiz() {
     }, 1000);
 
     if (isCorrect) {
+      answersRef.current.push({ id: q.id, selected: optionIndex });
       setScore((s) => s + 1);
       advanceTimerRef.current = window.setTimeout(goNext, DELAY_MS);
     } else {
       advanceTimerRef.current = window.setTimeout(() => {
-        saveScore(score);
+        saveScore();
         toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
         startQuiz();
       }, DELAY_MS);
     }
   };
+
 
   const handleSkip = () => {
     if (!showResult) return;
