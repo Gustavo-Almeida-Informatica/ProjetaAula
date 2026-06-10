@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { Seo } from "@/components/Seo";
 
 type AuthMode = "login" | "register";
 
@@ -95,6 +96,11 @@ export default function Login() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4 bg-background relative">
+      <Seo
+        title="Entrar — Projeta Aula"
+        description="Acesse sua conta de aluno ou professor do Projeta Aula para estudar informática básica do CETEP."
+        path="/login"
+      />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
