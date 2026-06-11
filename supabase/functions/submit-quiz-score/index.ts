@@ -2,6 +2,22 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { ANSWER_KEY } from "./answers.ts";
 
+async function signHmac(payload: string, secret: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
+  const bytes = new Uint8Array(sig);
+  let str = "";
+  for (const b of bytes) str += String.fromCharCode(b);
+  return btoa(str).replace(/=+$/, "");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -26,22 +42,41 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => null);
     const answers = body?.answers;
-    if (!Array.isArray(answers) || answers.length === 0 || answers.length > 1000) {
+    if (!Array.isArray(answers) || answers.length === 0 || answers.length > 2000) {
       return json({ error: "Invalid payload" }, 400);
     }
 
-    // Compute the score: count of consecutive correct answers from the start
-    // (the quiz resets on first wrong answer, so all submitted answers must be correct)
+    // Compute the score: count consecutive correct answers from the start.
+    // Static questions: lookup in ANSWER_KEY by id.
+    // Dynamic questions: id starts with "dyn_", entry must contain
+    //   { id, selected, correct, token } and the token must HMAC-match.
     let score = 0;
-    const seen = new Set<number>();
+    const seen = new Set<string>();
     for (const a of answers) {
-      const id = Number(a?.id);
+      const idRaw = a?.id;
       const selected = Number(a?.selected);
-      if (!Number.isInteger(id) || !Number.isInteger(selected)) break;
-      if (seen.has(id)) break; // disallow duplicates inflating the score
-      seen.add(id);
-      const correct = ANSWER_KEY[id];
-      if (correct === undefined || correct !== selected) break;
+      if (idRaw === undefined || idRaw === null) break;
+      const idStr = String(idRaw);
+      if (seen.has(idStr)) break;
+      seen.add(idStr);
+      if (!Number.isInteger(selected) || selected < 0 || selected > 3) break;
+
+      let isCorrect = false;
+      if (idStr.startsWith("dyn_")) {
+        const declaredCorrect = Number(a?.correct);
+        const token = typeof a?.token === "string" ? a.token : "";
+        if (!Number.isInteger(declaredCorrect) || declaredCorrect < 0 || declaredCorrect > 3) break;
+        if (!token) break;
+        const expected = await signHmac(`${idStr}|${declaredCorrect}`, SERVICE_ROLE);
+        if (expected !== token) break;
+        isCorrect = selected === declaredCorrect;
+      } else {
+        const correctIdx = ANSWER_KEY[idStr];
+        if (correctIdx === undefined) break;
+        isCorrect = selected === correctIdx;
+      }
+
+      if (!isCorrect) break;
       score += 1;
     }
 
