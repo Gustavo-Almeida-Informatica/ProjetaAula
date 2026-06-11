@@ -118,6 +118,57 @@ export const peripherals = [
   },
 ];
 
+export const extras = [
+  {
+    category: "Brasil na Computação",
+    desc: "A história do computador também tem capítulos importantes no Brasil — da reserva de mercado aos polos de tecnologia atuais.",
+    items: [
+      { name: "Patinho Feio (1972)", detail: "Primeiro computador projetado e construído no Brasil, na USP. Marco inicial da computação brasileira e símbolo da capacidade técnica nacional." },
+      { name: "COBRA (1974)", detail: "Computadores Brasileiros S.A. — primeira empresa brasileira de computadores, criada durante a política de reserva de mercado para tecnologia nacional." },
+      { name: "Reserva de Mercado (1984–1992)", detail: "Lei que proibia a importação de computadores estrangeiros para estimular a indústria nacional. Trouxe atraso tecnológico mas formou engenheiros brasileiros." },
+      { name: "Internet no Brasil (1995)", detail: "A internet comercial chegou ao Brasil em 1995. Antes era restrita a universidades pela Rede Nacional de Pesquisa (RNP)." },
+      { name: "Polo Industrial de Manaus", detail: "Concentra grande parte da montagem de eletrônicos no Brasil, incluindo celulares, TVs e notebooks de marcas como Samsung, Positivo e Multilaser." },
+      { name: "Pix (2020)", detail: "Sistema brasileiro de pagamentos instantâneos do Banco Central, exemplo mundial de inovação em fintech e infraestrutura digital pública." },
+    ],
+  },
+  {
+    category: "Evolução dos Smartphones",
+    desc: "O celular se transformou em um computador de bolso. Veja como chegamos aos smartphones modernos.",
+    items: [
+      { name: "Motorola DynaTAC (1983)", detail: "Primeiro celular comercial do mundo. Pesava quase 1 kg, custava US$ 3.995 e a bateria durava só 30 minutos de conversa." },
+      { name: "Nokia 3310 (2000)", detail: "Ícone dos 'tijolões' — bateria que durava dias, jogo Snake e durabilidade lendária. Vendeu mais de 126 milhões de unidades." },
+      { name: "BlackBerry (2003)", detail: "Popularizou o e-mail no celular com teclado físico QWERTY. Foi o smartphone preferido de executivos antes do iPhone." },
+      { name: "iPhone (2007)", detail: "Apresentado por Steve Jobs, revolucionou tudo: tela touch capacitiva sem caneta, App Store (2008) e sistema iOS pensado para o dedo." },
+      { name: "Android (2008)", detail: "Sistema operacional do Google baseado em Linux, aberto a vários fabricantes. Hoje roda em mais de 70% dos celulares do mundo." },
+      { name: "5G (2019+)", detail: "Quinta geração de redes móveis: latência baixíssima e velocidades de gigabit, abrindo caminho para IoT em larga escala e carros autônomos." },
+    ],
+  },
+  {
+    category: "Era da Inteligência Artificial Generativa",
+    desc: "A IA deixou de ser ficção científica. Conheça os marcos recentes que mudaram a forma como criamos e trabalhamos.",
+    items: [
+      { name: "Deep Blue (1997)", detail: "Computador da IBM que venceu o campeão mundial de xadrez Garry Kasparov — primeiro grande marco da IA derrotando humanos em jogos complexos." },
+      { name: "AlphaGo (2016)", detail: "IA da DeepMind (Google) que venceu o campeão mundial de Go, jogo considerado intratável para computadores até então." },
+      { name: "GPT-3 (2020)", detail: "Modelo de linguagem da OpenAI com 175 bilhões de parâmetros — primeiro a gerar texto realmente coerente e útil em larga escala." },
+      { name: "ChatGPT (2022)", detail: "Atingiu 100 milhões de usuários em 2 meses — o produto digital de adoção mais rápida da história. Popularizou a IA conversacional." },
+      { name: "Geração de Imagens", detail: "Ferramentas como DALL-E, Midjourney e Stable Diffusion criam imagens realistas a partir de texto, revolucionando design e arte digital." },
+      { name: "IA Multimodal (2024+)", detail: "Modelos como Gemini e GPT-4o entendem texto, imagem, áudio e vídeo ao mesmo tempo, abrindo caminho para assistentes verdadeiramente úteis." },
+    ],
+  },
+  {
+    category: "Redes Sociais e Comunicação Digital",
+    desc: "A internet conectou pessoas como nunca antes. Veja a evolução das principais redes e serviços.",
+    items: [
+      { name: "ICQ e MSN Messenger", detail: "Primeiros mensageiros instantâneos populares (anos 1990 e 2000). MSN dominou no Brasil antes de ser desativado em 2014." },
+      { name: "Orkut (2004–2014)", detail: "Rede social do Google que fez enorme sucesso no Brasil — chegamos a ter mais da metade dos usuários mundiais antes do Facebook dominar." },
+      { name: "Facebook (2004)", detail: "Criado por Mark Zuckerberg em Harvard, virou a maior rede social do mundo com mais de 3 bilhões de usuários ativos." },
+      { name: "YouTube (2005)", detail: "Plataforma de vídeos comprada pelo Google em 2006. Criou a profissão de 'youtuber' e democratizou a produção audiovisual." },
+      { name: "WhatsApp (2009)", detail: "Mensageiro comprado pelo Facebook por US$ 19 bilhões em 2014. No Brasil, é praticamente sinônimo de comunicação digital." },
+      { name: "TikTok (2016)", detail: "Rede social chinesa de vídeos curtos com algoritmo de recomendação extremamente preciso. Mudou o consumo de conteúdo entre jovens." },
+    ],
+  },
+];
+
 export default function History() {
   const [params] = useSearchParams();
   const itemParam = params.get("item");
