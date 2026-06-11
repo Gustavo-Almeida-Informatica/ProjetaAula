@@ -1,10 +1,13 @@
 export interface QuizQuestion {
-  id: number;
+  id: number | string;
   category: string;
   question: string;
   options: string[];
   correct: number;
   explanation: string;
+  // Optional fields for dynamic (AI-generated) questions
+  token?: string;
+  dynamic?: boolean;
 }
 
 export const quizQuestions: QuizQuestion[] = [
