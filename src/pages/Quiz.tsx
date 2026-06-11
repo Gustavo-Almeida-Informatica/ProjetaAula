@@ -6,7 +6,7 @@ import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface LeaderboardEntry {
@@ -14,6 +14,15 @@ interface LeaderboardEntry {
   user_role: string;
   score: number;
 }
+
+interface AnswerRecord {
+  id: number | string;
+  selected: number;
+  correct?: number; // included for dynamic questions
+  token?: string;   // HMAC for dynamic questions
+}
+
+const PREFETCH_THRESHOLD = 3; // start fetching dynamic when only this many static remain
 
 export default function Quiz() {
   const { user, profile } = useAuth();
@@ -25,9 +34,12 @@ export default function Quiz() {
   const [showResult, setShowResult] = useState(false);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [countdown, setCountdown] = useState(0);
+  const [generatingDynamic, setGeneratingDynamic] = useState(false);
   const advanceTimerRef = useRef<number | null>(null);
   const tickRef = useRef<number | null>(null);
-  const answersRef = useRef<{ id: number; selected: number }[]>([]);
+  const answersRef = useRef<AnswerRecord[]>([]);
+  const fetchingRef = useRef(false);
+  const usedTopicsRef = useRef<string[]>([]);
 
   const clearTimers = () => {
     if (advanceTimerRef.current) { window.clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null; }
@@ -42,7 +54,10 @@ export default function Quiz() {
     setSelected(null);
     setShowResult(false);
     setCountdown(0);
+    setGeneratingDynamic(false);
     answersRef.current = [];
+    usedTopicsRef.current = [];
+    fetchingRef.current = false;
   }, []);
 
   useEffect(() => {
@@ -82,6 +97,73 @@ export default function Quiz() {
     fetchLeaderboard();
   };
 
+  const fetchDynamicQuestion = useCallback(async (): Promise<QuizQuestion | null> => {
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-quiz-question", {
+        body: { avoid: usedTopicsRef.current.slice(-8) },
+      });
+      if (error || !data || data.error) {
+        console.error("dynamic question error", error || data?.error);
+        return null;
+      }
+      const q: QuizQuestion = {
+        id: String(data.id),
+        category: String(data.category ?? "IA"),
+        question: String(data.question),
+        options: data.options,
+        correct: Number(data.correct),
+        explanation: String(data.explanation),
+        token: String(data.token),
+        dynamic: true,
+      };
+      // Track topic seed (first 60 chars of question) to reduce repetition
+      usedTopicsRef.current.push(q.question.slice(0, 60));
+      return q;
+    } catch (e) {
+      console.error("dynamic question fetch failed", e);
+      return null;
+    }
+  }, []);
+
+  // Prefetch dynamic questions in background when remaining < threshold
+  useEffect(() => {
+    const remaining = questions.length - currentIndex - 1;
+    if (remaining > PREFETCH_THRESHOLD || fetchingRef.current) return;
+    fetchingRef.current = true;
+    (async () => {
+      const q = await fetchDynamicQuestion();
+      if (q) {
+        setQuestions((prev) => [...prev, q]);
+      }
+      fetchingRef.current = false;
+    })();
+  }, [currentIndex, questions.length, fetchDynamicQuestion]);
+
+  const goNext = useCallback(async () => {
+    clearTimers();
+    setCountdown(0);
+    setSelected(null);
+    setShowResult(false);
+
+    // If we're at the very end and have no dynamic queued, fetch one inline.
+    if (currentIndex + 1 >= questions.length) {
+      setGeneratingDynamic(true);
+      const q = await fetchDynamicQuestion();
+      setGeneratingDynamic(false);
+      if (q) {
+        setQuestions((prev) => [...prev, q]);
+        setCurrentIndex((i) => i + 1);
+        return;
+      }
+      // Fallback: reshuffle static if dynamic fails
+      toast.info("Reembaralhando perguntas...");
+      setQuestions(getShuffledQuestions());
+      setCurrentIndex(0);
+      return;
+    }
+    setCurrentIndex((i) => i + 1);
+  }, [currentIndex, questions.length, fetchDynamicQuestion]);
+
   const handleStop = () => {
     clearTimers();
     if (score > 0) {
@@ -90,19 +172,6 @@ export default function Quiz() {
     }
     startQuiz();
   };
-
-  const goNext = useCallback(() => {
-    clearTimers();
-    setCountdown(0);
-    setSelected(null);
-    setShowResult(false);
-    setCurrentIndex((i) => {
-      if (i + 1 < questions.length) return i + 1;
-      setQuestions(getShuffledQuestions());
-      toast.success("Todas as perguntas respondidas! Continuando com novas perguntas...");
-      return 0;
-    });
-  }, [questions.length]);
 
   const handleAnswer = (optionIndex: number) => {
     if (showResult) return;
@@ -118,9 +187,14 @@ export default function Quiz() {
     }, 1000);
 
     if (isCorrect) {
-      answersRef.current.push({ id: q.id, selected: optionIndex });
+      const record: AnswerRecord = { id: q.id, selected: optionIndex };
+      if (q.dynamic) {
+        record.correct = q.correct;
+        record.token = q.token;
+      }
+      answersRef.current.push(record);
       setScore((s) => s + 1);
-      advanceTimerRef.current = window.setTimeout(goNext, DELAY_MS);
+      advanceTimerRef.current = window.setTimeout(() => { goNext(); }, DELAY_MS);
     } else {
       advanceTimerRef.current = window.setTimeout(() => {
         saveScore();
@@ -151,13 +225,13 @@ export default function Quiz() {
     <div className="min-h-screen pt-16 pb-12">
       <Seo
         title="Quiz Infinito de Informática | Projeta Aula"
-        description="Mais de 120 questões aleatórias de informática. Teste seus conhecimentos e entre no ranking dos melhores."
+        description="Mais de 150 questões aleatórias de informática, com geração dinâmica por IA quando o banco acaba. Teste seus conhecimentos."
         path="/quiz"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "LearningResource",
           name: "Quiz Infinito de Informática",
-          description: "Quiz interativo com mais de 120 questões aleatórias sobre hardware, software, Windows 11 e história dos computadores.",
+          description: "Quiz interativo com mais de 150 questões aleatórias sobre hardware, software, Windows 11, história, Brasil, smartphones, IA e redes sociais — com geração dinâmica de novas perguntas por IA.",
           learningResourceType: "Quiz",
           educationalLevel: "Beginner",
           inLanguage: "pt-BR",
@@ -184,18 +258,27 @@ export default function Quiz() {
               <span className="text-xs text-muted-foreground">
                 Pergunta {currentIndex + 1}
               </span>
-              <span className="text-xs px-2 py-1 rounded-md bg-secondary text-muted-foreground">{current.category}</span>
+              <span className="text-xs px-2 py-1 rounded-md bg-secondary text-muted-foreground flex items-center gap-1">
+                {current.dynamic && <Sparkles className="w-3 h-3 text-primary" />}
+                {current.category}
+              </span>
             </div>
 
             {/* Question */}
             <AnimatePresence mode="wait">
               <motion.div
-                key={current.id + "-" + currentIndex}
+                key={String(current.id) + "-" + currentIndex}
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 className="glass p-6"
               >
+                {current.dynamic && (
+                  <div className="flex items-center gap-2 mb-3 text-xs text-primary">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Pergunta gerada por IA com base no conteúdo do site</span>
+                  </div>
+                )}
                 <h2 className="text-base md:text-lg font-semibold text-foreground mb-6">
                   {current.question}
                 </h2>
@@ -242,11 +325,14 @@ export default function Quiz() {
                     </button>
                     <div className="flex items-center justify-between gap-3 pt-1">
                       <span className="text-xs text-muted-foreground">
-                        Avançando em <span className="font-bold text-primary">{countdown}s</span>...
+                        {generatingDynamic
+                          ? "Gerando nova pergunta com IA..."
+                          : <>Avançando em <span className="font-bold text-primary">{countdown}s</span>...</>}
                       </span>
                       <button
                         onClick={handleSkip}
-                        className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg gradient-warm text-primary-foreground font-semibold warm-glow-sm hover:scale-[1.02] transition-all"
+                        disabled={generatingDynamic}
+                        className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg gradient-warm text-primary-foreground font-semibold warm-glow-sm hover:scale-[1.02] transition-all disabled:opacity-60"
                       >
                         Pular para a próxima →
                       </button>
