@@ -269,6 +269,35 @@ export default function History() {
             ))}
           </div>
         </motion.div>
+
+        {/* Extras: Brasil, Smartphones, IA, Redes Sociais */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <h2 className="font-display text-2xl font-bold text-center mb-10 gradient-warm-text">
+            Mais História: Brasil, Smartphones, IA e Redes Sociais
+          </h2>
+
+          <div className="space-y-8">
+            {extras.map((section) => (
+              <div key={section.category} className="glass p-6">
+                <h2 className="font-display text-base font-bold text-foreground mb-2">{section.category}</h2>
+                <p className="text-sm text-muted-foreground mb-4">{section.desc}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {section.items.map((item) => (
+                    <div key={item.name} id={slugify(item.name)} className="bg-secondary/50 rounded-lg p-4 scroll-mt-24 border border-transparent">
+                      <h4 className="text-sm font-bold text-primary mb-1">{item.name}</h4>
+                      <p className="text-xs text-foreground/80 leading-relaxed">{item.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
