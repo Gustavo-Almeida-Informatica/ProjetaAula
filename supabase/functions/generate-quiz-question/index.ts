@@ -129,6 +129,7 @@ Gere AGORA UMA única questão nova de quiz seguindo todas as regras.`;
       options?: unknown;
       correct?: unknown;
       explanation?: unknown;
+      contentLink?: unknown;
     };
     try {
       parsed = JSON.parse(content);
@@ -155,6 +156,22 @@ Gere AGORA UMA única questão nova de quiz seguindo todas as regras.`;
     }
     if (!explanation) return json({ error: "missing_explanation" }, 502);
 
+    // Validate contentLink (allowlist)
+    const ALLOWED_PATHS = new Set(["/hardware", "/software", "/history", "/"]);
+    const ALLOWED_TABS = new Set(["windows", "programas", "explorador", "manutencao", "drivers", "logica", "seguranca"]);
+    const slugRe = /^[a-z0-9-]{1,80}$/;
+    let contentLink: { path: string; item?: string; tab?: string } | undefined;
+    const cl = parsed.contentLink as { path?: unknown; item?: unknown; tab?: unknown } | undefined;
+    if (cl && typeof cl === "object") {
+      const path = typeof cl.path === "string" ? cl.path : "";
+      if (ALLOWED_PATHS.has(path)) {
+        contentLink = { path };
+        if (typeof cl.item === "string" && slugRe.test(cl.item)) contentLink.item = cl.item;
+        if (typeof cl.tab === "string" && ALLOWED_TABS.has(cl.tab)) contentLink.tab = cl.tab;
+        if (path === "/software" && !contentLink.tab) contentLink.tab = "programas";
+      }
+    }
+
     // Build a signed id so submit-quiz-score can verify the correct index
     // without trusting the client.
     const nonce = crypto.randomUUID();
@@ -171,6 +188,7 @@ Gere AGORA UMA única questão nova de quiz seguindo todas as regras.`;
       explanation,
       token,
       dynamic: true,
+      contentLink,
     });
   } catch (e) {
     console.error("generate-quiz-question error", e);
