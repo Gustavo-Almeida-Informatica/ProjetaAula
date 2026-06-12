@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
+import { getShuffledQuestions, QuizQuestion, resolveContentLink, ContentLink } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download, Sparkles } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, ArrowRight, Sparkles, Cpu, Download, BookOpen, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface LeaderboardEntry {
