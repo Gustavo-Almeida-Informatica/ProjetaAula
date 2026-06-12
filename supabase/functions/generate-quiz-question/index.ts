@@ -73,10 +73,16 @@ REGRAS OBRIGATÓRIAS:
 - Não use "Todas as anteriores", "Nenhuma das anteriores", "Mais de uma das opções", etc.
 - NÃO escreva "A)", "B)" etc dentro do texto das alternativas. Apenas o texto puro.
 - Varie o índice da resposta correta (0, 1, 2 ou 3).
+- SEMPRE inclua "contentLink" apontando para a seção do site que explica a pergunta, escolhendo de uma lista permitida.
 - Responda APENAS em JSON válido, sem markdown, sem texto extra.
 
+PÁGINAS DO SITE e SEÇÕES VÁLIDAS para contentLink:
+- /hardware (item opcional): processador-cpu, memoria-ram, armazenamento-hd-e-ssd, cooler-ventilador, fonte-de-alimentacao, placa-mae, placa-de-video-gpu, perifericos, gabinete, placa-de-som, placa-de-rede-nic, placa-fax-modem, flat-cable-cabos-internos, teclado-detalhado, mouse-detalhado, monitor-detalhado, impressora-tipos, scanner-detalhado, webcam, kit-multimidia, bios-cmos-post-detalhado, interfaces-e-portas, slots-de-barramento, chipsets-ponte-norte-e-ponte-sul, memorias-avancadas-sdram-ddr2-ddr3, raid-redundant-array-of-independent-disks, sistemas-numericos-binario-bits-e-bytes
+- /software (tab obrigatória entre: windows, programas, explorador, manutencao, drivers, logica, seguranca; item opcional como slug-em-kebab-case do tópico)
+- /history (item opcional): valvulas-termoionicas-eniac-e-edvac, transistores, circuitos-integrados-chips, vlsi-e-computadores-pessoais-pc, ulsi-internet-smartphones-e-ia, patinho-feio-1972, cobra-1974, reserva-de-mercado-1984-1992, internet-no-brasil-1995, polo-industrial-de-manaus, pix-2020, motorola-dynatac-1983, nokia-3310-2000, blackberry-2003, iphone-2007, android-2008, 5g-2019, deep-blue-1997, alphago-2016, gpt-3-2020, chatgpt-2022, geracao-de-imagens, ia-multimodal-2024, icq-e-msn-messenger, orkut-2004-2014, facebook-2004, youtube-2005, whatsapp-2009, tiktok-2016
+
 FORMATO EXATO (JSON):
-{"question":"...","options":["...","...","...","..."],"correct":2,"explanation":"..."}`;
+{"question":"...","options":["...","...","...","..."],"correct":2,"explanation":"...","contentLink":{"path":"/hardware","item":"processador-cpu"}}`;
 
     const userPrompt = `CONTEÚDO DO SITE PROJETA AULA:
 ${SITE_CORPUS}
