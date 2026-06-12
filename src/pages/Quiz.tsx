@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { getShuffledQuestions, QuizQuestion } from "@/lib/quizData";
+import { getShuffledQuestions, QuizQuestion, resolveContentLink, ContentLink } from "@/lib/quizData";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, Download, Sparkles } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, ArrowRight, Sparkles, Cpu, Download, BookOpen, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface LeaderboardEntry {
@@ -115,6 +115,7 @@ export default function Quiz() {
         explanation: String(data.explanation),
         token: String(data.token),
         dynamic: true,
+        contentLink: data.contentLink && typeof data.contentLink === "object" ? data.contentLink : undefined,
       };
       // Track topic seed (first 60 chars of question) to reduce repetition
       usedTopicsRef.current.push(q.question.slice(0, 60));
@@ -316,13 +317,34 @@ export default function Quiz() {
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                       Dica: {current.explanation}
                     </p>
-                    <button
-                      onClick={() => navigate("/software")}
-                      className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      Conheça os Programas Essenciais
-                    </button>
+                    {(() => {
+                      const link = resolveContentLink(current);
+                      if (!link) return null;
+                      const params = new URLSearchParams();
+                      if (link.tab) params.set("tab", link.tab);
+                      if (link.item) params.set("item", link.item);
+                      const qs = params.toString();
+                      const to = link.path + (qs ? `?${qs}` : "");
+                      const Icon = link.path === "/hardware" ? Cpu
+                        : link.path === "/history" ? BookOpen
+                        : link.path === "/" ? Home
+                        : Download;
+                      const label = link.label
+                        ?? (link.path === "/hardware" ? "Veja no guia de Hardware"
+                          : link.path === "/history" ? "Leia na linha do tempo"
+                          : link.path === "/" ? "Ver no site"
+                          : "Conheça os Programas Essenciais");
+                      return (
+                        <button
+                          onClick={() => navigate(to)}
+                          className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all border border-border/40"
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          {`> ${label}`}
+                          <ArrowRight className="w-3 h-3 ml-auto" />
+                        </button>
+                      );
+                    })()}
                     <div className="flex items-center justify-between gap-3 pt-1">
                       <span className="text-xs text-muted-foreground">
                         {generatingDynamic

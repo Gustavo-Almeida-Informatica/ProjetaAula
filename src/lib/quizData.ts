@@ -1,3 +1,15 @@
+export type ContentPath = "/hardware" | "/software" | "/history" | "/";
+
+export interface ContentLink {
+  path: ContentPath;
+  /** id of the DOM element to scroll to (already slugified) */
+  item?: string;
+  /** Software page tab id (windows, programas, explorador, manutencao, drivers, logica, seguranca) */
+  tab?: string;
+  /** Optional override label for the button */
+  label?: string;
+}
+
 export interface QuizQuestion {
   id: number | string;
   category: string;
@@ -5,10 +17,222 @@ export interface QuizQuestion {
   options: string[];
   correct: number;
   explanation: string;
+  /** Optional explicit mapping to a section of the site. */
+  contentLink?: ContentLink;
   // Optional fields for dynamic (AI-generated) questions
   token?: string;
   dynamic?: boolean;
 }
+
+/**
+ * Best-effort mapping from a question to the section of the site that
+ * explains its topic. Used by the quiz feedback card to render a
+ * "Ir para o conteúdo" button. Returns null if no good match is found.
+ */
+export function resolveContentLink(q: QuizQuestion): ContentLink | null {
+  if (q.contentLink) return q.contentLink;
+
+  const text = `${q.question} ${q.options.join(" ")}`.toLowerCase();
+  const has = (...needles: string[]) => needles.some((n) => text.includes(n));
+
+  // ---------- Hardware page (specific topics) ----------
+  const HW = (item: string): ContentLink => ({ path: "/hardware", item, label: "Veja no guia de Hardware" });
+
+  if (has("ungoogled chromium")) return SW_PROGRAMS();
+  if (has("cpu", "processador", "núcleo", "nucleo", "ghz", "cache l1", "cache l2", "cache l3", "soquete", "intel core", "ryzen")) return HW("processador-cpu");
+  if (has("memória ram", "memoria ram", " ram ", "volátil", "volatil")) return HW("memoria-ram");
+  if (has("ddr2", "ddr3", "ddr4", "sdram")) return HW("memorias-avancadas-sdram-ddr2-ddr3");
+  if (has("ssd", "hd ", " hd,", " hd.", "nvme", "disco rígido", "disco rigido", "m.2", "sata")) {
+    if (has("raid")) return HW("raid-redundant-array-of-independent-disks");
+    return HW("armazenamento-hd-e-ssd");
+  }
+  if (has("raid")) return HW("raid-redundant-array-of-independent-disks");
+  if (has("cooler", "dissipar", "superaque")) return HW("cooler-ventilador");
+  if (has("fonte de aliment", "80 plus", "corrente alternada", "corrente contínua", "corrente continua", " ac ", " dc ")) return HW("fonte-de-alimentacao");
+  if (has("placa-mãe", "placa mae", "placa-mae", "atx", "pcie", "pci express", "slot pci")) {
+    if (has("slot")) return HW("slots-de-barramento");
+    return HW("placa-mae");
+  }
+  if (has("gpu", "placa de vídeo", "placa de video", "agp")) return HW("placa-de-video-gpu");
+  if (has("gabinete")) return HW("gabinete");
+  if (has("placa de som")) return HW("placa-de-som");
+  if (has("placa de rede", "rj45", "ethernet", "gigabit", "mac")) return HW("placa-de-rede-nic");
+  if (has("modem")) return HW("placa-fax-modem");
+  if (has("flat cable", "ide ", "cabo ide", "master/slave", "master / slave")) return HW("flat-cable-cabos-internos");
+  if (has("teclado")) return HW("teclado-detalhado");
+  if (has("mouse")) return HW("mouse-detalhado");
+  if (has("monitor", "hdmi", "vga", "displayport", "dvi")) return HW("monitor-detalhado");
+  if (has("impressora", "toner", "jato de tinta", "laser")) return HW("impressora-tipos");
+  if (has("scanner", "digitalizar")) return HW("scanner-detalhado");
+  if (has("webcam")) return HW("webcam");
+  if (has("projetor", "headset", "caixa de som")) return HW("kit-multimidia");
+  if (has("bios", "uefi", "post", "cmos", "cr2032", "bips", "bip ")) return HW("bios-cmos-post-detalhado");
+  if (has("usb-c", "usb 2.0", "usb 3.0", "usb-a", "usb-b", "micro usb", "mini usb", "db-9", "serial")) return HW("interfaces-e-portas");
+  if (has("isa", "pci convencional", "barramento")) return HW("slots-de-barramento");
+  if (has("chipset", "ponte norte", "ponte sul", "northbridge", "southbridge")) return HW("chipsets-ponte-norte-e-ponte-sul");
+  if (has("byte", "bit", "binário", "binario", "hexadecimal", "kilobyte", "kb)")) return HW("sistemas-numericos-binario-bits-e-bytes");
+  if (has("periférico", "periferico")) return HW("perifericos");
+
+  // ---------- History page ----------
+  const HX = (item?: string): ContentLink => ({ path: "/history", item, label: "Leia na linha do tempo" });
+
+  if (has("eniac", "edvac", "válvula", "valvula")) return HX("valvulas-termoionicas-eniac-e-edvac");
+  if (has("transistor", "bardeen", "shockley", "brattain", "laboratórios bell", "laboratorios bell")) return HX("transistores");
+  if (has("circuito integrado", "chip ", "jack kilby")) return HX("circuitos-integrados-chips");
+  if (has("apple ii", "altair", "computador pessoal", "vlsi")) return HX("vlsi-e-computadores-pessoais-pc");
+  if (has("ulsi", "world wide web", "www", "tim berners", "internet das coisas", " iot")) return HX("ulsi-internet-smartphones-e-ia");
+
+  // Brasil
+  if (has("patinho feio")) return HX("patinho-feio-1972");
+  if (has("cobra")) return HX("cobra-1974");
+  if (has("reserva de mercado")) return HX("reserva-de-mercado-1984-1992");
+  if (has("internet no brasil", "rnp", "rede nacional de pesquisa")) return HX("internet-no-brasil-1995");
+  if (has("polo industrial", "manaus")) return HX("polo-industrial-de-manaus");
+  if (has("pix")) return HX("pix-2020");
+
+  // Smartphones
+  if (has("dynatac", "motorola")) return HX("motorola-dynatac-1983");
+  if (has("nokia 3310", "nokia")) return HX("nokia-3310-2000");
+  if (has("blackberry")) return HX("blackberry-2003");
+  if (has("iphone", "steve jobs")) return HX("iphone-2007");
+  if (has("android")) return HX("android-2008");
+  if (has("5g")) return HX("5g-2019");
+
+  // IA
+  if (has("deep blue", "kasparov")) return HX("deep-blue-1997");
+  if (has("alphago")) return HX("alphago-2016");
+  if (has("gpt-3", "gpt 3")) return HX("gpt-3-2020");
+  if (has("chatgpt")) return HX("chatgpt-2022");
+  if (has("midjourney", "dall-e", "stable diffusion", "geração de imagens", "geracao de imagens")) return HX("geracao-de-imagens");
+  if (has("multimodal", "gemini", "gpt-4o")) return HX("ia-multimodal-2024");
+
+  // Redes Sociais
+  if (has("orkut")) return HX("orkut-2004-2014");
+  if (has("msn messenger", "icq")) return HX("icq-e-msn-messenger");
+  if (has("facebook", "zuckerberg")) return HX("facebook-2004");
+  if (has("youtube")) return HX("youtube-2005");
+  if (has("whatsapp")) {
+    // Software page also has WhatsApp Desktop; prefer history when question is about year/founding
+    if (has("fundado", "2009", "comprado")) return HX("whatsapp-2009");
+    return SW("programas", "whatsapp-desktop");
+  }
+  if (has("tiktok")) return HX("tiktok-2016");
+
+  if (has("google ", "fundado", "1998", "larry page", "sergey brin")) return HX("ulsi-internet-smartphones-e-ia");
+  if (has("nuvem", "cloud")) return HX("ulsi-internet-smartphones-e-ia");
+  if (has("ms-dos", "dos ")) return HX();
+
+  // ---------- Software page ----------
+  function SW(tab: string, item?: string, label?: string): ContentLink {
+    return { path: "/software", tab, item, label: label ?? "Conheça o conteúdo no site" };
+  }
+  function SW_PROGRAMS(item?: string): ContentLink {
+    return { path: "/software", tab: "programas", item, label: "Conheça os Programas Essenciais" };
+  }
+
+  // Programs by name (cards with anchors)
+  const programMatches: Array<[string[], string]> = [
+    [["chrome"], "google-chrome"],
+    [["firefox"], "firefox"],
+    [["brave"], "brave"],
+    [["opera gx"], "opera-gx"],
+    [["edge"], "google-chrome"], // no Edge card, fallback to programas section
+    [["libreoffice"], "libreoffice"],
+    [["winrar"], "winrar"],
+    [["7-zip", "7zip"], "7-zip"],
+    [["vlc"], "vlc-media-player"],
+    [["spotify"], "spotify"],
+    [["obs studio", "obs "], "obs-studio"],
+    [["discord"], "discord"],
+    [["steam"], "steam"],
+    [["epic games"], "epic-games"],
+    [["notion"], "notion"],
+    [["trello"], "trello"],
+    [["zoom"], "zoom"],
+    [["telegram"], "telegram"],
+    [["bitwarden"], "bitwarden"],
+    [["malwarebytes"], "malwarebytes"],
+    [["ccleaner"], "ccleaner"],
+    [["windows defender", "defender"], "windows-defender"],
+    [["canva"], "canva"],
+    [["powertoys"], "powertoys"],
+    [["f.lux", "flux "], "f-lux"],
+    [["shotcut"], "shotcut"],
+    [["audacity"], "audacity"],
+    [["blender"], "blender"],
+    [["sharex"], "sharex"],
+    [["anki"], "anki"],
+    [["handbrake"], "handbrake"],
+    [["qbittorrent"], "qbittorrent"],
+    [["rufus"], "rufus"],
+    [["vs code", "vscode"], "vs-code"],
+  ];
+  for (const [needles, slug] of programMatches) {
+    if (has(...needles)) return SW_PROGRAMS(slug);
+  }
+
+  // Windows page sections (slugified titles)
+  if (has("aero snap")) return SW("windows", "aero-snap-organizar-janelas");
+  if (has("layout snap")) return SW("windows", "layout-snap-windows-11");
+  if (has("área de trabalho virtua", "area de trabalho virtua")) return SW("windows", "areas-de-trabalho-virtuais");
+  if (has("paint")) return SW("windows", "paint");
+  if (has("ferramenta de captura", "snipping", "win+shift+s")) return SW("windows", "ferramenta-de-captura-snipping-tool");
+  if (has("wordpad")) return SW("windows", "wordpad");
+  if (has("bloco de notas", "sticky notes")) return SW("windows", "bloco-de-notas-e-sticky-notes");
+  if (has("calculadora")) return SW("windows", "calculadora-do-windows");
+  if (has("microsoft edge")) return SW("windows", "microsoft-edge");
+  if (has("lixeira", "shift+delete")) return SW("explorador", "lixeira");
+  if (has("ctrl+a")) return SW("explorador", "selecao-de-arquivos");
+  if (has("copiar", "colar", "recortar", "ctrl+c", "ctrl+v", "ctrl+x")) return SW("explorador", "copiar-colar-e-recortar");
+  if (has("explorador de arquivos")) return SW("explorador", "layout-do-explorador-de-arquivos");
+  if (has("ccleaner")) return SW("manutencao", "ccleaner-limpeza");
+  if (has("desfragmenta", "defraggler")) return SW("manutencao", "defraggler-desfragmentacao");
+  if (has("compact", "zip", "rar", ".7z")) return SW("manutencao", "compactacao-de-arquivos");
+  if (has("driver")) return SW("drivers", "o-que-sao-drivers");
+  if (has("algoritmo")) return SW("logica", "o-que-e-um-algoritmo");
+  if (has("variável", "variavel")) return SW("logica", "variaveis");
+  if (has("se/senão", "se / senão", "se senao", "condi")) return SW("logica", "condicoes-se-senao");
+  if (has("loop", "repetição", "repeticao")) return SW("logica", "repeticao-loops");
+  if (has("phishing")) return SW("seguranca", "o-que-e-phishing");
+  if (has("senha", "antivírus", "antivirus", "backup", "wi-fi público", "wifi público")) return SW("seguranca", "dicas-de-seguranca-no-computador");
+  if (has("gerenciador de tarefas", "ctrl+shift+esc")) return SW("windows", "gerenciador-de-tarefas");
+  if (has("atalho", "ctrl+", "alt+f4", "win+")) return SW("windows", "atalhos-do-windows-completo");
+  if (has("barra de tarefas", "menu iniciar", "área de trabalho", "area de trabalho")) return SW("windows", "area-de-trabalho-e-barra-de-tarefas");
+  if (has("windows 11", "windows")) return SW("windows", "o-que-e-o-windows");
+
+  // ---------- Projeta Aula / generic ----------
+  if (q.category === "Projeta Aula") return { path: "/", label: "Ver no site" };
+
+  // Category-based fallback
+  switch (q.category) {
+    case "Hardware":
+    case "Cabos":
+    case "Periféricos":
+      return { path: "/hardware", label: "Veja no guia de Hardware" };
+    case "Windows":
+    case "Uso do PC":
+      return { path: "/software", tab: "windows", label: "Veja no guia do Windows" };
+    case "Programas":
+    case "Essenciais":
+    case "Jogos":
+    case "Navegadores":
+    case "Streaming":
+    case "Produtividade":
+      return SW_PROGRAMS();
+    case "Manutenção":
+      return { path: "/software", tab: "manutencao", label: "Veja em Manutenção" };
+    case "Segurança":
+      return { path: "/software", tab: "seguranca", label: "Veja em Segurança" };
+    case "Lógica":
+      return { path: "/software", tab: "logica", label: "Veja em Lógica Básica" };
+    case "Conceitos":
+    case "História":
+      return { path: "/history", label: "Leia na linha do tempo" };
+    default:
+      return null;
+  }
+}
+
 
 export const quizQuestions: QuizQuestion[] = [
   // Hardware
