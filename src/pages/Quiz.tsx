@@ -115,6 +115,7 @@ export default function Quiz() {
         explanation: String(data.explanation),
         token: String(data.token),
         dynamic: true,
+        contentLink: data.contentLink && typeof data.contentLink === "object" ? data.contentLink : undefined,
       };
       // Track topic seed (first 60 chars of question) to reduce repetition
       usedTopicsRef.current.push(q.question.slice(0, 60));
