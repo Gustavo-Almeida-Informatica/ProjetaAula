@@ -317,13 +317,34 @@ export default function Quiz() {
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                       Dica: {current.explanation}
                     </p>
-                    <button
-                      onClick={() => navigate("/software")}
-                      className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      Conheça os Programas Essenciais
-                    </button>
+                    {(() => {
+                      const link = resolveContentLink(current);
+                      if (!link) return null;
+                      const params = new URLSearchParams();
+                      if (link.tab) params.set("tab", link.tab);
+                      if (link.item) params.set("item", link.item);
+                      const qs = params.toString();
+                      const to = link.path + (qs ? `?${qs}` : "");
+                      const Icon = link.path === "/hardware" ? Cpu
+                        : link.path === "/history" ? BookOpen
+                        : link.path === "/" ? Home
+                        : Download;
+                      const label = link.label
+                        ?? (link.path === "/hardware" ? "Veja no guia de Hardware"
+                          : link.path === "/history" ? "Leia na linha do tempo"
+                          : link.path === "/" ? "Ver no site"
+                          : "Conheça os Programas Essenciais");
+                      return (
+                        <button
+                          onClick={() => navigate(to)}
+                          className="flex items-center gap-2 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all border border-border/40"
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                          {`> ${label}`}
+                          <ArrowRight className="w-3 h-3 ml-auto" />
+                        </button>
+                      );
+                    })()}
                     <div className="flex items-center justify-between gap-3 pt-1">
                       <span className="text-xs text-muted-foreground">
                         {generatingDynamic
