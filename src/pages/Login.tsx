@@ -26,8 +26,28 @@ export default function Login() {
     }
   }, [loading, session, navigate]);
 
+  const validatePassword = (pw: string): string | null => {
+    if (pw.length < 8) return "A senha precisa de pelo menos 8 caracteres.";
+    if (!/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw))
+      return "Use letras e números na sua senha.";
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (mode === "register") {
+      if (!fullName.trim()) {
+        toast.error("Informe seu nome completo.");
+        return;
+      }
+      const pwError = validatePassword(password);
+      if (pwError) {
+        toast.error(pwError);
+        return;
+      }
+    }
+
     setSubmitting(true);
 
     try {
@@ -52,7 +72,6 @@ export default function Login() {
         if (data.session) {
           toast.success("Conta criada com sucesso!");
         } else {
-          // Auto-confirm on; sign in directly to be safe
           const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
           if (signInErr) throw signInErr;
           toast.success("Conta criada com sucesso!");
@@ -64,20 +83,33 @@ export default function Login() {
       }
     } catch (err: any) {
       console.error("Auth error:", err);
-      const generic =
-        mode === "register"
-          ? "Não foi possível criar a conta. Verifique os dados e tente novamente."
-          : "E-mail ou senha inválidos.";
-      // Only surface safe, non-enumerating validation messages
-      const safe =
-        typeof err?.message === "string" && /password|senha/i.test(err.message) && /short|6|character|caractere/i.test(err.message)
-          ? "A senha deve ter pelo menos 6 caracteres."
-          : generic;
-      toast.error(safe);
+      const code = err?.code;
+      const msg = typeof err?.message === "string" ? err.message : "";
+
+      let friendly: string;
+      if (code === "weak_password" || /weak|pwned|known to be/i.test(msg)) {
+        friendly =
+          "Essa senha é muito fraca ou já apareceu em vazamentos públicos. Escolha algo único, com 8+ caracteres misturando letras, números e símbolos.";
+      } else if (code === "user_already_exists" || /already registered|already exists/i.test(msg)) {
+        friendly = "Este e-mail já está cadastrado. Tente entrar ou recuperar a senha.";
+      } else if (/password/i.test(msg) && /(short|6|8|character|caractere)/i.test(msg)) {
+        friendly = "A senha precisa de pelo menos 8 caracteres.";
+      } else if (code === "invalid_credentials" || /invalid login|invalid credentials/i.test(msg)) {
+        friendly = "E-mail ou senha inválidos.";
+      } else if (/email/i.test(msg) && /invalid/i.test(msg)) {
+        friendly = "E-mail inválido. Confira e tente novamente.";
+      } else {
+        friendly =
+          mode === "register"
+            ? "Não foi possível criar a conta. Verifique os dados e tente novamente."
+            : "E-mail ou senha inválidos.";
+      }
+      toast.error(friendly);
     } finally {
       setSubmitting(false);
     }
   };
+
 
   const handleGoogleLogin = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
@@ -187,13 +219,18 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={6}
+              minLength={mode === "register" ? 8 : 6}
               className="w-full pl-10 pr-10 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-3 text-muted-foreground">
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
+          {mode === "register" && (
+            <p className="text-[11px] text-muted-foreground -mt-1 px-1">
+              Use 8+ caracteres com letras e números. Evite senhas comuns (ex.: "123456", "senha123") — elas são bloqueadas por segurança.
+            </p>
+          )}
           <button
             type="submit"
             disabled={submitting}
