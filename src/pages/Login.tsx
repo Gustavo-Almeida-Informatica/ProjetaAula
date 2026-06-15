@@ -226,6 +226,11 @@ export default function Login() {
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
+          {mode === "register" && (
+            <p className="text-[11px] text-muted-foreground -mt-1 px-1">
+              Use 8+ caracteres com letras e números. Evite senhas comuns (ex.: "123456", "senha123") — elas são bloqueadas por segurança.
+            </p>
+          )}
           <button
             type="submit"
             disabled={submitting}
