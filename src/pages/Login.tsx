@@ -27,9 +27,7 @@ export default function Login() {
   }, [loading, session, navigate]);
 
   const validatePassword = (pw: string): string | null => {
-    if (pw.length < 8) return "A senha precisa de pelo menos 8 caracteres.";
-    if (!/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw))
-      return "Use letras e números na sua senha.";
+    if (pw.length < 6) return "A senha precisa de pelo menos 6 caracteres.";
     return null;
   };
 
