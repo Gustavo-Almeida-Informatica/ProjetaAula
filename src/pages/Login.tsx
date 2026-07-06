@@ -226,7 +226,7 @@ export default function Login() {
           </div>
           {mode === "register" && (
             <p className="text-[11px] text-muted-foreground -mt-1 px-1">
-              Use 8+ caracteres com letras e números. Evite senhas comuns (ex.: "123456", "senha123") — elas são bloqueadas por segurança.
+              Sua senha precisa de pelo menos 6 caracteres.
             </p>
           )}
           <button
