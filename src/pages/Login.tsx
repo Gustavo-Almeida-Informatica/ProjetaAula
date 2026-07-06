@@ -28,22 +28,48 @@ export default function Login() {
 
   const validatePassword = (pw: string): string | null => {
     if (pw.length < 6) return "A senha precisa de pelo menos 6 caracteres.";
+    if (pw.length > 72) return "A senha pode ter no máximo 72 caracteres.";
+    return null;
+  };
+
+  const validateEmail = (value: string): string | null => {
+    const trimmed = value.trim();
+    if (!trimmed) return "Informe seu e-mail.";
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(trimmed)) return "E-mail inválido. Confira e tente novamente.";
+    if (trimmed.length > 255) return "E-mail muito longo.";
     return null;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const emailError = validateEmail(email);
+    if (emailError) {
+      toast.error(emailError);
+      return;
+    }
+
     if (mode === "register") {
-      if (!fullName.trim()) {
+      const name = fullName.trim();
+      if (!name) {
         toast.error("Informe seu nome completo.");
         return;
       }
-      const pwError = validatePassword(password);
-      if (pwError) {
-        toast.error(pwError);
+      if (name.length < 2) {
+        toast.error("Nome muito curto.");
         return;
       }
+      if (name.length > 120) {
+        toast.error("Nome muito longo (máx. 120 caracteres).");
+        return;
+      }
+    }
+
+    const pwError = validatePassword(password);
+    if (pwError) {
+      toast.error(pwError);
+      return;
     }
 
     setSubmitting(true);
