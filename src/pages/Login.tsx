@@ -27,9 +27,7 @@ export default function Login() {
   }, [loading, session, navigate]);
 
   const validatePassword = (pw: string): string | null => {
-    if (pw.length < 8) return "A senha precisa de pelo menos 8 caracteres.";
-    if (!/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw))
-      return "Use letras e números na sua senha.";
+    if (pw.length < 6) return "A senha precisa de pelo menos 6 caracteres.";
     return null;
   };
 
@@ -219,7 +217,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={mode === "register" ? 8 : 6}
+              minLength={6}
               className="w-full pl-10 pr-10 py-2.5 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-3 text-muted-foreground">
@@ -228,7 +226,7 @@ export default function Login() {
           </div>
           {mode === "register" && (
             <p className="text-[11px] text-muted-foreground -mt-1 px-1">
-              Use 8+ caracteres com letras e números. Evite senhas comuns (ex.: "123456", "senha123") — elas são bloqueadas por segurança.
+              Sua senha precisa de pelo menos 6 caracteres.
             </p>
           )}
           <button
