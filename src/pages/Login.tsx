@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, LogIn, UserPlus, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { Seo } from "@/components/Seo";
 
@@ -19,6 +19,14 @@ export default function Login() {
   const [fullName, setFullName] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const trimmedEmail = email.trim().toLowerCase();
+  const trimmedName = fullName.trim();
+  const isRegisterMode = mode === "register";
+  const activeActionLabel = isRegisterMode ? "Criar Conta" : "Entrar";
+  const activeActionDescription = isRegisterMode
+    ? "Modo cadastro ativo: este botão cria sua conta e libera o acesso ao site."
+    : "Modo login ativo: este botão entra com uma conta que já existe.";
 
   useEffect(() => {
     if (!loading && session) {
@@ -50,17 +58,16 @@ export default function Login() {
       return;
     }
 
-    if (mode === "register") {
-      const name = fullName.trim();
-      if (!name) {
+    if (isRegisterMode) {
+      if (!trimmedName) {
         toast.error("Informe seu nome completo.");
         return;
       }
-      if (name.length < 2) {
+      if (trimmedName.length < 2) {
         toast.error("Nome muito curto.");
         return;
       }
-      if (name.length > 120) {
+      if (trimmedName.length > 120) {
         toast.error("Nome muito longo (máx. 120 caracteres).");
         return;
       }
@@ -75,35 +82,39 @@ export default function Login() {
     setSubmitting(true);
 
     try {
-      if (mode === "register") {
+      if (isRegisterMode) {
+        toast.info("Criando sua conta...");
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: trimmedEmail,
           password,
           options: {
-            data: { full_name: fullName },
-            emailRedirectTo: window.location.origin,
+            data: { full_name: trimmedName },
           },
         });
         if (error) throw error;
 
         if (data.user) {
-          await supabase
+          const { error: profileError } = await supabase
             .from("profiles")
-            .update({ full_name: fullName })
+            .update({ full_name: trimmedName })
             .eq("id", data.user.id);
+
+          if (profileError) console.error("Profile update error:", profileError);
         }
 
-        if (data.session) {
-          toast.success("Conta criada com sucesso!");
-        } else {
-          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (!data.session) {
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email: trimmedEmail, password });
           if (signInErr) throw signInErr;
-          toast.success("Conta criada com sucesso!");
         }
+
+        toast.success("Conta criada! Entrando no site...");
+        navigate("/", { replace: true });
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        toast.info("Entrando na sua conta...");
+        const { error } = await supabase.auth.signInWithPassword({ email: trimmedEmail, password });
         if (error) throw error;
-        toast.success("Login realizado!");
+        toast.success("Login realizado! Entrando no site...");
+        navigate("/", { replace: true });
       }
     } catch (err: any) {
       console.error("Auth error:", err);
@@ -113,18 +124,23 @@ export default function Login() {
       let friendly: string;
       if (code === "weak_password" || /weak|pwned|known to be/i.test(msg)) {
         friendly =
-          "Essa senha é muito fraca ou já apareceu em vazamentos públicos. Escolha algo único, com 8+ caracteres misturando letras, números e símbolos.";
+          "Essa senha é muito fraca. Use pelo menos 6 caracteres e escolha uma senha diferente.";
       } else if (code === "user_already_exists" || /already registered|already exists/i.test(msg)) {
-        friendly = "Este e-mail já está cadastrado. Tente entrar ou recuperar a senha.";
+        setMode("login");
+        friendly = "Este e-mail já está cadastrado. Mudei para Entrar: informe a senha dessa conta.";
       } else if (/password/i.test(msg) && /(short|6|8|character|caractere)/i.test(msg)) {
-        friendly = "A senha precisa de pelo menos 8 caracteres.";
+        friendly = "A senha precisa de pelo menos 6 caracteres.";
+      } else if (code === "email_not_confirmed" || /email not confirmed|not confirmed/i.test(msg)) {
+        friendly = "A confirmação por e-mail foi desativada para novos cadastros. Crie a conta novamente ou use outro e-mail.";
       } else if (code === "invalid_credentials" || /invalid login|invalid credentials/i.test(msg)) {
-        friendly = "E-mail ou senha inválidos.";
+        friendly = isRegisterMode
+          ? "Este e-mail já pode existir. Tente entrar com ele ou use outro e-mail para criar uma nova conta."
+          : "E-mail ou senha inválidos. Confira os dados e tente novamente.";
       } else if (/email/i.test(msg) && /invalid/i.test(msg)) {
         friendly = "E-mail inválido. Confira e tente novamente.";
       } else {
         friendly =
-          mode === "register"
+          isRegisterMode
             ? "Não foi possível criar a conta. Verifique os dados e tente novamente."
             : "E-mail ou senha inválidos.";
       }
@@ -190,27 +206,39 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="flex rounded-lg overflow-hidden border border-border">
+        <div className="flex rounded-lg overflow-hidden border border-border" aria-label="Escolha entre entrar ou criar conta">
           <button
+            type="button"
             onClick={() => setMode("login")}
             className={`flex-1 py-2 text-sm font-medium transition-colors ${
-              mode === "login" ? "gradient-warm text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              !isRegisterMode ? "gradient-warm text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
+            aria-pressed={!isRegisterMode}
           >
             Entrar
           </button>
           <button
+            type="button"
             onClick={() => setMode("register")}
             className={`flex-1 py-2 text-sm font-medium transition-colors ${
-              mode === "register" ? "gradient-warm text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+              isRegisterMode ? "gradient-warm text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
+            aria-pressed={isRegisterMode}
           >
             Criar Conta
           </button>
         </div>
 
+        <div className="rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 flex items-start gap-2" role="status" aria-live="polite">
+          <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+          <div>
+            <p className="text-xs font-semibold text-foreground">Ação selecionada: {activeActionLabel}</p>
+            <p className="text-[11px] leading-relaxed text-muted-foreground">{activeActionDescription}</p>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-3">
-          {mode === "register" && (
+          {isRegisterMode && (
             <div className="relative">
               <User className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
               <input
@@ -250,17 +278,18 @@ export default function Login() {
               {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
-          {mode === "register" && (
+          {isRegisterMode && (
             <p className="text-[11px] text-muted-foreground -mt-1 px-1">
-              Sua senha precisa de pelo menos 6 caracteres.
+              Senha simples permitida: use pelo menos 6 caracteres. Pode ser só letras ou só números.
             </p>
           )}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-lg border border-border text-foreground font-semibold text-sm hover:bg-secondary disabled:opacity-50 transition-all"
+            className="w-full py-3 rounded-lg border border-border text-foreground font-semibold text-sm hover:bg-secondary disabled:opacity-50 transition-all flex items-center justify-center gap-2"
           >
-            {submitting ? "Carregando..." : mode === "login" ? "Entrar" : "Criar Conta"}
+            {isRegisterMode ? <UserPlus className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
+            {submitting ? "Carregando..." : activeActionLabel}
           </button>
         </form>
       </motion.div>
