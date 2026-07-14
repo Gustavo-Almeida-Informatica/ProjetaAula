@@ -53,6 +53,7 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
       <Route path="/historia" element={<ProtectedRoute><History /></ProtectedRoute>} />
       <Route path="/hardware" element={<ProtectedRoute><Hardware /></ProtectedRoute>} />
+      <Route path="/cabos" element={<ProtectedRoute><Cabos /></ProtectedRoute>} />
       <Route path="/software" element={<ProtectedRoute><Software /></ProtectedRoute>} />
       <Route path="/galeria" element={<ProtectedRoute><Gallery /></ProtectedRoute>} />
       <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
