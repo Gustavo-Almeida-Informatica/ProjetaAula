@@ -12,6 +12,7 @@ import Gallery from "./pages/Gallery";
 import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
 import History from "./pages/History";
+import Cabos from "./pages/Cabos";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
