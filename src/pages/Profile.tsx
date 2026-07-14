@@ -52,20 +52,29 @@ export default function Profile() {
 
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop();
-      const filePath = `${user.id}/avatar.${ext}`;
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      // Remove any previous avatar files (any extension) to avoid stale copies
+      const { data: existing } = await supabase.storage.from("avatars").list(user.id);
+      if (existing && existing.length > 0) {
+        await supabase.storage
+          .from("avatars")
+          .remove(existing.map((f) => `${user.id}/${f.name}`));
+      }
+
+      const filePath = `${user.id}/avatar-${Date.now()}.${ext}`;
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(filePath, file, { upsert: true });
+        .upload(filePath, file, {
+          upsert: true,
+          contentType: file.type || `image/${ext}`,
+          cacheControl: "3600",
+        });
 
       if (uploadError) throw uploadError;
 
-      const { data: urlData } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
-
-      const publicUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+      const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(filePath);
+      const publicUrl = urlData.publicUrl;
 
       const { error: updateError } = await supabase
         .from("profiles")
@@ -74,13 +83,15 @@ export default function Profile() {
 
       if (updateError) throw updateError;
 
-      setAvatarUrl(publicUrl);
+      setAvatarUrl(`${publicUrl}?t=${Date.now()}`);
       await refreshProfile();
       toast.success("Foto de perfil atualizada!");
     } catch (err: any) {
-      toast.error(err.message || "Erro ao enviar foto");
+      console.error("Avatar upload error:", err);
+      toast.error(err?.message || "Erro ao enviar foto");
     } finally {
       setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
