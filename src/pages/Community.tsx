@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,10 +39,12 @@ export default function Community() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [showTagSuggest, setShowTagSuggest] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPosts = async () => {
-    let query = supabase
+    const query = supabase
       .from("community_posts")
       .select("*")
       .order(sort === "popular" ? "likes_count" : "created_at", { ascending: false });
@@ -56,9 +58,7 @@ export default function Community() {
         .select("post_id")
         .eq("user_id", user.id);
       const likedIds = new Set(likes?.map((l) => l.post_id));
-      setPosts(
-        (data as Post[]).map((p) => ({ ...p, liked_by_me: likedIds.has(p.id) }))
-      );
+      setPosts((data as Post[]).map((p) => ({ ...p, liked_by_me: likedIds.has(p.id) })));
     } else {
       setPosts(data as Post[]);
     }
@@ -67,6 +67,41 @@ export default function Community() {
   useEffect(() => {
     fetchPosts();
   }, [sort, user]);
+
+  // Compute popular hashtags across all posts for suggestions
+  const popularHashtags = useMemo(() => {
+    const counts = new Map<string, number>();
+    posts.forEach((p) =>
+      (p.hashtags || []).forEach((t) => {
+        const k = t.toLowerCase();
+        counts.set(k, (counts.get(k) || 0) + 1);
+      })
+    );
+    return Array.from(counts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([tag, n]) => ({ tag, n }));
+  }, [posts]);
+
+  // Current hashtag fragment being typed (after last "#" or ",")
+  const currentFragment = useMemo(() => {
+    const parts = hashtags.split(",");
+    const last = parts[parts.length - 1] || "";
+    return last.trim().replace(/^#/, "").toLowerCase();
+  }, [hashtags]);
+
+  const suggestedHashtags = useMemo(() => {
+    const filtered = currentFragment
+      ? popularHashtags.filter((h) => h.tag.startsWith(currentFragment) && h.tag !== currentFragment)
+      : popularHashtags;
+    return filtered.slice(0, 6);
+  }, [popularHashtags, currentFragment]);
+
+  const insertHashtag = (tag: string) => {
+    const parts = hashtags.split(",");
+    parts[parts.length - 1] = ` #${tag}`;
+    setHashtags(parts.join(",").replace(/^\s+/, "") + ", ");
+    setShowTagSuggest(true);
+  };
 
   const filteredPosts = posts.filter((p) => {
     if (!search) return true;
@@ -178,20 +213,39 @@ export default function Community() {
   const toggleLike = async (post: Post) => {
     if (!user) return;
 
-    if (post.liked_by_me) {
-      await supabase.from("post_likes").delete().eq("user_id", user.id).eq("post_id", post.id);
-      await supabase
-        .from("community_posts")
-        .update({ likes_count: Math.max(0, post.likes_count - 1) })
-        .eq("id", post.id);
+    // Optimistic update — counter is synced by database trigger
+    const wasLiked = !!post.liked_by_me;
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.id === post.id
+          ? {
+              ...p,
+              liked_by_me: !wasLiked,
+              likes_count: Math.max(0, p.likes_count + (wasLiked ? -1 : 1)),
+            }
+          : p
+      )
+    );
+
+    if (wasLiked) {
+      const { error } = await supabase
+        .from("post_likes")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("post_id", post.id);
+      if (error) {
+        toast.error("Erro ao remover curtida");
+        fetchPosts();
+      }
     } else {
-      await supabase.from("post_likes").insert({ user_id: user.id, post_id: post.id });
-      await supabase
-        .from("community_posts")
-        .update({ likes_count: post.likes_count + 1 })
-        .eq("id", post.id);
+      const { error } = await supabase
+        .from("post_likes")
+        .insert({ user_id: user.id, post_id: post.id });
+      if (error) {
+        toast.error("Erro ao curtir");
+        fetchPosts();
+      }
     }
-    fetchPosts();
   };
 
   const timeAgo = (date: string) => {
@@ -305,11 +359,38 @@ export default function Community() {
                   <Hash className="absolute left-3 top-2.5 w-4 h-4 text-muted-foreground" />
                   <input
                     type="text"
-                    placeholder="hashtags separadas por vírgula"
+                    placeholder='digite "#" para ver sugestões'
                     value={hashtags}
-                    onChange={(e) => setHashtags(e.target.value)}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setHashtags(v);
+                      // Show suggestions when user just typed "#" or is inside a fragment
+                      const lastChar = v.slice(-1);
+                      setShowTagSuggest(lastChar === "#" || currentFragment.length > 0 || v.endsWith(","));
+                    }}
+                    onFocus={() => setShowTagSuggest(true)}
+                    onBlur={() => setTimeout(() => setShowTagSuggest(false), 150)}
                     className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   />
+                  {showTagSuggest && suggestedHashtags.length > 0 && (
+                    <div className="absolute z-20 mt-1 left-0 right-0 glass rounded-lg border border-border/60 overflow-hidden shadow-lg">
+                      <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/40 flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3" /> Hashtags populares
+                      </div>
+                      {suggestedHashtags.map((h) => (
+                        <button
+                          key={h.tag}
+                          type="button"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => insertHashtag(h.tag)}
+                          className="w-full flex items-center justify-between px-3 py-2 text-xs text-foreground hover:bg-primary/10 transition-colors"
+                        >
+                          <span className="text-primary">#{h.tag}</span>
+                          <span className="text-muted-foreground">{h.n} post{h.n > 1 ? "s" : ""}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <input
                   ref={fileInputRef}
@@ -374,14 +455,19 @@ export default function Community() {
               <h3 className="text-sm font-bold text-foreground mb-1">{post.title}</h3>
               <p className="text-xs text-muted-foreground whitespace-pre-wrap">{post.content}</p>
               {post.image_url && (
-                <div className="mt-3 rounded-lg overflow-hidden border border-border/30">
+                <button
+                  type="button"
+                  onClick={() => setLightbox(post.image_url!)}
+                  className="mt-3 block w-full rounded-lg overflow-hidden border border-border/30 group focus:outline-none focus:ring-2 focus:ring-ring"
+                  aria-label="Ver imagem em tela cheia"
+                >
                   <img
                     src={post.image_url}
                     alt={post.title}
                     loading="lazy"
-                    className="w-full aspect-video object-cover"
+                    className="w-full aspect-video object-cover group-hover:scale-[1.02] transition-transform"
                   />
-                </div>
+                </button>
               )}
               {post.hashtags && post.hashtags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
@@ -412,6 +498,39 @@ export default function Community() {
           ))}
         </div>
       </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setLightbox(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Visualização de imagem em tela cheia"
+          >
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-background/80 hover:bg-background text-foreground border border-border/60"
+              aria-label="Fechar imagem"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <motion.img
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              src={lightbox}
+              alt="Imagem em tela cheia"
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
