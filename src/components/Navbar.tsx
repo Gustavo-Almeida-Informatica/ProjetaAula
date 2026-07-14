@@ -11,6 +11,7 @@ const navItems = [
   { to: "/", label: "Início", icon: Home },
   { to: "/historia", label: "História", icon: BookOpen },
   { to: "/hardware", label: "Hardware", icon: Cpu },
+  { to: "/cabos", label: "Cabos", icon: Cable },
   { to: "/software", label: "Software", icon: Monitor },
   { to: "/galeria", label: "Conectores", icon: Image },
   { to: "/quiz", label: "Quiz", icon: Brain },
