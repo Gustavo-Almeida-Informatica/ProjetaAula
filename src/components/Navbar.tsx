@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import {
-  Monitor, Cpu, Image, Brain, Users, Home, LogOut, Menu, X, BookOpen, UserCircle, Cable,
+  Monitor, Cpu, Image, Brain, Users, Home, LogOut, Menu, X, BookOpen, UserCircle,
 } from "lucide-react";
 import { useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -11,9 +11,8 @@ const navItems = [
   { to: "/", label: "Início", icon: Home },
   { to: "/historia", label: "História", icon: BookOpen },
   { to: "/hardware", label: "Hardware", icon: Cpu },
-  { to: "/cabos", label: "Cabos", icon: Cable },
   { to: "/software", label: "Software", icon: Monitor },
-  { to: "/galeria", label: "Conectores", icon: Image },
+  { to: "/galeria", label: "Conectores e Cabos", icon: Image },
   { to: "/quiz", label: "Quiz", icon: Brain },
   { to: "/comunidade", label: "Comunidade", icon: Users },
 ];
