@@ -3,19 +3,27 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { MonitorPlay, Wifi } from "lucide-react";
+import { Zap, MonitorPlay, Usb, HardDrive, Wifi, Volume2 } from "lucide-react";
 import { slugify } from "@/lib/slug";
 import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 import hdmiImg from "@/assets/cable-hdmi.jpg";
 import displayportImg from "@/assets/cable-displayport.jpg";
 import vgaImg from "@/assets/cable-vga.jpg";
+import dviImg from "@/assets/cable-dvi.jpg";
 import ethernetImg from "@/assets/cable-ethernet.jpg";
 import wifiImg from "@/assets/cable-wifi.jpg";
+import powerImg from "@/assets/cable-power.jpg";
+import usbImg from "@/assets/cable-usb.jpg";
+import sataImg from "@/assets/cable-sata.jpg";
+import audioImg from "@/assets/cable-audio.jpg";
 
 const categories = [
+  { id: "energia", label: "Energia", icon: Zap },
   { id: "video", label: "Cabos de Vídeo", icon: MonitorPlay },
-  { id: "internet", label: "Cabos de Internet", icon: Wifi },
+  { id: "dados", label: "Dados", icon: Usb },
+  { id: "rede", label: "Rede e Internet", icon: Wifi },
+  { id: "audio", label: "Áudio", icon: Volume2 },
 ];
 
 interface GalleryItem {
@@ -26,6 +34,20 @@ interface GalleryItem {
 }
 
 export const galleryContent: Record<string, GalleryItem[]> = {
+  energia: [
+    {
+      title: "Cabo de Força (Tripolar)",
+      image: powerImg,
+      desc: "Cabo padrão que leva energia da tomada até o computador, monitor ou impressora. No Brasil segue o padrão NBR 14136 (três pinos).",
+      specs: [
+        { label: "O que faz", value: "Leva energia da tomada ao equipamento" },
+        { label: "Onde usar", value: "Gabinete, monitor, impressora, estabilizador" },
+        { label: "Padrão (BR)", value: "NBR 14136 — três pinos" },
+        { label: "Aterramento", value: "Pino central protege contra choques" },
+        { label: "Dica", value: "Nunca corte o pino de aterramento" },
+      ],
+    },
+  ],
   video: [
     {
       title: "Cabo HDMI",
@@ -34,8 +56,8 @@ export const galleryContent: Record<string, GalleryItem[]> = {
       specs: [
         { label: "O que faz", value: "Transmite imagem e som juntos" },
         { label: "Onde usar", value: "Monitores, TVs, projetores" },
-        { label: "Qualidade", value: "Suporta Full HD e 4K" },
-        { label: "Vantagem", value: "Um único cabo resolve tudo" },
+        { label: "Qualidade", value: "Suporta Full HD, 4K e 8K (HDMI 2.1)" },
+        { label: "Velocidade", value: "Até 48 Gbps (HDMI 2.1)" },
         { label: "Comprimento", value: "Até 15 metros sem perder qualidade" },
       ],
     },
@@ -46,9 +68,21 @@ export const galleryContent: Record<string, GalleryItem[]> = {
       specs: [
         { label: "O que faz", value: "Transmite imagem de altíssima qualidade" },
         { label: "Onde usar", value: "Monitores gamer e profissionais" },
-        { label: "Vantagem", value: "Suporta vários monitores com um cabo" },
-        { label: "Para gamers", value: "Imagem mais fluida nos jogos" },
+        { label: "Velocidade", value: "Até 80 Gbps (DP 2.1)" },
+        { label: "Vantagem", value: "Vários monitores em cadeia" },
         { label: "Versão menor", value: "Mini DisplayPort para notebooks" },
+      ],
+    },
+    {
+      title: "Cabo DVI",
+      image: dviImg,
+      desc: "Intermediário entre o VGA e o HDMI. Foi bastante usado em desktops antigos para monitores digitais.",
+      specs: [
+        { label: "O que faz", value: "Transmite apenas imagem (sem som)" },
+        { label: "Versões", value: "DVI-D (digital) e DVI-I (digital + analógico)" },
+        { label: "Onde encontrar", value: "Placas de vídeo e monitores antigos" },
+        { label: "Adaptador", value: "Fácil converter para HDMI" },
+        { label: "Dica", value: "Prefira HDMI ou DisplayPort quando houver" },
       ],
     },
     {
@@ -64,7 +98,33 @@ export const galleryContent: Record<string, GalleryItem[]> = {
       ],
     },
   ],
-  internet: [
+  dados: [
+    {
+      title: "Cabo USB (A / B / C)",
+      image: usbImg,
+      desc: "Cabo universal para transferir dados e levar energia. USB-A é o retangular clássico, USB-B é quadrado (impressoras) e USB-C é o novo padrão reversível.",
+      specs: [
+        { label: "O que faz", value: "Transfere dados e alimenta aparelhos" },
+        { label: "Onde usar", value: "Pendrives, HDs, mouse, teclado, celular" },
+        { label: "Velocidade", value: "USB 2.0: 480 Mbps · USB4: até 40 Gbps" },
+        { label: "Energia (USB-C)", value: "Pode entregar até 240 W" },
+        { label: "Dica", value: "USB-C é reversível — encaixa nos dois lados" },
+      ],
+    },
+    {
+      title: "Cabo SATA",
+      image: sataImg,
+      desc: "Cabo interno do gabinete que liga o HD ou SSD à placa-mãe. Fino, geralmente vermelho ou preto.",
+      specs: [
+        { label: "O que faz", value: "Conecta HDs e SSDs à placa-mãe" },
+        { label: "Onde usar", value: "HD/SSD 2.5\" e 3.5\", leitor de DVD" },
+        { label: "Velocidade", value: "SATA III: até 600 MB/s" },
+        { label: "Formato", value: "Fino, com conector em L" },
+        { label: "Dica", value: "SSDs NVMe não usam SATA — vão no slot M.2" },
+      ],
+    },
+  ],
+  rede: [
     {
       title: "Cabo de Rede (Ethernet / RJ45)",
       image: ethernetImg,
@@ -73,7 +133,7 @@ export const galleryContent: Record<string, GalleryItem[]> = {
         { label: "O que faz", value: "Conecta o PC à internet com fio" },
         { label: "Vantagem", value: "Mais rápido e estável que Wi-Fi" },
         { label: "Conector", value: "RJ45 (parece um telefone, mas maior)" },
-        { label: "Tipos", value: "Cat5e, Cat6, Cat7 (cada vez melhor)" },
+        { label: "Tipos", value: "Cat5e (1 Gbps) · Cat6 · Cat6a/7 (10 Gbps+)" },
         { label: "Ideal para", value: "Jogos online, downloads e trabalho" },
       ],
     },
@@ -90,6 +150,20 @@ export const galleryContent: Record<string, GalleryItem[]> = {
       ],
     },
   ],
+  audio: [
+    {
+      title: "Cabo P2 (Áudio 3,5mm)",
+      image: audioImg,
+      desc: "Plug de áudio analógico redondo, usado em fones de ouvido, caixinhas de som e microfones.",
+      specs: [
+        { label: "O que faz", value: "Transmite som analógico" },
+        { label: "Onde usar", value: "Fones, caixas de som, microfones" },
+        { label: "Verde", value: "Saída de áudio (som)" },
+        { label: "Rosa", value: "Entrada de microfone" },
+        { label: "Azul", value: "Entrada de linha (line-in)" },
+      ],
+    },
+  ],
 };
 
 export default function Gallery() {
@@ -97,15 +171,15 @@ export default function Gallery() {
   const catParam = params.get("cat");
   const itemParam = params.get("item");
   const [activeCategory, setActiveCategory] = useState(
-    catParam && galleryContent[catParam] ? catParam : "video",
+    catParam && galleryContent[catParam] ? catParam : "energia",
   );
   useScrollToItem(itemParam, [activeCategory]);
 
   return (
     <div className="min-h-screen pt-16 pb-12">
       <Seo
-        title="Conectores e Cabos — HDMI, DisplayPort, VGA, RJ45 | Projeta Aula"
-        description="Galeria de conectores de vídeo (HDMI, DisplayPort, VGA) e cabos de rede para conectar seu computador."
+        title="Conectores e Cabos — HDMI, USB, SATA, RJ45 e mais | Projeta Aula"
+        description="Galeria completa de cabos e conectores: energia, vídeo (HDMI, DisplayPort, VGA, DVI), dados (USB, SATA), rede (Ethernet, Wi-Fi) e áudio (P2)."
         path="/galeria"
       />
       <ScrollToTop />
@@ -119,16 +193,16 @@ export default function Gallery() {
             Conectores e Cabos
           </h1>
           <p className="text-muted-foreground text-sm mt-3">
-            Conheça os cabos que conectam as peças do computador e a internet
+            Conheça os cabos que conectam as peças do computador, a energia, a internet e o áudio
           </p>
         </motion.div>
 
-        <div className="flex gap-3 justify-center mb-8">
+        <div className="flex flex-wrap gap-2 md:gap-3 justify-center mb-8">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-medium transition-all ${
                 activeCategory === cat.id
                   ? "gradient-warm text-primary-foreground warm-glow-sm"
                   : "glass text-muted-foreground hover:text-foreground"
@@ -167,9 +241,9 @@ export default function Gallery() {
               <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
               <div className="space-y-2">
                 {item.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between items-center text-xs border-b border-border/30 pb-1.5">
-                    <span className="text-primary font-medium">{spec.label}</span>
-                    <span className="text-foreground/80">{spec.value}</span>
+                  <div key={spec.label} className="flex justify-between items-center gap-3 text-xs border-b border-border/30 pb-1.5">
+                    <span className="text-primary font-medium shrink-0">{spec.label}</span>
+                    <span className="text-foreground/80 text-right">{spec.value}</span>
                   </div>
                 ))}
               </div>

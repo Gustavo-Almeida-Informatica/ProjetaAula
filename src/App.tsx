@@ -12,7 +12,7 @@ import Gallery from "./pages/Gallery";
 import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
 import History from "./pages/History";
-import Cabos from "./pages/Cabos";
+
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
@@ -53,7 +53,7 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
       <Route path="/historia" element={<ProtectedRoute><History /></ProtectedRoute>} />
       <Route path="/hardware" element={<ProtectedRoute><Hardware /></ProtectedRoute>} />
-      <Route path="/cabos" element={<ProtectedRoute><Cabos /></ProtectedRoute>} />
+      <Route path="/cabos" element={<Navigate to="/galeria" replace />} />
       <Route path="/software" element={<ProtectedRoute><Software /></ProtectedRoute>} />
       <Route path="/galeria" element={<ProtectedRoute><Gallery /></ProtectedRoute>} />
       <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
