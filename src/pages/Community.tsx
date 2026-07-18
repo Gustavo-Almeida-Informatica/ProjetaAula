@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -7,7 +8,7 @@ import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import {
   Search, Hash, TrendingUp, Clock, Heart, MessageSquare, Plus, X, Send,
-  Image as ImageIcon, Trash2,
+  Image as ImageIcon, Trash2, LogIn,
 } from "lucide-react";
 import PostComments from "@/components/PostComments";
 
