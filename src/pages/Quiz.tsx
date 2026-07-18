@@ -220,6 +220,35 @@ export default function Quiz() {
   };
 
   const current = questions[currentIndex];
+  if (!user) {
+    return (
+      <div className="min-h-screen pt-16 pb-12 flex items-center">
+        <Seo
+          title="Quiz Infinito de Informática | Projeta Aula"
+          description="Faça login para começar o quiz infinito de informática com mais de 150 questões."
+          path="/quiz"
+        />
+        <div className="container max-w-lg">
+          <div className="glass p-8 text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-full gradient-warm flex items-center justify-center warm-glow-sm">
+              <Brain className="w-7 h-7 text-primary-foreground" />
+            </div>
+            <h1 className="font-display text-2xl font-bold gradient-warm-text">Quiz Infinito</h1>
+            <p className="text-sm text-muted-foreground">
+              Para participar do quiz e salvar sua pontuação no ranking, você precisa entrar ou criar uma conta gratuita.
+            </p>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg gradient-warm text-primary-foreground text-sm font-semibold warm-glow-sm hover:scale-[1.02] transition-all"
+            >
+              <LogIn className="w-4 h-4" /> Entrar / Criar Conta
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!current) return null;
 
   return (
