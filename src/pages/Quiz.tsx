@@ -139,7 +139,7 @@ export default function Quiz() {
       }
       fetchingRef.current = false;
     })();
-  }, [currentIndex, questions.length, fetchDynamicQuestion]);
+  }, [currentIndex, questions.length, fetchDynamicQuestion, user]);
 
   const goNext = useCallback(async () => {
     clearTimers();
