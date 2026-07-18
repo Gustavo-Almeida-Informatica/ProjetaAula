@@ -6,8 +6,8 @@ import { getShuffledQuestions, QuizQuestion, resolveContentLink, ContentLink } f
 import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
-import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, ArrowRight, Sparkles, Cpu, Download, BookOpen, Home } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, ArrowRight, Sparkles, Cpu, Download, BookOpen, Home, LogIn, Brain } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface LeaderboardEntry {
   user_name: string;
