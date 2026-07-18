@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -7,7 +8,7 @@ import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import {
   Search, Hash, TrendingUp, Clock, Heart, MessageSquare, Plus, X, Send,
-  Image as ImageIcon, Trash2,
+  Image as ImageIcon, Trash2, LogIn,
 } from "lucide-react";
 import PostComments from "@/components/PostComments";
 
@@ -29,6 +30,15 @@ type SortMode = "recent" | "popular";
 
 export default function Community() {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
+
+  const requireAuth = (action: string) => {
+    if (user) return true;
+    toast.info(`Faça login para ${action}.`, {
+      action: { label: "Entrar", onClick: () => navigate("/login") },
+    });
+    return false;
+  };
   const [posts, setPosts] = useState<Post[]>([]);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortMode>("recent");
@@ -211,6 +221,7 @@ export default function Community() {
   };
 
   const toggleLike = async (post: Post) => {
+    if (!requireAuth("curtir posts")) return;
     if (!user) return;
 
     // Optimistic update — counter is synced by database trigger
@@ -271,6 +282,21 @@ export default function Community() {
           <p className="text-muted-foreground text-sm mt-3">Compartilhe conhecimento, tire dúvidas e conecte-se!</p>
         </motion.div>
 
+        {!user && (
+          <div className="glass p-4 mb-6 flex flex-wrap items-center gap-3 border border-primary/20">
+            <LogIn className="w-4 h-4 text-primary shrink-0" />
+            <p className="text-xs text-muted-foreground flex-1 min-w-[180px]">
+              Você pode ler os posts livremente. Para publicar, comentar ou curtir, faça login.
+            </p>
+            <Link
+              to="/login"
+              className="text-xs font-medium px-4 py-2 rounded-lg gradient-warm text-primary-foreground warm-glow-sm"
+            >
+              Entrar / Criar Conta
+            </Link>
+          </div>
+        )}
+
         {/* Search & Filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
@@ -301,7 +327,10 @@ export default function Community() {
               <TrendingUp className="w-3.5 h-3.5" /> Populares
             </button>
             <button
-              onClick={() => setShowNew(!showNew)}
+              onClick={() => {
+                if (!requireAuth("criar um post")) return;
+                setShowNew(!showNew);
+              }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg gradient-warm text-primary-foreground text-xs font-medium warm-glow-sm"
             >
               {showNew ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}

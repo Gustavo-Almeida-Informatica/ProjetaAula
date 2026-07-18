@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Send, Trash2, MessageCircle } from "lucide-react";
+import { Send, Trash2, MessageCircle, LogIn } from "lucide-react";
 
 interface Comment {
   id: string;
@@ -96,7 +97,7 @@ export default function PostComments({ postId }: { postId: string }) {
             </div>
           ))}
 
-          {user && (
+          {user ? (
             <form onSubmit={handleSend} className="flex gap-2">
               <input
                 type="text"
@@ -114,6 +115,14 @@ export default function PostComments({ postId }: { postId: string }) {
                 <Send className="w-3.5 h-3.5" />
               </button>
             </form>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-secondary/60 border border-border text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              Faça login para comentar
+            </Link>
           )}
         </div>
       )}

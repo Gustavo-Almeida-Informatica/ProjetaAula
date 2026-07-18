@@ -65,29 +65,38 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          {profile && (
+          {profile ? (
+            <>
+              <Link
+                to="/perfil"
+                className="flex items-center gap-2 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
+              >
+                <Avatar className="w-6 h-6">
+                  {profile.avatar_url ? (
+                    <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
+                  ) : null}
+                  <AvatarFallback className="text-[10px] font-bold bg-primary/20 text-primary">
+                    {getInitials(profile.full_name || "U")}
+                  </AvatarFallback>
+                </Avatar>
+                {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+              </Link>
+              <button
+                onClick={signOut}
+                aria-label="Sair da conta"
+                className="text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </>
+          ) : (
             <Link
-              to="/perfil"
-              className="flex items-center gap-2 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
+              to="/login"
+              className="text-xs font-medium px-4 py-1.5 rounded-lg gradient-warm text-primary-foreground warm-glow-sm hover:scale-[1.02] transition-all"
             >
-              <Avatar className="w-6 h-6">
-                {profile.avatar_url ? (
-                  <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-                ) : null}
-                <AvatarFallback className="text-[10px] font-bold bg-primary/20 text-primary">
-                  {getInitials(profile.full_name || "U")}
-                </AvatarFallback>
-              </Avatar>
-              {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+              Entrar
             </Link>
           )}
-          <button
-            onClick={signOut}
-            aria-label="Sair da conta"
-            className="text-muted-foreground hover:text-destructive transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
         </div>
 
         {/* Mobile toggle */}
@@ -122,36 +131,47 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="border-t border-border/50 pt-2 mt-2 space-y-1">
-            <Link
-              to="/perfil"
-              onClick={() => setOpen(false)}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm ${
-                pathname === "/perfil" ? "text-primary bg-primary/8" : "text-muted-foreground"
-              }`}
-            >
-              {profile?.avatar_url ? (
-                <Avatar className="w-5 h-5">
-                  <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-                  <AvatarFallback className="text-[8px]">
-                    {getInitials(profile?.full_name || "U")}
-                  </AvatarFallback>
-                </Avatar>
-              ) : (
-                <UserCircle className="w-4 h-4" />
-              )}
-              Meu Perfil
-            </Link>
-            <div className="flex items-center justify-between px-3">
-              {profile && (
-                <span className="text-xs text-muted-foreground">
-                  {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
-                </span>
-              )}
-              <button onClick={signOut} className="text-destructive text-sm">Sair</button>
-            </div>
+            {profile ? (
+              <>
+                <Link
+                  to="/perfil"
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm ${
+                    pathname === "/perfil" ? "text-primary bg-primary/8" : "text-muted-foreground"
+                  }`}
+                >
+                  {profile.avatar_url ? (
+                    <Avatar className="w-5 h-5">
+                      <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
+                      <AvatarFallback className="text-[8px]">
+                        {getInitials(profile?.full_name || "U")}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <UserCircle className="w-4 h-4" />
+                  )}
+                  Meu Perfil
+                </Link>
+                <div className="flex items-center justify-between px-3">
+                  <span className="text-xs text-muted-foreground">
+                    {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+                  </span>
+                  <button onClick={signOut} className="text-destructive text-sm">Sair</button>
+                </div>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm gradient-warm text-primary-foreground font-medium"
+              >
+                Entrar / Criar Conta
+              </Link>
+            )}
           </div>
         </motion.div>
       )}
     </nav>
   );
 }
+
