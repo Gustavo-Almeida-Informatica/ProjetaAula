@@ -312,7 +312,10 @@ export default function Community() {
               <TrendingUp className="w-3.5 h-3.5" /> Populares
             </button>
             <button
-              onClick={() => setShowNew(!showNew)}
+              onClick={() => {
+                if (!requireAuth("criar um post")) return;
+                setShowNew(!showNew);
+              }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg gradient-warm text-primary-foreground text-xs font-medium warm-glow-sm"
             >
               {showNew ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
