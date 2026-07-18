@@ -221,6 +221,7 @@ export default function Community() {
   };
 
   const toggleLike = async (post: Post) => {
+    if (!requireAuth("curtir posts")) return;
     if (!user) return;
 
     // Optimistic update — counter is synced by database trigger
