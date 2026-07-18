@@ -30,6 +30,15 @@ type SortMode = "recent" | "popular";
 
 export default function Community() {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
+
+  const requireAuth = (action: string) => {
+    if (user) return true;
+    toast.info(`Faça login para ${action}.`, {
+      action: { label: "Entrar", onClick: () => navigate("/login") },
+    });
+    return false;
+  };
   const [posts, setPosts] = useState<Post[]>([]);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortMode>("recent");
