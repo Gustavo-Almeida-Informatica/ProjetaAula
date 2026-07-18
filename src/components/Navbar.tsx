@@ -65,29 +65,38 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          {profile && (
+          {profile ? (
+            <>
+              <Link
+                to="/perfil"
+                className="flex items-center gap-2 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
+              >
+                <Avatar className="w-6 h-6">
+                  {profile.avatar_url ? (
+                    <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
+                  ) : null}
+                  <AvatarFallback className="text-[10px] font-bold bg-primary/20 text-primary">
+                    {getInitials(profile.full_name || "U")}
+                  </AvatarFallback>
+                </Avatar>
+                {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+              </Link>
+              <button
+                onClick={signOut}
+                aria-label="Sair da conta"
+                className="text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </>
+          ) : (
             <Link
-              to="/perfil"
-              className="flex items-center gap-2 text-xs text-muted-foreground px-3 py-1.5 rounded-lg bg-secondary/50 hover:text-foreground transition-colors"
+              to="/login"
+              className="text-xs font-medium px-4 py-1.5 rounded-lg gradient-warm text-primary-foreground warm-glow-sm hover:scale-[1.02] transition-all"
             >
-              <Avatar className="w-6 h-6">
-                {profile.avatar_url ? (
-                  <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-                ) : null}
-                <AvatarFallback className="text-[10px] font-bold bg-primary/20 text-primary">
-                  {getInitials(profile.full_name || "U")}
-                </AvatarFallback>
-              </Avatar>
-              {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+              Entrar
             </Link>
           )}
-          <button
-            onClick={signOut}
-            aria-label="Sair da conta"
-            className="text-muted-foreground hover:text-destructive transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
         </div>
 
         {/* Mobile toggle */}
