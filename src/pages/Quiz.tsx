@@ -128,6 +128,7 @@ export default function Quiz() {
 
   // Prefetch dynamic questions in background when remaining < threshold
   useEffect(() => {
+    if (!user) return;
     const remaining = questions.length - currentIndex - 1;
     if (remaining > PREFETCH_THRESHOLD || fetchingRef.current) return;
     fetchingRef.current = true;
