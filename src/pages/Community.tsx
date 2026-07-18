@@ -282,6 +282,21 @@ export default function Community() {
           <p className="text-muted-foreground text-sm mt-3">Compartilhe conhecimento, tire dúvidas e conecte-se!</p>
         </motion.div>
 
+        {!user && (
+          <div className="glass p-4 mb-6 flex flex-wrap items-center gap-3 border border-primary/20">
+            <LogIn className="w-4 h-4 text-primary shrink-0" />
+            <p className="text-xs text-muted-foreground flex-1 min-w-[180px]">
+              Você pode ler os posts livremente. Para publicar, comentar ou curtir, faça login.
+            </p>
+            <Link
+              to="/login"
+              className="text-xs font-medium px-4 py-2 rounded-lg gradient-warm text-primary-foreground warm-glow-sm"
+            >
+              Entrar / Criar Conta
+            </Link>
+          </div>
+        )}
+
         {/* Search & Filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
