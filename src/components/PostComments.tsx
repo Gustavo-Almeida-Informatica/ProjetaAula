@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { Send, Trash2, MessageCircle } from "lucide-react";
+import { Send, Trash2, MessageCircle, LogIn } from "lucide-react";
 
 interface Comment {
   id: string;
