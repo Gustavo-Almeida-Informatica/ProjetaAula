@@ -131,36 +131,47 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="border-t border-border/50 pt-2 mt-2 space-y-1">
-            <Link
-              to="/perfil"
-              onClick={() => setOpen(false)}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm ${
-                pathname === "/perfil" ? "text-primary bg-primary/8" : "text-muted-foreground"
-              }`}
-            >
-              {profile?.avatar_url ? (
-                <Avatar className="w-5 h-5">
-                  <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
-                  <AvatarFallback className="text-[8px]">
-                    {getInitials(profile?.full_name || "U")}
-                  </AvatarFallback>
-                </Avatar>
-              ) : (
-                <UserCircle className="w-4 h-4" />
-              )}
-              Meu Perfil
-            </Link>
-            <div className="flex items-center justify-between px-3">
-              {profile && (
-                <span className="text-xs text-muted-foreground">
-                  {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
-                </span>
-              )}
-              <button onClick={signOut} className="text-destructive text-sm">Sair</button>
-            </div>
+            {profile ? (
+              <>
+                <Link
+                  to="/perfil"
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm ${
+                    pathname === "/perfil" ? "text-primary bg-primary/8" : "text-muted-foreground"
+                  }`}
+                >
+                  {profile.avatar_url ? (
+                    <Avatar className="w-5 h-5">
+                      <AvatarImage src={profile.avatar_url} alt={profile.full_name} />
+                      <AvatarFallback className="text-[8px]">
+                        {getInitials(profile?.full_name || "U")}
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <UserCircle className="w-4 h-4" />
+                  )}
+                  Meu Perfil
+                </Link>
+                <div className="flex items-center justify-between px-3">
+                  <span className="text-xs text-muted-foreground">
+                    {profile.role === "professor" ? "👨‍🏫" : "🎓"} {profile.full_name}
+                  </span>
+                  <button onClick={signOut} className="text-destructive text-sm">Sair</button>
+                </div>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm gradient-warm text-primary-foreground font-medium"
+              >
+                Entrar / Criar Conta
+              </Link>
+            )}
           </div>
         </motion.div>
       )}
     </nav>
   );
 }
+
