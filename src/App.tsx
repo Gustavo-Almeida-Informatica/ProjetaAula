@@ -18,6 +18,15 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Navbar />
+      <main>{children}</main>
+    </>
+  );
+}
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
   if (loading) {
@@ -28,12 +37,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
   if (!session) return <Navigate to="/login" replace />;
-  return (
-    <>
-      <Navbar />
-      <main>{children}</main>
-    </>
-  );
+  return <AppLayout>{children}</AppLayout>;
 }
 
 function AppRoutes() {
@@ -50,14 +54,14 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={session ? <Navigate to="/" replace /> : <Login />} />
-      <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-      <Route path="/historia" element={<ProtectedRoute><History /></ProtectedRoute>} />
-      <Route path="/hardware" element={<ProtectedRoute><Hardware /></ProtectedRoute>} />
+      <Route path="/" element={<AppLayout><Index /></AppLayout>} />
+      <Route path="/historia" element={<AppLayout><History /></AppLayout>} />
+      <Route path="/hardware" element={<AppLayout><Hardware /></AppLayout>} />
       <Route path="/cabos" element={<Navigate to="/galeria" replace />} />
-      <Route path="/software" element={<ProtectedRoute><Software /></ProtectedRoute>} />
-      <Route path="/galeria" element={<ProtectedRoute><Gallery /></ProtectedRoute>} />
-      <Route path="/quiz" element={<ProtectedRoute><Quiz /></ProtectedRoute>} />
-      <Route path="/comunidade" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+      <Route path="/software" element={<AppLayout><Software /></AppLayout>} />
+      <Route path="/galeria" element={<AppLayout><Gallery /></AppLayout>} />
+      <Route path="/quiz" element={<AppLayout><Quiz /></AppLayout>} />
+      <Route path="/comunidade" element={<AppLayout><Community /></AppLayout>} />
       <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
