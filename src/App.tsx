@@ -12,6 +12,8 @@ import Gallery from "./pages/Gallery";
 import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
 import History from "./pages/History";
+import About from "./pages/About";
+
 
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -56,6 +58,7 @@ function AppRoutes() {
       <Route path="/login" element={session ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/" element={<AppLayout><Index /></AppLayout>} />
       <Route path="/historia" element={<AppLayout><History /></AppLayout>} />
+      <Route path="/sobre" element={<AppLayout><About /></AppLayout>} />
       <Route path="/hardware" element={<AppLayout><Hardware /></AppLayout>} />
       <Route path="/cabos" element={<Navigate to="/galeria" replace />} />
       <Route path="/software" element={<AppLayout><Software /></AppLayout>} />
