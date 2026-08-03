@@ -57,7 +57,7 @@ export default function KeyboardPosture({ layout }: { layout: KeyboardLayout }) 
     <div className="space-y-4">
       <div className="overflow-x-auto">
         <svg
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`-50 0 ${width + 60} ${height}`}
           className="w-full min-w-[560px]"
           role="img"
           aria-label={`Ilustração do teclado ${layout.name} com a posição correta dos dedos na home row`}
