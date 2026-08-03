@@ -124,6 +124,7 @@ export type Database = {
           created_at: string
           full_name: string
           id: string
+          keyboard_layout: string | null
           phone: string | null
           role: Database["public"]["Enums"]["user_role"]
         }
@@ -133,6 +134,7 @@ export type Database = {
           created_at?: string
           full_name?: string
           id: string
+          keyboard_layout?: string | null
           phone?: string | null
           role?: Database["public"]["Enums"]["user_role"]
         }
@@ -142,6 +144,7 @@ export type Database = {
           created_at?: string
           full_name?: string
           id?: string
+          keyboard_layout?: string | null
           phone?: string | null
           role?: Database["public"]["Enums"]["user_role"]
         }
@@ -171,6 +174,42 @@ export type Database = {
           user_id?: string
           user_name?: string
           user_role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
+      typing_scores: {
+        Row: {
+          accuracy: number
+          correct_words: number
+          created_at: string
+          id: string
+          points: number
+          user_id: string
+          user_name: string
+          wpm: number
+          wrong_words: number
+        }
+        Insert: {
+          accuracy?: number
+          correct_words?: number
+          created_at?: string
+          id?: string
+          points?: number
+          user_id: string
+          user_name?: string
+          wpm?: number
+          wrong_words?: number
+        }
+        Update: {
+          accuracy?: number
+          correct_words?: number
+          created_at?: string
+          id?: string
+          points?: number
+          user_id?: string
+          user_name?: string
+          wpm?: number
+          wrong_words?: number
         }
         Relationships: []
       }
