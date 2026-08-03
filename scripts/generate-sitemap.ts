@@ -19,7 +19,10 @@ const entries: SitemapEntry[] = [
   { path: "/galeria", changefreq: "weekly", priority: "0.8" },
   { path: "/quiz", changefreq: "weekly", priority: "0.9" },
   { path: "/comunidade", changefreq: "daily", priority: "0.8" },
+  { path: "/digitacao", changefreq: "weekly", priority: "0.8" },
+  { path: "/sobre", changefreq: "monthly", priority: "0.7" },
   { path: "/perfil", changefreq: "monthly", priority: "0.6" },
+
 ]
 
 function generateSitemap(entries: SitemapEntry[]) {
