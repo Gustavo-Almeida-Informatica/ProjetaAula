@@ -13,6 +13,8 @@ import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
 import History from "./pages/History";
 import About from "./pages/About";
+import Typing from "./pages/Typing";
+
 
 
 import Profile from "./pages/Profile";
