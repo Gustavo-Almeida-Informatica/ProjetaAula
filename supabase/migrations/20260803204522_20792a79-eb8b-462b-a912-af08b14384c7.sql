@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.set_typing_score_identity() FROM PUBLIC, anon, authenticated;

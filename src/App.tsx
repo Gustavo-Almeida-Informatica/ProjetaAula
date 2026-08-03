@@ -13,6 +13,8 @@ import Quiz from "./pages/Quiz";
 import Community from "./pages/Community";
 import History from "./pages/History";
 import About from "./pages/About";
+import Typing from "./pages/Typing";
+
 
 
 import Profile from "./pages/Profile";
@@ -65,7 +67,9 @@ function AppRoutes() {
       <Route path="/galeria" element={<AppLayout><Gallery /></AppLayout>} />
       <Route path="/quiz" element={<AppLayout><Quiz /></AppLayout>} />
       <Route path="/comunidade" element={<AppLayout><Community /></AppLayout>} />
+      <Route path="/digitacao" element={<AppLayout><Typing /></AppLayout>} />
       <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
