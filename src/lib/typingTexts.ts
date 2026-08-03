@@ -127,18 +127,15 @@ const RAW_TEXTS: TypingText[] = [
 ];
 
 /**
- * Todos os textos são normalizados para o MESMO número de caracteres,
+ * Todos os textos sao normalizados para o MESMO numero de palavras
+ * (e, com isso, praticamente o mesmo numero de caracteres),
  * garantindo que o ranking compare desempenhos de forma justa.
  */
 function normalizeLength(texts: TypingText[]): TypingText[] {
-  const target = Math.min(...texts.map((t) => t.content.length));
-  return texts.map((t) => {
-    if (t.content.length === target) return t;
-    let cut = t.content.slice(0, target);
-    // corta na última palavra completa e completa com pontuação até o alvo
-    const lastSpace = cut.lastIndexOf(" ");
-    cut = cut.slice(0, lastSpace).replace(/[\s,;:.]+$/, "");
-    cut = cut + ".".padEnd(target - cut.length, ".");
+  const words = texts.map((t) => t.content.trim().split(/\s+/));
+  const target = Math.min(...words.map((w) => w.length));
+  return texts.map((t, i) => {
+    const cut = words[i].slice(0, target).join(" ").replace(/[\s,;:.]+$/, "") + ".";
     return { ...t, content: cut };
   });
 }
