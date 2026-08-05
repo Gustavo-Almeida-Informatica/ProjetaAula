@@ -500,7 +500,7 @@ export default function Community() {
               animate={{ opacity: 1, y: 0 }}
               className="glass p-4 sm:p-5 hover:border-primary/15 transition-all"
             >
-              <div className="flex gap-3">
+              <div className="flex items-start gap-3">
                 <ProfileHoverCard
                   profile={profilesMap.get(post.user_id)}
                   fallbackName={post.user_name || "Anônimo"}
