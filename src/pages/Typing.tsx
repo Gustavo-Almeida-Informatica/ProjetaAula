@@ -28,7 +28,7 @@ interface RankRow {
 const LS_KEY = "projeta-aula:keyboard-layout";
 
 export default function Typing() {
-  const { user, profile } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const [screen, setScreen] = useState<Screen>("layout");
   const [layoutId, setLayoutId] = useState<KeyboardLayoutId | null>(null);
   const layout = getLayout(layoutId);
