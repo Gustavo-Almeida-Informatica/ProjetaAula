@@ -54,6 +54,9 @@ export default function Community() {
   const [loading, setLoading] = useState(false);
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [showTagSuggest, setShowTagSuggest] = useState(false);
+  const [profilesMap, setProfilesMap] = useState<Map<string, PublicProfile>>(new Map());
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  const viewedRef = useRef<Set<string>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchPosts = async () => {
@@ -65,17 +68,49 @@ export default function Community() {
     const { data } = await query;
     if (!data) return;
 
+    let list = data as Post[];
     if (user) {
       const { data: likes } = await supabase
         .from("post_likes")
         .select("post_id")
         .eq("user_id", user.id);
       const likedIds = new Set(likes?.map((l) => l.post_id));
-      setPosts((data as Post[]).map((p) => ({ ...p, liked_by_me: likedIds.has(p.id) })));
-    } else {
-      setPosts(data as Post[]);
+      list = list.map((p) => ({ ...p, liked_by_me: likedIds.has(p.id) }));
+    }
+    setPosts(list);
+
+    // Perfis públicos dos autores (nome, foto, cidade) para o card de hover
+    setProfilesMap(await fetchPublicProfiles(list.map((p) => p.user_id)));
+
+    // Contagem de comentários por post
+    const { data: comments } = await supabase.from("post_comments").select("post_id");
+    const counts: Record<string, number> = {};
+    (comments ?? []).forEach((c: { post_id: string }) => {
+      counts[c.post_id] = (counts[c.post_id] || 0) + 1;
+    });
+    setCommentCounts(counts);
+
+    // Visualizações: conta no máximo uma vez por post nesta sessão
+    const seenKey = "projeta-aula:viewed-posts";
+    const seen = new Set<string>(JSON.parse(sessionStorage.getItem(seenKey) || "[]"));
+    const fresh = list.filter((p) => !seen.has(p.id) && !viewedRef.current.has(p.id));
+    if (fresh.length > 0) {
+      fresh.forEach((p) => {
+        seen.add(p.id);
+        viewedRef.current.add(p.id);
+      });
+      sessionStorage.setItem(seenKey, JSON.stringify([...seen]));
+      await Promise.all(
+        fresh.map((p) => (supabase.rpc as any)("increment_post_view", { _post_id: p.id }))
+      );
+      setPosts((prev) =>
+        prev.map((p) =>
+          fresh.some((f) => f.id === p.id) ? { ...p, views_count: (p.views_count ?? 0) + 1 } : p
+        )
+      );
     }
   };
+
 
   useEffect(() => {
     fetchPosts();
