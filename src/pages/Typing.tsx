@@ -379,15 +379,20 @@ function TestScreen({
         {words.map((w, i) => {
           const isCurrent = i === currentIndex && !finished;
           const typedWord = completed[i];
+          // Palavra ainda não digitada => "pending" (nunca vermelha).
           const state =
             typedWord === undefined ? "pending" : typedWord === w ? "ok" : "bad";
+          // Na palavra atual, avisa só se o que já foi digitado não bate com o início dela.
+          const currentMismatch = isCurrent && currentWord.length > 0 && !w.startsWith(currentWord);
           return (
             <span
               key={i}
               ref={isCurrent ? activeRef : undefined}
               className={`rounded-sm ${
                 isCurrent
-                  ? "bg-yellow-400/30 text-foreground"
+                  ? currentMismatch
+                    ? "bg-red-500/25 text-red-300"
+                    : "bg-yellow-400/30 text-foreground"
                   : state === "ok"
                   ? "text-green-400"
                   : state === "bad"
@@ -406,7 +411,11 @@ function TestScreen({
         ref={inputRef}
         value={typed}
         onChange={(e) => handleChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") e.preventDefault();
+        }}
         disabled={finished}
+
         rows={3}
         autoFocus
         spellCheck={false}
