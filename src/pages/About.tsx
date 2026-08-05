@@ -217,11 +217,35 @@ export default function About() {
               className="glass p-6 flex flex-col items-center text-center"
             >
               <Avatar className="w-20 h-20 mb-4 border-2 border-primary/20">
+                {dev.photo && <AvatarImage src={dev.photo} alt={`Foto de ${dev.name}`} className="object-cover" />}
                 <AvatarFallback className="bg-secondary text-primary text-xl font-display font-bold">
                   {dev.initials}
                 </AvatarFallback>
               </Avatar>
               <h3 className="font-display text-sm font-bold text-foreground">{dev.name}</h3>
+              <div className="mt-3 space-y-1.5 w-full">
+                {dev.instagram && (
+                  <a
+                    href={`https://www.instagram.com/${dev.instagram.replace("@", "")}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground hover:text-primary transition-colors break-all"
+                  >
+                    <Instagram className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate">{dev.instagram}</span>
+                  </a>
+                )}
+                {dev.email && (
+                  <a
+                    href={`mailto:${dev.email}`}
+                    className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <Mail className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate">{dev.email}</span>
+                  </a>
+                )}
+              </div>
+
             </motion.div>
           ))}
         </div>
