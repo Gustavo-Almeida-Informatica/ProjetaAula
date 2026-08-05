@@ -8,9 +8,10 @@ import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import {
   Search, Hash, TrendingUp, Clock, Heart, MessageSquare, Plus, X, Send,
-  Image as ImageIcon, Trash2, LogIn,
+  Image as ImageIcon, Trash2, LogIn, BarChart2,
 } from "lucide-react";
 import PostComments from "@/components/PostComments";
+import ProfileHoverCard, { fetchPublicProfiles, PublicProfile } from "@/components/ProfileHoverCard";
 
 interface Post {
   id: string;
@@ -21,10 +22,12 @@ interface Post {
   content: string;
   hashtags: string[];
   likes_count: number;
+  views_count?: number;
   created_at: string;
   image_url?: string | null;
   liked_by_me?: boolean;
 }
+
 
 type SortMode = "recent" | "popular";
 
