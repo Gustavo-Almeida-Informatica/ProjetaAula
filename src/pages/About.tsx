@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { Seo } from "@/components/Seo";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { GraduationCap, UserCircle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { GraduationCap, UserCircle, Instagram, Mail } from "lucide-react";
+import gustavoImg from "@/assets/gustavo.jpg";
+import maxImg from "@/assets/max.jpg";
+import harryImg from "@/assets/harry.jpg";
+import joseImg from "@/assets/jose.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -25,12 +29,47 @@ const orientationTeam = [
   },
 ];
 
-const developers = [
-  { name: "Gustavo", initials: "GU" },
-  { name: "Harry", initials: "HA" },
-  { name: "José Antônio", initials: "JA" },
-  { name: "Max", initials: "MA" },
+/**
+ * Dados da equipe — edite apenas aqui (foto, Instagram e e-mail).
+ * Deixe `instagram` ou `email` como undefined para não exibir o item no card.
+ */
+interface Developer {
+  name: string;
+  initials: string;
+  photo?: string;
+  instagram?: string;
+  email?: string;
+}
+
+const developers: Developer[] = [
+  {
+    name: "Gustavo",
+    initials: "GU",
+    photo: gustavoImg,
+    instagram: "@gustavo.almeida.ofc",
+    email: "gustavoalmeidainformatica2025@gmail.com",
+  },
+  {
+    name: "Harry",
+    initials: "HA",
+    photo: harryImg,
+    instagram: "@harry_potter_457557",
+  },
+  {
+    name: "José Antônio",
+    initials: "JA",
+    photo: joseImg,
+    instagram: "@joseantoniofilho365",
+  },
+  {
+    name: "Max",
+    initials: "MA",
+    photo: maxImg,
+    instagram: "@max_silveira_2023",
+    email: "maxsilveira248@gmail.com",
+  },
 ];
+
 
 export default function About() {
   return (
