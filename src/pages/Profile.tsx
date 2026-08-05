@@ -6,8 +6,18 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { User, Mail, Phone, MapPin, Save, LogOut, Camera } from "lucide-react";
+import { User, Mail, Phone, MapPin, Save, LogOut, Camera, Heart, MessageSquare } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
+
+interface MyPost {
+  id: string;
+  title: string;
+  content: string;
+  image_url: string | null;
+  likes_count: number;
+  created_at: string;
+}
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -127,6 +137,28 @@ export default function Profile() {
 
   const inputClass =
     "w-full pl-10 pr-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring";
+
+  // Postagens do usuário na comunidade
+  const [myPosts, setMyPosts] = useState<MyPost[]>([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("community_posts")
+        .select("id, title, content, image_url, likes_count, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      if (!active) return;
+      setMyPosts((data as MyPost[]) ?? []);
+      setPostsLoading(false);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
   return (
     <div className="min-h-screen pt-16 pb-12">
@@ -253,6 +285,66 @@ export default function Profile() {
             Sair da Conta
           </button>
         </motion.div>
+
+        {/* Minhas postagens na comunidade */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="glass p-6 mt-6"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-display text-base font-bold text-foreground flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 text-primary" />
+              Minhas Postagens
+            </h2>
+            <Link to="/comunidade" className="text-xs text-primary hover:underline">
+              Ir para a Comunidade
+            </Link>
+          </div>
+
+          {postsLoading ? (
+            <p className="text-sm text-muted-foreground">Carregando...</p>
+          ) : myPosts.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Você ainda não publicou nada na comunidade.
+            </p>
+          ) : (
+            <ul className="space-y-3">
+              {myPosts.map((p) => (
+                <li
+                  key={p.id}
+                  className="p-4 rounded-xl bg-secondary/30 border border-border/50"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-sm font-semibold text-foreground">{p.title}</h3>
+                    <time
+                      dateTime={p.created_at}
+                      className="text-[11px] text-muted-foreground shrink-0"
+                    >
+                      {new Date(p.created_at).toLocaleDateString("pt-BR")}
+                    </time>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-3 whitespace-pre-wrap">
+                    {p.content}
+                  </p>
+                  {p.image_url && (
+                    <img
+                      src={p.image_url}
+                      alt={p.title}
+                      loading="lazy"
+                      className="mt-3 w-full aspect-video object-cover rounded-lg border border-border/30"
+                    />
+                  )}
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                    <Heart className="w-3.5 h-3.5" />
+                    {p.likes_count}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </motion.section>
       </div>
     </div>
   );

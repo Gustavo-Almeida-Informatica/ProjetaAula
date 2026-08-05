@@ -26,6 +26,7 @@ export type Database = {
           user_id: string
           user_name: string
           user_role: Database["public"]["Enums"]["user_role"]
+          views_count: number
         }
         Insert: {
           content: string
@@ -38,6 +39,7 @@ export type Database = {
           user_id: string
           user_name?: string
           user_role?: Database["public"]["Enums"]["user_role"]
+          views_count?: number
         }
         Update: {
           content?: string
@@ -50,6 +52,7 @@ export type Database = {
           user_id?: string
           user_name?: string
           user_role?: Database["public"]["Enums"]["user_role"]
+          views_count?: number
         }
         Relationships: []
       }
@@ -218,7 +221,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_public_profiles: {
+        Args: { _ids: string[] }
+        Returns: {
+          avatar_url: string
+          city: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+        }[]
+      }
+      increment_post_view: { Args: { _post_id: string }; Returns: undefined }
     }
     Enums: {
       user_role: "aluno" | "professor"

@@ -28,7 +28,7 @@ interface RankRow {
 const LS_KEY = "projeta-aula:keyboard-layout";
 
 export default function Typing() {
-  const { user, profile } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   const [screen, setScreen] = useState<Screen>("layout");
   const [layoutId, setLayoutId] = useState<KeyboardLayoutId | null>(null);
   const layout = getLayout(layoutId);
@@ -88,25 +88,53 @@ export default function Typing() {
           </h1>
         </div>
 
-        {screen === "layout" && <LayoutScreen onChoose={chooseLayout} />}
-        {screen === "posture" && (
-          <PostureScreen
-            layoutName={layout.name}
-            layout={layout}
-            onStart={() => setScreen("test")}
-            onChangeLayout={() => setScreen("layout")}
-          />
+        {authLoading ? (
+          <div className="glass p-8 text-center text-sm text-muted-foreground">Carregando…</div>
+        ) : !user ? (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass p-8 text-center space-y-4"
+          >
+            <LogIn className="w-8 h-8 text-primary mx-auto" />
+            <h2 className="font-display text-xl font-bold text-foreground">
+              Entre para praticar digitação
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              O teste de digitação salva seu layout de teclado e seus resultados no ranking, por isso
+              é necessário estar logado.
+            </p>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg gradient-warm text-primary-foreground text-sm font-semibold warm-glow-sm"
+            >
+              <LogIn className="w-4 h-4" /> Entrar / Criar Conta
+            </Link>
+          </motion.div>
+        ) : (
+          <>
+            {screen === "layout" && <LayoutScreen onChoose={chooseLayout} />}
+            {screen === "posture" && (
+              <PostureScreen
+                layoutName={layout.name}
+                layout={layout}
+                onStart={() => setScreen("test")}
+                onChangeLayout={() => setScreen("layout")}
+              />
+            )}
+            {screen === "test" && (
+              <TestScreen
+                supportsAccents={layout.supportsAccents}
+                userId={user?.id ?? null}
+                userName={profile?.full_name ?? ""}
+                onBack={() => setScreen("posture")}
+                onRanking={() => setScreen("ranking")}
+              />
+            )}
+            {screen === "ranking" && <RankingScreen onBack={() => setScreen("posture")} />}
+          </>
         )}
-        {screen === "test" && (
-          <TestScreen
-            supportsAccents={layout.supportsAccents}
-            userId={user?.id ?? null}
-            userName={profile?.full_name ?? ""}
-            onBack={() => setScreen("posture")}
-            onRanking={() => setScreen("ranking")}
-          />
-        )}
-        {screen === "ranking" && <RankingScreen onBack={() => setScreen("posture")} />}
+
       </section>
     </div>
   );
@@ -229,10 +257,18 @@ function TestScreen({
 
   const words = useMemo(() => text.content.split(" "), [text]);
 
-  // tokens completos = todos menos o último (o último é a palavra em digitação)
-  const typedTokens = typed.split(" ");
-  const completed = typedTokens.slice(0, -1);
-  const currentIndex = completed.length;
+  // Estado derivado direto do texto digitado (sempre sincronizado, sem atraso):
+  // - `completed` são as palavras já finalizadas (seguidas de espaço)
+  // - `currentWord` é a palavra sendo digitada agora (nunca marcada como errada)
+  const { completed, currentWord, currentIndex } = useMemo(() => {
+    const tokens = typed.split(" ");
+    const done = tokens.slice(0, -1);
+    return {
+      completed: done,
+      currentWord: tokens[tokens.length - 1] ?? "",
+      currentIndex: done.length,
+    };
+  }, [typed]);
 
   useEffect(() => {
     if (!started || finished) return;
@@ -255,14 +291,21 @@ function TestScreen({
 
   const handleChange = (value: string) => {
     if (finished) return;
-    if (!started && value.length > 0) setStarted(true);
-    setTyped(value);
-    const done = value.split(" ").slice(0, -1).length;
-    if (done >= words.length) setFinished(true);
+    // Normaliza quebras de linha e espaços repetidos para que cada palavra
+    // digitada continue alinhada com a palavra correspondente do texto alvo.
+    const clean = value.replace(/[\r\n\t]+/g, " ").replace(/ {2,}/g, " ").replace(/^ +/, "");
+    if (!started && clean.length > 0) setStarted(true);
+    setTyped(clean);
+    if (clean.split(" ").slice(0, -1).length >= words.length) setFinished(true);
   };
 
   const stats = useMemo(() => {
-    const evaluated = finished ? typed.trim().split(" ").filter(Boolean) : completed;
+    // No fim do teste conta também a última palavra (mesmo sem espaço final).
+    const evaluated = finished
+      ? typed.trim().length
+        ? typed.trim().split(" ")
+        : []
+      : completed;
     let correct = 0;
     let wrong = 0;
     evaluated.forEach((w, i) => {
@@ -276,6 +319,7 @@ function TestScreen({
     const accuracy = total ? Math.round((correct / total) * 100) : 0;
     return { correct, wrong, wpm, accuracy, points: Math.round((wpm * accuracy) / 100) };
   }, [finished, typed, completed, words, remaining, text.estimatedSeconds]);
+
 
   const saveScore = useCallback(async () => {
     if (!userId || saved) return;
@@ -335,15 +379,20 @@ function TestScreen({
         {words.map((w, i) => {
           const isCurrent = i === currentIndex && !finished;
           const typedWord = completed[i];
+          // Palavra ainda não digitada => "pending" (nunca vermelha).
           const state =
             typedWord === undefined ? "pending" : typedWord === w ? "ok" : "bad";
+          // Na palavra atual, avisa só se o que já foi digitado não bate com o início dela.
+          const currentMismatch = isCurrent && currentWord.length > 0 && !w.startsWith(currentWord);
           return (
             <span
               key={i}
               ref={isCurrent ? activeRef : undefined}
               className={`rounded-sm ${
                 isCurrent
-                  ? "bg-yellow-400/30 text-foreground"
+                  ? currentMismatch
+                    ? "bg-red-500/25 text-red-300"
+                    : "bg-yellow-400/30 text-foreground"
                   : state === "ok"
                   ? "text-green-400"
                   : state === "bad"
@@ -362,7 +411,11 @@ function TestScreen({
         ref={inputRef}
         value={typed}
         onChange={(e) => handleChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") e.preventDefault();
+        }}
         disabled={finished}
+
         rows={3}
         autoFocus
         spellCheck={false}

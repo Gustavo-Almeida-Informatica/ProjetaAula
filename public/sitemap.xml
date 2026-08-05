@@ -41,6 +41,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://projetoaula.lovable.app/digitacao</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://projetoaula.lovable.app/sobre</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://projetoaula.lovable.app/perfil</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

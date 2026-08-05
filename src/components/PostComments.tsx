@@ -14,12 +14,24 @@ interface Comment {
   created_at: string;
 }
 
-export default function PostComments({ postId }: { postId: string }) {
+export default function PostComments({
+  postId,
+  initialCount = 0,
+  renderTrigger = false,
+}: {
+  postId: string;
+  /** Contagem já conhecida (evita esperar abrir para mostrar o número) */
+  initialCount?: number;
+  /** Usa o visual de barra de ações estilo X */
+  renderTrigger?: boolean;
+}) {
   const { user, profile } = useAuth();
   const [comments, setComments] = useState<Comment[]>([]);
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const count = loaded ? comments.length : initialCount;
 
   const fetchComments = async () => {
     const { data } = await supabase
@@ -27,7 +39,10 @@ export default function PostComments({ postId }: { postId: string }) {
       .select("*")
       .eq("post_id", postId)
       .order("created_at", { ascending: true });
-    if (data) setComments(data as Comment[]);
+    if (data) {
+      setComments(data as Comment[]);
+      setLoaded(true);
+    }
   };
 
   useEffect(() => {
@@ -71,11 +86,17 @@ export default function PostComments({ postId }: { postId: string }) {
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+        aria-label={open ? "Fechar comentários" : "Ver comentários"}
+        className={
+          renderTrigger
+            ? `flex items-center gap-1.5 text-xs rounded-full px-2 py-1 transition-colors ${
+                open ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+              }`
+            : "flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+        }
       >
-        <MessageCircle className="w-3.5 h-3.5" />
-        {open ? "Fechar" : "Comentários"}
-        {!open && comments.length > 0 && ` (${comments.length})`}
+        <MessageCircle className={renderTrigger ? "w-4 h-4" : "w-3.5 h-3.5"} />
+        {renderTrigger ? count : `${open ? "Fechar" : "Comentários"}${!open && count > 0 ? ` (${count})` : ""}`}
       </button>
 
       {open && (

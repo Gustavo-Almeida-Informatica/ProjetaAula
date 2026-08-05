@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { Seo } from "@/components/Seo";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { GraduationCap, UserCircle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { GraduationCap, UserCircle, Instagram, Mail } from "lucide-react";
+import gustavoImg from "@/assets/gustavo.jpg";
+import maxImg from "@/assets/max.jpg";
+import harryImg from "@/assets/harry.jpg";
+import joseImg from "@/assets/jose.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -25,12 +29,47 @@ const orientationTeam = [
   },
 ];
 
-const developers = [
-  { name: "Gustavo", initials: "GU" },
-  { name: "Harry", initials: "HA" },
-  { name: "José Antônio", initials: "JA" },
-  { name: "Max", initials: "MA" },
+/**
+ * Dados da equipe — edite apenas aqui (foto, Instagram e e-mail).
+ * Deixe `instagram` ou `email` como undefined para não exibir o item no card.
+ */
+interface Developer {
+  name: string;
+  initials: string;
+  photo?: string;
+  instagram?: string;
+  email?: string;
+}
+
+const developers: Developer[] = [
+  {
+    name: "Gustavo",
+    initials: "GU",
+    photo: gustavoImg,
+    instagram: "@gustavo.almeida.ofc",
+    email: "gustavoalmeidainformatica2025@gmail.com",
+  },
+  {
+    name: "Harry",
+    initials: "HA",
+    photo: harryImg,
+    instagram: "@harry_potter_457557",
+  },
+  {
+    name: "José Antônio",
+    initials: "JA",
+    photo: joseImg,
+    instagram: "@joseantoniofilho365",
+  },
+  {
+    name: "Max",
+    initials: "MA",
+    photo: maxImg,
+    instagram: "@max_silveira_2023",
+    email: "maxsilveira248@gmail.com",
+  },
 ];
+
 
 export default function About() {
   return (
@@ -178,11 +217,35 @@ export default function About() {
               className="glass p-6 flex flex-col items-center text-center"
             >
               <Avatar className="w-20 h-20 mb-4 border-2 border-primary/20">
+                {dev.photo && <AvatarImage src={dev.photo} alt={`Foto de ${dev.name}`} className="object-cover" />}
                 <AvatarFallback className="bg-secondary text-primary text-xl font-display font-bold">
                   {dev.initials}
                 </AvatarFallback>
               </Avatar>
               <h3 className="font-display text-sm font-bold text-foreground">{dev.name}</h3>
+              <div className="mt-3 space-y-1.5 w-full">
+                {dev.instagram && (
+                  <a
+                    href={`https://www.instagram.com/${dev.instagram.replace("@", "")}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground hover:text-primary transition-colors break-all"
+                  >
+                    <Instagram className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate">{dev.instagram}</span>
+                  </a>
+                )}
+                {dev.email && (
+                  <a
+                    href={`mailto:${dev.email}`}
+                    className="flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <Mail className="w-3.5 h-3.5 shrink-0" />
+                    <span className="truncate">{dev.email}</span>
+                  </a>
+                )}
+              </div>
+
             </motion.div>
           ))}
         </div>
