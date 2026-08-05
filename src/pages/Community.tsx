@@ -456,75 +456,113 @@ export default function Community() {
             </div>
           )}
           {filteredPosts.map((post) => (
-            <motion.div
+            <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass p-5 hover:border-primary/15 transition-all"
+              className="glass p-4 sm:p-5 hover:border-primary/15 transition-all"
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">{post.user_name || "Anônimo"}</span>
-                  <span className="text-xs">{post.user_role === "professor" ? "👨‍🏫" : "🎓"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">{timeAgo(post.created_at)}</span>
-                  {user?.id === post.user_id && (
+              <div className="flex gap-3">
+                <ProfileHoverCard
+                  profile={profilesMap.get(post.user_id)}
+                  fallbackName={post.user_name || "Anônimo"}
+                />
+
+                <div className="flex-1 min-w-0">
+                  {/* Cabeçalho: nome · papel · data */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                      <span className="text-sm font-semibold text-foreground truncate">
+                        {post.user_name || "Anônimo"}
+                      </span>
+                      <span className="text-xs">{post.user_role === "professor" ? "👨‍🏫" : "🎓"}</span>
+                      <span className="text-xs text-muted-foreground">·</span>
+                      <time
+                        dateTime={post.created_at}
+                        title={new Date(post.created_at).toLocaleString("pt-BR")}
+                        className="text-xs text-muted-foreground"
+                      >
+                        {timeAgo(post.created_at)}
+                      </time>
+                    </div>
+                    {user?.id === post.user_id && (
+                      <button
+                        onClick={() => handleDelete(post)}
+                        className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shrink-0"
+                        aria-label="Deletar post"
+                        title="Deletar post"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Conteúdo */}
+                  <h3 className="text-sm font-bold text-foreground mt-1">{post.title}</h3>
+                  <p className="text-sm text-muted-foreground whitespace-pre-wrap mt-0.5">{post.content}</p>
+
+                  {post.image_url && (
                     <button
-                      onClick={() => handleDelete(post)}
-                      className="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                      aria-label="Deletar post"
-                      title="Deletar post"
+                      type="button"
+                      onClick={() => setLightbox(post.image_url!)}
+                      className="mt-3 block w-full rounded-2xl overflow-hidden border border-border/30 group focus:outline-none focus:ring-2 focus:ring-ring"
+                      aria-label="Ver imagem em tela cheia"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <img
+                        src={post.image_url}
+                        alt={post.title}
+                        loading="lazy"
+                        className="w-full aspect-video object-cover group-hover:scale-[1.02] transition-transform"
+                      />
                     </button>
                   )}
-                </div>
-              </div>
-              <h3 className="text-sm font-bold text-foreground mb-1">{post.title}</h3>
-              <p className="text-xs text-muted-foreground whitespace-pre-wrap">{post.content}</p>
-              {post.image_url && (
-                <button
-                  type="button"
-                  onClick={() => setLightbox(post.image_url!)}
-                  className="mt-3 block w-full rounded-lg overflow-hidden border border-border/30 group focus:outline-none focus:ring-2 focus:ring-ring"
-                  aria-label="Ver imagem em tela cheia"
-                >
-                  <img
-                    src={post.image_url}
-                    alt={post.title}
-                    loading="lazy"
-                    className="w-full aspect-video object-cover group-hover:scale-[1.02] transition-transform"
-                  />
-                </button>
-              )}
-              {post.hashtags && post.hashtags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {post.hashtags.map((tag) => (
-                    <span
-                      key={tag}
-                      onClick={() => setSearch(`#${tag}`)}
-                      className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full cursor-pointer hover:bg-primary/20 transition-colors"
+
+                  {post.hashtags && post.hashtags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {post.hashtags.map((tag) => (
+                        <span
+                          key={tag}
+                          onClick={() => setSearch(`#${tag}`)}
+                          className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full cursor-pointer hover:bg-primary/20 transition-colors"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Barra de ações estilo X */}
+                  <div className="flex items-center justify-between max-w-sm mt-3 pt-2 border-t border-border/30">
+                    <PostComments
+                      postId={post.id}
+                      initialCount={commentCounts[post.id] ?? 0}
+                      renderTrigger
+                    />
+                    <button
+                      onClick={() => toggleLike(post)}
+                      aria-label={post.liked_by_me ? "Remover curtida" : "Curtir post"}
+                      className={`flex items-center gap-1.5 text-xs rounded-full px-2 py-1 transition-colors ${
+                        post.liked_by_me
+                          ? "text-pink-500 bg-pink-500/10"
+                          : "text-muted-foreground hover:text-pink-500 hover:bg-pink-500/10"
+                      }`}
                     >
-                      #{tag}
+                      <Heart className={`w-4 h-4 ${post.liked_by_me ? "fill-current" : ""}`} />
+                      {post.likes_count}
+                    </button>
+                    <span
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground px-2 py-1"
+                      title="Visualizações"
+                    >
+                      <BarChart2 className="w-4 h-4" />
+                      {post.views_count ?? 0}
                     </span>
-                  ))}
+                  </div>
                 </div>
-              )}
-              <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/30">
-                <button
-                  onClick={() => toggleLike(post)}
-                  className={`flex items-center gap-1 text-xs transition-colors ${
-                    post.liked_by_me ? "text-pink-500" : "text-muted-foreground hover:text-pink-500"
-                  }`}
-                >
-                  <Heart className={`w-3.5 h-3.5 ${post.liked_by_me ? "fill-current" : ""}`} />
-                  {post.likes_count}
-                </button>
-                <PostComments postId={post.id} />
               </div>
-            </motion.div>
+            </motion.article>
           ))}
+
         </div>
       </div>
 
