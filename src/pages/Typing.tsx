@@ -88,25 +88,53 @@ export default function Typing() {
           </h1>
         </div>
 
-        {screen === "layout" && <LayoutScreen onChoose={chooseLayout} />}
-        {screen === "posture" && (
-          <PostureScreen
-            layoutName={layout.name}
-            layout={layout}
-            onStart={() => setScreen("test")}
-            onChangeLayout={() => setScreen("layout")}
-          />
+        {authLoading ? (
+          <div className="glass p-8 text-center text-sm text-muted-foreground">Carregando…</div>
+        ) : !user ? (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass p-8 text-center space-y-4"
+          >
+            <LogIn className="w-8 h-8 text-primary mx-auto" />
+            <h2 className="font-display text-xl font-bold text-foreground">
+              Entre para praticar digitação
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">
+              O teste de digitação salva seu layout de teclado e seus resultados no ranking, por isso
+              é necessário estar logado.
+            </p>
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg gradient-warm text-primary-foreground text-sm font-semibold warm-glow-sm"
+            >
+              <LogIn className="w-4 h-4" /> Entrar / Criar Conta
+            </Link>
+          </motion.div>
+        ) : (
+          <>
+            {screen === "layout" && <LayoutScreen onChoose={chooseLayout} />}
+            {screen === "posture" && (
+              <PostureScreen
+                layoutName={layout.name}
+                layout={layout}
+                onStart={() => setScreen("test")}
+                onChangeLayout={() => setScreen("layout")}
+              />
+            )}
+            {screen === "test" && (
+              <TestScreen
+                supportsAccents={layout.supportsAccents}
+                userId={user?.id ?? null}
+                userName={profile?.full_name ?? ""}
+                onBack={() => setScreen("posture")}
+                onRanking={() => setScreen("ranking")}
+              />
+            )}
+            {screen === "ranking" && <RankingScreen onBack={() => setScreen("posture")} />}
+          </>
         )}
-        {screen === "test" && (
-          <TestScreen
-            supportsAccents={layout.supportsAccents}
-            userId={user?.id ?? null}
-            userName={profile?.full_name ?? ""}
-            onBack={() => setScreen("posture")}
-            onRanking={() => setScreen("ranking")}
-          />
-        )}
-        {screen === "ranking" && <RankingScreen onBack={() => setScreen("posture")} />}
+
       </section>
     </div>
   );
