@@ -24,6 +24,7 @@ const orientationTeam = [
     role: "Professor Orientador",
     initials: "RT",
     photo: ricardoAsset.url,
+    zoom: 1.45,
   },
   {
     name: "Willian Marques dos Santos",
