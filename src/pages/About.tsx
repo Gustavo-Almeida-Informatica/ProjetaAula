@@ -6,6 +6,8 @@ import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
 import harryImg from "@/assets/harry.jpg";
 import joseImg from "@/assets/jose.jpg";
+import ricardoAsset from "@/assets/ricardo.png.asset.json";
+import williamAsset from "@/assets/william.jpg.asset.json";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -21,13 +23,16 @@ const orientationTeam = [
     name: "Ricardo Wellington Ribeiro Brandão Teles",
     role: "Professor Orientador",
     initials: "RT",
+    photo: ricardoAsset.url,
   },
   {
     name: "Willian Marques dos Santos",
     role: "Supervisor",
     initials: "WM",
+    photo: williamAsset.url,
   },
 ];
+
 
 /**
  * Dados da equipe — edite apenas aqui (foto, Instagram e e-mail).
