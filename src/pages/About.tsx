@@ -126,7 +126,7 @@ export default function About() {
                   <AvatarImage
                     src={person.photo}
                     alt={`Foto de ${person.name}`}
-                    className={`object-cover ${person.zoom ? `scale-[${person.zoom}]` : ""}`}
+                    className="object-cover"
                     style={{
                       objectPosition: "center",
                       transform: person.zoom ? `scale(${person.zoom})` : undefined,
