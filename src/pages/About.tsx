@@ -121,9 +121,17 @@ export default function About() {
               viewport={{ once: true }}
               className="glass p-6 flex flex-col items-center text-center"
             >
-              <Avatar className="w-24 h-24 mb-4 border-2 border-primary/20">
+              <Avatar className="w-24 h-24 mb-4 border-2 border-primary/20 overflow-hidden">
                 {person.photo && (
-                  <AvatarImage src={person.photo} alt={`Foto de ${person.name}`} className="object-cover" />
+                  <AvatarImage
+                    src={person.photo}
+                    alt={`Foto de ${person.name}`}
+                    className={`object-cover ${person.zoom ? `scale-[${person.zoom}]` : ""}`}
+                    style={{
+                      objectPosition: "center",
+                      transform: person.zoom ? `scale(${person.zoom})` : undefined,
+                    }}
+                  />
                 )}
                 <AvatarFallback className="bg-secondary text-primary text-2xl font-display font-bold">
                   <UserCircle className="w-10 h-10" />
