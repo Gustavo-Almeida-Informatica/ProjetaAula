@@ -6,6 +6,8 @@ import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
 import harryImg from "@/assets/harry.jpg";
 import joseImg from "@/assets/jose.jpg";
+import ricardoAsset from "@/assets/ricardo.png.asset.json";
+import williamAsset from "@/assets/william.jpg.asset.json";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -21,13 +23,16 @@ const orientationTeam = [
     name: "Ricardo Wellington Ribeiro Brandão Teles",
     role: "Professor Orientador",
     initials: "RT",
+    photo: ricardoAsset.url,
   },
   {
     name: "Willian Marques dos Santos",
     role: "Supervisor",
     initials: "WM",
+    photo: williamAsset.url,
   },
 ];
+
 
 /**
  * Dados da equipe — edite apenas aqui (foto, Instagram e e-mail).
@@ -116,6 +121,9 @@ export default function About() {
               className="glass p-6 flex flex-col items-center text-center"
             >
               <Avatar className="w-24 h-24 mb-4 border-2 border-primary/20">
+                {person.photo && (
+                  <AvatarImage src={person.photo} alt={`Foto de ${person.name}`} className="object-cover" />
+                )}
                 <AvatarFallback className="bg-secondary text-primary text-2xl font-display font-bold">
                   <UserCircle className="w-10 h-10" />
                 </AvatarFallback>
@@ -173,16 +181,44 @@ export default function About() {
           </div>
 
           <div>
+            <h2 className="font-display text-lg font-bold text-foreground mb-2">Conectores e Cabos</h2>
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              A seção de conectores e cabos reúne, com fotos reais, os principais tipos de conexão usados no dia a dia: cabos de vídeo como HDMI, DisplayPort, VGA e DVI, cabos de rede, cabos SATA e cabos de alimentação. O objetivo é ajudar o estudante a reconhecer cada conector na prática, entender para que serve e evitar erros comuns na hora de montar ou ligar um computador.
+            </p>
+          </div>
+
+          <div>
             <h2 className="font-display text-lg font-bold text-foreground mb-2">Quiz Interativo</h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              Por fim, o site conta com um quiz interativo, pensado para tornar o aprendizado mais dinâmico e envolvente. Depois de estudar os conteúdos de hardware, software e história, o aluno pode testar o que aprendeu respondendo a perguntas relacionadas aos temas abordados. Essa ferramenta ajuda a fixar o conhecimento e permite que o próprio estudante identifique quais pontos ainda precisa reforçar.
+              O site conta com um quiz interativo, pensado para tornar o aprendizado mais dinâmico e envolvente. Depois de estudar os conteúdos de hardware, software, história e cabos, o aluno pode testar o que aprendeu respondendo a perguntas relacionadas aos temas abordados. O quiz é praticamente infinito: além do banco de questões, novas perguntas são geradas com base no próprio conteúdo do site, as alternativas são sempre embaralhadas e, ao responder, o aluno recebe um atalho para o trecho exato onde o assunto é explicado. O progresso pode ser salvo e comparado no ranking pessoal.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-lg font-bold text-foreground mb-2">Teste de Digitação</h2>
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              A aba de Digitação é uma das novidades da plataforma. Nela, o estudante escolhe o layout do teclado que usa (ABNT2, US Internacional, US QWERTY ou Português de Portugal), aprende a postura correta das mãos com uma ilustração da posição dos dedos e faz um teste cronometrado de digitação usando textos retirados dos próprios conteúdos do site. Ao final, são exibidas as palavras por minuto e a precisão, e o resultado entra em um ranking para acompanhar a evolução.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-lg font-bold text-foreground mb-2">Comunidade</h2>
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              A Comunidade é o espaço de troca entre os estudantes. Nela é possível publicar dúvidas e dicas, usar hashtags para organizar os assuntos, anexar imagens, curtir e comentar as publicações dos colegas. Cada usuário tem um perfil com foto e informações básicas, e todas as suas postagens ficam reunidas na área de perfil. Para publicar ou comentar é necessário estar logado, mas a leitura é livre para qualquer visitante.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-lg font-bold text-foreground mb-2">Acesso e perfil do aluno</h2>
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+              Todo o conteúdo de estudo do site é aberto: qualquer pessoa pode navegar por hardware, software, história e conectores sem precisar criar conta. O login é exigido apenas para as atividades que registram progresso ou identidade — publicar na comunidade, fazer o quiz e realizar o teste de digitação. Com a conta criada, o aluno pode editar seus dados, escolher uma foto de perfil e acompanhar seus resultados.
             </p>
           </div>
 
           <div>
             <h2 className="font-display text-lg font-bold text-foreground mb-2">Considerações finais</h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              De forma geral, o Projeta Aula funciona como um verdadeiro guia de estudos para quem está começando na área de informática. Combinando teoria e prática por meio do quiz, o site cumpre bem seu papel de orientar e apoiar o aprendizado dos alunos do CETEP, tornando o processo de estudo mais acessível, interativo e organizado.
+              De forma geral, o Projeta Aula funciona como um verdadeiro guia de estudos para quem está começando na área de informática. Combinando teoria e prática por meio do quiz, do teste de digitação e da troca com a comunidade, o site cumpre bem seu papel de orientar e apoiar o aprendizado dos alunos do CETEP, tornando o processo de estudo mais acessível, interativo e organizado.
             </p>
           </div>
         </motion.div>
