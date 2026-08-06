@@ -121,6 +121,9 @@ export default function About() {
               className="glass p-6 flex flex-col items-center text-center"
             >
               <Avatar className="w-24 h-24 mb-4 border-2 border-primary/20">
+                {person.photo && (
+                  <AvatarImage src={person.photo} alt={`Foto de ${person.name}`} className="object-cover" />
+                )}
                 <AvatarFallback className="bg-secondary text-primary text-2xl font-display font-bold">
                   <UserCircle className="w-10 h-10" />
                 </AvatarFallback>
