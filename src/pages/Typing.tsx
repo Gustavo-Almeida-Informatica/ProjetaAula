@@ -323,21 +323,22 @@ function TestScreen({
 
   const saveScore = useCallback(async () => {
     if (!userId || saved) return;
-    const { error } = await supabase.from("typing_scores").insert({
-      user_id: userId,
-      user_name: userName,
-      wpm: stats.wpm,
-      accuracy: stats.accuracy,
-      points: stats.points,
-      correct_words: stats.correct,
-      wrong_words: stats.wrong,
+    // O resultado é recalculado no servidor a partir do texto digitado:
+    // o cliente não envia PPM/precisão/pontos.
+    const { data, error } = await supabase.functions.invoke("submit-typing-score", {
+      body: {
+        textId: text.id,
+        typed,
+        elapsedSeconds: Math.max(1, text.estimatedSeconds - remaining),
+        accents: supportsAccents,
+      },
     });
-    if (error) toast.error("Não foi possível salvar seu resultado.");
+    if (error || !data?.saved) toast.error("Não foi possível salvar seu resultado.");
     else {
       setSaved(true);
       toast.success("Resultado salvo no ranking!");
     }
-  }, [userId, saved, userName, stats]);
+  }, [userId, saved, text, typed, remaining, supportsAccents]);
 
   useEffect(() => {
     if (finished) saveScore();
