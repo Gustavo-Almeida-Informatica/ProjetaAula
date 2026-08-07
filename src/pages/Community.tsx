@@ -100,9 +100,9 @@ export default function Community() {
         viewedRef.current.add(p.id);
       });
       sessionStorage.setItem(seenKey, JSON.stringify([...seen]));
-      await Promise.all(
-        fresh.map((p) => (supabase.rpc as any)("increment_post_view", { _post_id: p.id }))
-      );
+      await supabase.functions.invoke("increment-post-view", {
+        body: { postIds: fresh.map((p) => p.id) },
+      });
       setPosts((prev) =>
         prev.map((p) =>
           fresh.some((f) => f.id === p.id) ? { ...p, views_count: (p.views_count ?? 0) + 1 } : p

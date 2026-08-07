@@ -17,9 +17,11 @@ export async function fetchPublicProfiles(ids: string[]): Promise<Map<string, Pu
   const map = new Map<string, PublicProfile>();
   const unique = Array.from(new Set(ids.filter(Boolean)));
   if (unique.length === 0) return map;
-  const { data, error } = await (supabase.rpc as any)("get_public_profiles", { _ids: unique });
-  if (error || !data) return map;
-  (data as PublicProfile[]).forEach((p) => map.set(p.id, p));
+  const { data, error } = await supabase.functions.invoke("public-profiles", {
+    body: { ids: unique },
+  });
+  if (error || !data?.profiles) return map;
+  (data.profiles as PublicProfile[]).forEach((p) => map.set(p.id, p));
   return map;
 }
 
