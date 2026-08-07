@@ -372,7 +372,7 @@ export default function Quiz() {
                       Dica: {current.explanation}
                     </p>
                     {(() => {
-                      const link = resolveContentLink(current);
+                      const link = resolveContentLink({ correct: 0, ...current });
                       if (!link) return null;
                       const params = new URLSearchParams();
                       if (link.tab) params.set("tab", link.tab);
