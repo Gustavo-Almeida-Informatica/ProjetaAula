@@ -221,13 +221,6 @@ export default function Profile() {
             />
           </div>
 
-          {/* Role badge */}
-          <div className="text-center">
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold gradient-warm text-primary-foreground">
-              {profile?.role === "professor" ? "👨‍🏫 Professor" : "🎓 Aluno"}
-            </span>
-          </div>
-
           {/* Name */}
           <div className="relative">
             <User className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground" />
@@ -252,17 +245,6 @@ export default function Profile() {
             <span className="absolute right-3 top-3.5 text-[10px] text-muted-foreground">não editável</span>
           </div>
 
-          {/* Phone */}
-          <div className="relative">
-            <Phone className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground" />
-            <input
-              type="tel"
-              placeholder="Telefone (ex: 71 99999-0000)"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={inputClass}
-            />
-          </div>
 
           {/* City */}
           <div className="relative">
