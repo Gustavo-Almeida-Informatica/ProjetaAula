@@ -168,6 +168,27 @@ export default function Profile() {
     };
   }, [user]);
 
+  const [postToDelete, setPostToDelete] = useState<MyPost | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeletePost = async () => {
+    if (!postToDelete || !user) return;
+    setDeleting(true);
+    const { error } = await supabase
+      .from("community_posts")
+      .delete()
+      .eq("id", postToDelete.id)
+      .eq("user_id", user.id);
+    setDeleting(false);
+    if (error) {
+      toast.error("Erro ao excluir postagem");
+      return;
+    }
+    setMyPosts((prev) => prev.filter((p) => p.id !== postToDelete.id));
+    setPostToDelete(null);
+    toast.success("Postagem excluída!");
+  };
+
   return (
     <div className="min-h-screen pt-16 pb-12">
       <Seo
