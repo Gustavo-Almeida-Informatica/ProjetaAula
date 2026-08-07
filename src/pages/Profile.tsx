@@ -6,9 +6,19 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { User, Mail, Phone, MapPin, Save, LogOut, Camera, Heart, MessageSquare } from "lucide-react";
+import { User, Mail, MapPin, Save, LogOut, Camera, Heart, MessageSquare, Trash2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface MyPost {
   id: string;
@@ -23,7 +33,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const { user, profile, signOut, refreshProfile } = useAuth();
   const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -36,12 +45,11 @@ export default function Profile() {
     setAvatarUrl(profile.avatar_url || null);
     supabase
       .from("profiles")
-      .select("phone, city")
+      .select("city")
       .eq("id", user.id)
       .single()
       .then(({ data }) => {
         if (data) {
-          setPhone((data as any).phone || "");
           setCity((data as any).city || "");
         }
       });
@@ -110,7 +118,7 @@ export default function Profile() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: fullName, phone, city } as any)
+      .update({ full_name: fullName, city } as any)
       .eq("id", user.id);
     if (error) {
       toast.error("Erro ao salvar");
@@ -159,6 +167,27 @@ export default function Profile() {
       active = false;
     };
   }, [user]);
+
+  const [postToDelete, setPostToDelete] = useState<MyPost | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeletePost = async () => {
+    if (!postToDelete || !user) return;
+    setDeleting(true);
+    const { error } = await supabase
+      .from("community_posts")
+      .delete()
+      .eq("id", postToDelete.id)
+      .eq("user_id", user.id);
+    setDeleting(false);
+    if (error) {
+      toast.error("Erro ao excluir postagem");
+      return;
+    }
+    setMyPosts((prev) => prev.filter((p) => p.id !== postToDelete.id));
+    setPostToDelete(null);
+    toast.success("Postagem excluída!");
+  };
 
   return (
     <div className="min-h-screen pt-16 pb-12">
@@ -211,13 +240,6 @@ export default function Profile() {
             />
           </div>
 
-          {/* Role badge */}
-          <div className="text-center">
-            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold gradient-warm text-primary-foreground">
-              {profile?.role === "professor" ? "👨‍🏫 Professor" : "🎓 Aluno"}
-            </span>
-          </div>
-
           {/* Name */}
           <div className="relative">
             <User className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground" />
@@ -242,17 +264,6 @@ export default function Profile() {
             <span className="absolute right-3 top-3.5 text-[10px] text-muted-foreground">não editável</span>
           </div>
 
-          {/* Phone */}
-          <div className="relative">
-            <Phone className="absolute left-3 top-3.5 w-4 h-4 text-muted-foreground" />
-            <input
-              type="tel"
-              placeholder="Telefone (ex: 71 99999-0000)"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={inputClass}
-            />
-          </div>
 
           {/* City */}
           <div className="relative">
@@ -318,12 +329,22 @@ export default function Profile() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-sm font-semibold text-foreground">{p.title}</h3>
-                    <time
-                      dateTime={p.created_at}
-                      className="text-[11px] text-muted-foreground shrink-0"
-                    >
-                      {new Date(p.created_at).toLocaleDateString("pt-BR")}
-                    </time>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <time
+                        dateTime={p.created_at}
+                        className="text-[11px] text-muted-foreground"
+                      >
+                        {new Date(p.created_at).toLocaleDateString("pt-BR")}
+                      </time>
+                      <button
+                        type="button"
+                        onClick={() => setPostToDelete(p)}
+                        aria-label="Excluir postagem"
+                        className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-3 whitespace-pre-wrap">
                     {p.content}
@@ -346,6 +367,31 @@ export default function Profile() {
           )}
         </motion.section>
       </div>
+
+      <AlertDialog open={!!postToDelete} onOpenChange={(open) => !open && setPostToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tem certeza que deseja excluir esta postagem?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. A postagem será removida permanentemente da comunidade.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeletePost();
+              }}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? "Excluindo..." : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
