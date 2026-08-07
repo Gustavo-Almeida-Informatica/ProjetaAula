@@ -33,7 +33,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const { user, profile, signOut, refreshProfile } = useAuth();
   const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -46,12 +45,11 @@ export default function Profile() {
     setAvatarUrl(profile.avatar_url || null);
     supabase
       .from("profiles")
-      .select("phone, city")
+      .select("city")
       .eq("id", user.id)
       .single()
       .then(({ data }) => {
         if (data) {
-          setPhone((data as any).phone || "");
           setCity((data as any).city || "");
         }
       });
