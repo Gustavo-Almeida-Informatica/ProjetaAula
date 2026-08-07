@@ -6,9 +6,19 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { User, Mail, Phone, MapPin, Save, LogOut, Camera, Heart, MessageSquare } from "lucide-react";
+import { User, Mail, MapPin, Save, LogOut, Camera, Heart, MessageSquare, Trash2 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface MyPost {
   id: string;
