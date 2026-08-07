@@ -22,12 +22,15 @@ interface AnswerRecord {
   token?: string;   // HMAC for dynamic questions
 }
 
+/** Dynamic questions arrive without `correct`; it is revealed after answering. */
+type PlayQuestion = Omit<QuizQuestion, "correct"> & { correct?: number };
+
 const PREFETCH_THRESHOLD = 3; // start fetching dynamic when only this many static remain
 
 export default function Quiz() {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [questions, setQuestions] = useState<PlayQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -97,7 +100,7 @@ export default function Quiz() {
     fetchLeaderboard();
   };
 
-  const fetchDynamicQuestion = useCallback(async (): Promise<QuizQuestion | null> => {
+  const fetchDynamicQuestion = useCallback(async (): Promise<PlayQuestion | null> => {
     try {
       const { data, error } = await supabase.functions.invoke("generate-quiz-question", {
         body: { avoid: usedTopicsRef.current.slice(-8) },
@@ -106,7 +109,7 @@ export default function Quiz() {
         console.error("dynamic question error", error || data?.error);
         return null;
       }
-      const q: QuizQuestion = {
+      const q: PlayQuestion = {
         id: String(data.id),
         category: String(data.category ?? "IA"),
         question: String(data.question),
