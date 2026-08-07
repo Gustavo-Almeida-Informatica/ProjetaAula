@@ -179,13 +179,32 @@ export default function Quiz() {
     startQuiz();
   };
 
-  const handleAnswer = (optionIndex: number) => {
+  const handleAnswer = async (optionIndex: number) => {
     if (showResult) return;
     setSelected(optionIndex);
-    setShowResult(true);
 
     const q = questions[currentIndex];
-    const isCorrect = optionIndex === q.correct;
+
+    // Dynamic questions do not carry the answer key; ask the server to reveal
+    // it only now that the player committed to an option.
+    let correctIndex = q.correct;
+    if (q.dynamic && correctIndex === undefined) {
+      const { data, error } = await supabase.functions.invoke("verify-quiz-answer", {
+        body: { id: q.id, token: q.token, selected: optionIndex },
+      });
+      if (error || !data || typeof data.correct !== "number") {
+        setSelected(null);
+        toast.error("Não foi possível validar a resposta. Tente novamente.");
+        return;
+      }
+      correctIndex = data.correct as number;
+      setQuestions((prev) =>
+        prev.map((item, i) => (i === currentIndex ? { ...item, correct: correctIndex } : item))
+      );
+    }
+
+    setShowResult(true);
+    const isCorrect = optionIndex === correctIndex;
     const DELAY_MS = 5000;
     setCountdown(Math.ceil(DELAY_MS / 1000));
     tickRef.current = window.setInterval(() => {
@@ -195,7 +214,7 @@ export default function Quiz() {
     if (isCorrect) {
       const record: AnswerRecord = { id: q.id, selected: optionIndex };
       if (q.dynamic) {
-        record.correct = q.correct;
+        record.correct = correctIndex;
         record.token = q.token;
       }
       answersRef.current.push(record);
@@ -209,6 +228,7 @@ export default function Quiz() {
       }, DELAY_MS);
     }
   };
+
 
 
   const handleSkip = () => {
