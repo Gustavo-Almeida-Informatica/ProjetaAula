@@ -118,7 +118,7 @@ export default function Profile() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: fullName, phone, city } as any)
+      .update({ full_name: fullName, city } as any)
       .eq("id", user.id);
     if (error) {
       toast.error("Erro ao salvar");
