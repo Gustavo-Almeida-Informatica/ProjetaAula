@@ -329,12 +329,22 @@ export default function Profile() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-sm font-semibold text-foreground">{p.title}</h3>
-                    <time
-                      dateTime={p.created_at}
-                      className="text-[11px] text-muted-foreground shrink-0"
-                    >
-                      {new Date(p.created_at).toLocaleDateString("pt-BR")}
-                    </time>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <time
+                        dateTime={p.created_at}
+                        className="text-[11px] text-muted-foreground"
+                      >
+                        {new Date(p.created_at).toLocaleDateString("pt-BR")}
+                      </time>
+                      <button
+                        type="button"
+                        onClick={() => setPostToDelete(p)}
+                        aria-label="Excluir postagem"
+                        className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-3 whitespace-pre-wrap">
                     {p.content}
@@ -357,6 +367,31 @@ export default function Profile() {
           )}
         </motion.section>
       </div>
+
+      <AlertDialog open={!!postToDelete} onOpenChange={(open) => !open && setPostToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tem certeza que deseja excluir esta postagem?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. A postagem será removida permanentemente da comunidade.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeletePost();
+              }}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? "Excluindo..." : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
