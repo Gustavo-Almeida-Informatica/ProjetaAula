@@ -111,7 +111,8 @@ export default function Quiz() {
         category: String(data.category ?? "IA"),
         question: String(data.question),
         options: data.options,
-        correct: Number(data.correct),
+        // `correct` is intentionally NOT returned by the server for dynamic
+        // questions — it is only revealed after the player answers.
         explanation: String(data.explanation),
         token: String(data.token),
         dynamic: true,
