@@ -6,7 +6,7 @@ import gustavoImg from "@/assets/gustavo.jpg";
 import maxImg from "@/assets/max.jpg";
 import harryImg from "@/assets/harry.jpg";
 import joseImg from "@/assets/jose.jpg";
-import ricardoAsset from "@/assets/ricardo.png.asset.json";
+import ricardoAsset from "@/assets/ricardo2.jpg.asset.json";
 import williamAsset from "@/assets/william.jpg.asset.json";
 
 const fadeUp = {
@@ -24,7 +24,6 @@ const orientationTeam = [
     role: "Professor Orientador",
     initials: "RT",
     photo: ricardoAsset.url,
-    zoom: 1.45,
   },
   {
     name: "Willian Marques dos Santos",
