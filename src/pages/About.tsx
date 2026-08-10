@@ -126,10 +126,7 @@ export default function About() {
                     src={person.photo}
                     alt={`Foto de ${person.name}`}
                     className="object-cover"
-                    style={{
-                      objectPosition: "center",
-                      transform: person.zoom ? `scale(${person.zoom})` : undefined,
-                    }}
+                    style={{ objectPosition: "center" }}
                   />
                 )}
                 <AvatarFallback className="bg-secondary text-primary text-2xl font-display font-bold">
