@@ -58,8 +58,10 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={session ? <Navigate to="/" replace /> : <Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
       <Route path="/" element={<AppLayout><Index /></AppLayout>} />
+
       <Route path="/historia" element={<AppLayout><History /></AppLayout>} />
       <Route path="/sobre" element={<AppLayout><About /></AppLayout>} />
       <Route path="/hardware" element={<AppLayout><Hardware /></AppLayout>} />
