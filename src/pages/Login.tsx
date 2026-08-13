@@ -157,7 +157,10 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri:
+        nextPath !== "/"
+          ? `${window.location.origin}/login?next=${encodeURIComponent(nextPath)}`
+          : window.location.origin,
     });
     if (result.error) toast.error(result.error.message);
   };

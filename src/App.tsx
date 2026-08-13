@@ -18,6 +18,7 @@ import Typing from "./pages/Typing";
 
 
 import Profile from "./pages/Profile";
+import OAuthConsent from "./pages/OAuthConsent";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
