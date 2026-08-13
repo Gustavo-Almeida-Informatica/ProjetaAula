@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +12,10 @@ type AuthMode = "login" | "register";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const rawNext = searchParams.get("next") ?? "";
+  // Only allow same-origin relative paths.
+  const nextPath = /^\/(?!\/)/.test(rawNext) ? rawNext : "/";
   const { session, loading } = useAuth();
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
@@ -30,9 +34,9 @@ export default function Login() {
 
   useEffect(() => {
     if (!loading && session) {
-      navigate("/", { replace: true });
+      navigate(nextPath, { replace: true });
     }
-  }, [loading, session, navigate]);
+  }, [loading, session, navigate, nextPath]);
 
   const validatePassword = (pw: string): string | null => {
     if (pw.length < 6) return "A senha precisa de pelo menos 6 caracteres.";
@@ -153,7 +157,10 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri:
+        nextPath !== "/"
+          ? `${window.location.origin}/login?next=${encodeURIComponent(nextPath)}`
+          : window.location.origin,
     });
     if (result.error) toast.error(result.error.message);
   };
