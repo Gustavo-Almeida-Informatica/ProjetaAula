@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.2",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://lsoymhlmlopmszvqdvsu.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "projeta-aula",
+      "version": "0.1.0",
+      "title": "PROJETA_AULA"
+    },
+    "tools": [
+      {
+        "name": "get_my_profile",
+        "title": "Meu perfil",
+        "description": "Retorna o perfil do usuário autenticado no Projeta Aula (nome, papel, cidade, layout de teclado).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_community_posts",
+        "title": "Listar posts da comunidade",
+        "description": "Lista as postagens mais recentes da comunidade do Projeta Aula, com filtro opcional por hashtag ou texto.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "Quantidade de posts (1-50)."
+            },
+            "search": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "Texto para buscar no título ou conteúdo."
+            },
+            "hashtag": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "description": "Hashtag (sem #) para filtrar."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_community_post",
+        "title": "Criar post na comunidade",
+        "description": "Publica uma nova postagem na comunidade do Projeta Aula em nome do usuário autenticado.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 120,
+              "description": "Título da postagem."
+            },
+            "content": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000,
+              "description": "Conteúdo da postagem."
+            },
+            "hashtags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 50
+              },
+              "maxItems": 10,
+              "description": "Hashtags sem o símbolo #."
+            }
+          },
+          "required": [
+            "title",
+            "content"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_my_scores",
+        "title": "Minhas pontuações",
+        "description": "Retorna o recorde do quiz e os melhores resultados do teste de digitação do usuário autenticado.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_leaderboard",
+        "title": "Ranking",
+        "description": "Mostra o ranking do quiz ou do teste de digitação do Projeta Aula.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "board": {
+              "type": "string",
+              "enum": [
+                "quiz",
+                "typing"
+              ],
+              "description": "Qual ranking consultar."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "Quantidade de posições (1-50)."
+            }
+          },
+          "required": [
+            "board"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
