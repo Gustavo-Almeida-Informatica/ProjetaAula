@@ -14,8 +14,8 @@ export default function Login() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const rawNext = searchParams.get("next") ?? "";
-  // Only allow same-origin relative paths.
-  const nextPath = /^\/(?!\/)/.test(rawNext) ? rawNext : "/";
+  // Only allow same-origin relative paths (blocks //evil.com, /\evil.com and absolute URLs).
+  const nextPath = /^\/(?![/\\])[^\s]*$/.test(rawNext) ? rawNext : "/";
   const { session, loading } = useAuth();
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
