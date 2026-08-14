@@ -34,7 +34,7 @@ export default function OAuthConsent() {
       const { data, error } = await (supabase.auth as any).oauth.getAuthorizationDetails(authorizationId);
       if (!active) return;
       if (error) return setError(error.message);
-      const immediate = data?.redirect_url ?? data?.redirect_to;
+      const immediate = safeRedirect(data?.redirect_url ?? data?.redirect_to);
       if (immediate && !data?.client) {
         window.location.href = immediate;
         return;
@@ -56,7 +56,7 @@ export default function OAuthConsent() {
       setBusy(false);
       return setError(error.message);
     }
-    const target = data?.redirect_url ?? data?.redirect_to;
+    const target = safeRedirect(data?.redirect_url ?? data?.redirect_to);
     if (!target) {
       setBusy(false);
       return setError("O servidor de autorização não retornou um redirecionamento.");
