@@ -2,6 +2,18 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
+/** Blocks javascript:/data: style URLs before assigning window.location. */
+function safeRedirect(url: unknown): string | null {
+  if (typeof url !== "string" || !url) return null;
+  if (/^\/(?![/\\])/.test(url)) return url;
+  try {
+    const parsed = new URL(url, window.location.origin);
+    return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.href : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function OAuthConsent() {
   const [params] = useSearchParams();
   const authorizationId = params.get("authorization_id") ?? "";
