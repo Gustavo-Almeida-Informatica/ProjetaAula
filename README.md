@@ -30,4 +30,4 @@ José Antônio: Desenvolvedor.
 
 🌐 Link do Site
 Você pode acessar o projeto online através do link abaixo:
-https://projetoaula.lovable.app
+https://projetaaula.lovable.app
