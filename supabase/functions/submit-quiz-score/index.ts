@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { ANSWER_KEY } from "./answers.ts";
+import { ANSWER_TEXT, normalizeAnswer } from "./answers.ts";
 
 async function signHmac(payload: string, secret: string): Promise<string> {
   const enc = new TextEncoder();
