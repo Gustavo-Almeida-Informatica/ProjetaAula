@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { ANSWER_KEY } from "./answers.ts";
+import { ANSWER_TEXT, normalizeAnswer } from "./answers.ts";
 
 async function signHmac(payload: string, secret: string): Promise<string> {
   const enc = new TextEncoder();
@@ -59,10 +59,10 @@ Deno.serve(async (req) => {
       const idStr = String(idRaw);
       if (seen.has(idStr)) continue;
       seen.add(idStr);
-      if (!Number.isInteger(selected) || selected < 0 || selected > 3) continue;
 
       let isCorrect = false;
       if (idStr.startsWith("dyn_")) {
+        if (!Number.isInteger(selected) || selected < 0 || selected > 3) continue;
         const declaredCorrect = Number(a?.correct);
         const token = typeof a?.token === "string" ? a.token : "";
         if (!Number.isInteger(declaredCorrect) || declaredCorrect < 0 || declaredCorrect > 3) continue;
@@ -71,9 +71,12 @@ Deno.serve(async (req) => {
         if (expected !== token) continue;
         isCorrect = selected === declaredCorrect;
       } else {
-        const correctIdx = ANSWER_KEY[idStr];
-        if (correctIdx === undefined) continue;
-        isCorrect = selected === correctIdx;
+        // As alternativas são embaralhadas no cliente, então validamos pelo TEXTO.
+        const expectedText = ANSWER_TEXT[idStr];
+        const selectedText = typeof a?.selectedText === "string" ? a.selectedText : "";
+        if (expectedText === undefined || !selectedText) continue;
+        if (selectedText.length > 500) continue;
+        isCorrect = normalizeAnswer(selectedText) === normalizeAnswer(expectedText);
       }
 
       if (isCorrect) score += 1;
