@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       return json({ error: "Invalid payload" }, 400);
     }
 
-    // Compute the score: count consecutive correct answers from the start.
+    // Compute the score: count ALL correct answers (right/wrong may interleave).
     // Static questions: lookup in ANSWER_KEY by id.
     // Dynamic questions: id starts with "dyn_", entry must contain
     //   { id, selected, correct, token } and the token must HMAC-match.
@@ -55,30 +55,30 @@ Deno.serve(async (req) => {
     for (const a of answers) {
       const idRaw = a?.id;
       const selected = Number(a?.selected);
-      if (idRaw === undefined || idRaw === null) break;
+      if (idRaw === undefined || idRaw === null) continue;
       const idStr = String(idRaw);
-      if (seen.has(idStr)) break;
+      if (seen.has(idStr)) continue;
       seen.add(idStr);
-      if (!Number.isInteger(selected) || selected < 0 || selected > 3) break;
+      if (!Number.isInteger(selected) || selected < 0 || selected > 3) continue;
 
       let isCorrect = false;
       if (idStr.startsWith("dyn_")) {
         const declaredCorrect = Number(a?.correct);
         const token = typeof a?.token === "string" ? a.token : "";
-        if (!Number.isInteger(declaredCorrect) || declaredCorrect < 0 || declaredCorrect > 3) break;
-        if (!token) break;
+        if (!Number.isInteger(declaredCorrect) || declaredCorrect < 0 || declaredCorrect > 3) continue;
+        if (!token) continue;
         const expected = await signHmac(`${idStr}|${declaredCorrect}`, SERVICE_ROLE);
-        if (expected !== token) break;
+        if (expected !== token) continue;
         isCorrect = selected === declaredCorrect;
       } else {
         const correctIdx = ANSWER_KEY[idStr];
-        if (correctIdx === undefined) break;
+        if (correctIdx === undefined) continue;
         isCorrect = selected === correctIdx;
       }
 
-      if (!isCorrect) break;
-      score += 1;
+      if (isCorrect) score += 1;
     }
+
 
     if (score <= 0) {
       return json({ score: 0, saved: false });

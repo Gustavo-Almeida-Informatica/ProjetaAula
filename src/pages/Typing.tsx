@@ -113,13 +113,16 @@ export default function Typing() {
           </motion.div>
         ) : (
           <>
-            {screen === "layout" && <LayoutScreen onChoose={chooseLayout} />}
+            {screen === "layout" && (
+              <LayoutScreen onChoose={chooseLayout} onRanking={() => setScreen("ranking")} />
+            )}
             {screen === "posture" && (
               <PostureScreen
                 layoutName={layout.name}
                 layout={layout}
                 onStart={() => setScreen("test")}
                 onChangeLayout={() => setScreen("layout")}
+                onRanking={() => setScreen("ranking")}
               />
             )}
             {screen === "test" && (
@@ -141,7 +144,13 @@ export default function Typing() {
 }
 
 /* ---------------- Tela 1 ---------------- */
-function LayoutScreen({ onChoose }: { onChoose: (id: KeyboardLayoutId) => void }) {
+function LayoutScreen({
+  onChoose,
+  onRanking,
+}: {
+  onChoose: (id: KeyboardLayoutId) => void;
+  onRanking: () => void;
+}) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="glass p-6 md:p-8">
       <h2 className="font-display text-xl font-bold mb-1">Qual layout de teclado você usa?</h2>
@@ -165,9 +174,18 @@ function LayoutScreen({ onChoose }: { onChoose: (id: KeyboardLayoutId) => void }
           </button>
         ))}
       </div>
+      <div className="mt-6 flex justify-center">
+        <button
+          onClick={onRanking}
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-border/60 text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          <Trophy className="w-4 h-4" /> Ver ranking
+        </button>
+      </div>
     </motion.div>
   );
 }
+
 
 /* ---------------- Tela 2 ---------------- */
 function PostureScreen({
@@ -175,11 +193,13 @@ function PostureScreen({
   layoutName,
   onStart,
   onChangeLayout,
+  onRanking,
 }: {
   layout: ReturnType<typeof getLayout>;
   layoutName: string;
   onStart: () => void;
   onChangeLayout: () => void;
+  onRanking: () => void;
 }) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="glass p-5 md:p-8 space-y-6">
@@ -225,6 +245,12 @@ function PostureScreen({
           className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-border/60 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <Keyboard className="w-4 h-4" /> Escolher outro layout de teclado
+        </button>
+        <button
+          onClick={onRanking}
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-border/60 text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          <Trophy className="w-4 h-4" /> Ver ranking
         </button>
       </div>
     </motion.div>
