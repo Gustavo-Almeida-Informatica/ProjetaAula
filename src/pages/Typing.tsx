@@ -113,13 +113,16 @@ export default function Typing() {
           </motion.div>
         ) : (
           <>
-            {screen === "layout" && <LayoutScreen onChoose={chooseLayout} />}
+            {screen === "layout" && (
+              <LayoutScreen onChoose={chooseLayout} onRanking={() => setScreen("ranking")} />
+            )}
             {screen === "posture" && (
               <PostureScreen
                 layoutName={layout.name}
                 layout={layout}
                 onStart={() => setScreen("test")}
                 onChangeLayout={() => setScreen("layout")}
+                onRanking={() => setScreen("ranking")}
               />
             )}
             {screen === "test" && (
