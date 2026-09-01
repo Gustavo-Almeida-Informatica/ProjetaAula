@@ -246,6 +246,12 @@ function PostureScreen({
         >
           <Keyboard className="w-4 h-4" /> Escolher outro layout de teclado
         </button>
+        <button
+          onClick={onRanking}
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-border/60 text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          <Trophy className="w-4 h-4" /> Ver ranking
+        </button>
       </div>
     </motion.div>
   );
