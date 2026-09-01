@@ -200,6 +200,7 @@ function PostureScreen({
   onStart: () => void;
   onChangeLayout: () => void;
   onRanking: () => void;
+}) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="glass p-5 md:p-8 space-y-6">
       <div className="flex justify-center">
