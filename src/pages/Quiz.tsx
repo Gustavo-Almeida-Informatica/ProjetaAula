@@ -18,6 +18,8 @@ interface LeaderboardEntry {
 interface AnswerRecord {
   id: number | string;
   selected: number;
+  /** Texto da alternativa escolhida (as opções são embaralhadas no cliente). */
+  selectedText?: string;
   correct?: number; // included for dynamic questions
   token?: string;   // HMAC for dynamic questions
 }
@@ -212,7 +214,11 @@ export default function Quiz() {
     }, 1000);
 
     if (isCorrect) {
-      const record: AnswerRecord = { id: q.id, selected: optionIndex };
+      const record: AnswerRecord = {
+        id: q.id,
+        selected: optionIndex,
+        selectedText: q.options[optionIndex],
+      };
       if (q.dynamic) {
         record.correct = correctIndex;
         record.token = q.token;
