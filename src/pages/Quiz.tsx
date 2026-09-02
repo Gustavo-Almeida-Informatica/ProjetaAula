@@ -18,6 +18,8 @@ interface LeaderboardEntry {
 interface AnswerRecord {
   id: number | string;
   selected: number;
+  /** Texto da alternativa escolhida (as opções são embaralhadas no cliente). */
+  selectedText?: string;
   correct?: number; // included for dynamic questions
   token?: string;   // HMAC for dynamic questions
 }
