@@ -43,6 +43,9 @@ export default function Quiz() {
   const advanceTimerRef = useRef<number | null>(null);
   const tickRef = useRef<number | null>(null);
   const answersRef = useRef<AnswerRecord[]>([]);
+  const saveInFlightRef = useRef<Promise<boolean> | null>(null);
+  const pendingWrongRef = useRef<{ score: number; save: Promise<boolean> } | null>(null);
+  const endingAttemptRef = useRef(false);
   const fetchingRef = useRef(false);
   const usedTopicsRef = useRef<string[]>([]);
 
@@ -89,17 +92,41 @@ export default function Quiz() {
     }
   };
 
-  const saveScore = async () => {
-    if (!user || !profile) return;
-    const answers = answersRef.current;
-    if (answers.length === 0) return;
-    const { error } = await supabase.functions.invoke("submit-quiz-score", {
-      body: { answers },
+  const saveScore = (answersSnapshot: AnswerRecord[] = [...answersRef.current]): Promise<boolean> => {
+    if (!user || !profile || answersSnapshot.length === 0) return Promise.resolve(false);
+    if (saveInFlightRef.current) return saveInFlightRef.current;
+
+    const request = (async () => {
+      const { error } = await supabase.functions.invoke("submit-quiz-score", {
+        body: { answers: answersSnapshot },
+      });
+      if (error) {
+        console.error("Score save failed", error);
+        toast.error("Não foi possível salvar sua pontuação. Tente novamente.");
+        return false;
+      }
+      await fetchLeaderboard();
+      return true;
+    })();
+
+    saveInFlightRef.current = request;
+    void request.finally(() => {
+      if (saveInFlightRef.current === request) saveInFlightRef.current = null;
     });
-    if (error) {
-      console.error("Score save failed", error);
+    return request;
+  };
+
+  const finishAttempt = async (scoreSnapshot: number, savePromise: Promise<boolean>) => {
+    if (endingAttemptRef.current) return;
+    endingAttemptRef.current = true;
+    clearTimers();
+    const saved = await savePromise;
+    if (saved) {
+      toast.error(`Errou! Sua pontuação: ${scoreSnapshot}. O quiz reinicia!`);
+      pendingWrongRef.current = null;
+      startQuiz();
     }
-    fetchLeaderboard();
+    endingAttemptRef.current = false;
   };
 
   const fetchDynamicQuestion = useCallback(async (): Promise<PlayQuestion | null> => {
@@ -172,13 +199,20 @@ export default function Quiz() {
     setCurrentIndex((i) => i + 1);
   }, [currentIndex, questions.length, fetchDynamicQuestion]);
 
-  const handleStop = () => {
+  const handleStop = async () => {
+    if (endingAttemptRef.current) return;
+    endingAttemptRef.current = true;
     clearTimers();
     if (score > 0) {
-      saveScore();
+      const saved = await saveScore([...answersRef.current]);
+      if (!saved) {
+        endingAttemptRef.current = false;
+        return;
+      }
       toast.info(`Você parou com ${score} ponto${score > 1 ? "s" : ""}! Sua pontuação foi salva.`);
     }
     startQuiz();
+    endingAttemptRef.current = false;
   };
 
   const handleAnswer = async (optionIndex: number) => {
@@ -227,26 +261,28 @@ export default function Quiz() {
       setScore((s) => s + 1);
       advanceTimerRef.current = window.setTimeout(() => { goNext(); }, DELAY_MS);
     } else {
+      const scoreSnapshot = score;
+      const savePromise = saveScore([...answersRef.current]);
+      pendingWrongRef.current = { score: scoreSnapshot, save: savePromise };
       advanceTimerRef.current = window.setTimeout(() => {
-        saveScore();
-        toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
-        startQuiz();
+        void finishAttempt(scoreSnapshot, savePromise);
       }, DELAY_MS);
     }
   };
 
 
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
     if (!showResult) return;
     const wasCorrect = selected === questions[currentIndex].correct;
     clearTimers();
     if (wasCorrect) {
       goNext();
     } else {
-      saveScore();
-      toast.error(`Errou! Sua pontuação: ${score}. O quiz reinicia!`);
-      startQuiz();
+      const pending = pendingWrongRef.current;
+      const scoreSnapshot = pending?.score ?? score;
+      const savePromise = pending?.save ?? saveScore([...answersRef.current]);
+      await finishAttempt(scoreSnapshot, savePromise);
     }
   };
 
