@@ -93,7 +93,7 @@ export default function Quiz() {
   };
 
   const saveScore = (answersSnapshot: AnswerRecord[] = [...answersRef.current]): Promise<boolean> => {
-    if (!user || !profile || answersSnapshot.length === 0) return Promise.resolve(false);
+    if (!user || answersSnapshot.length === 0) return Promise.resolve(false);
     if (saveInFlightRef.current) return saveInFlightRef.current;
 
     const request = (async () => {
