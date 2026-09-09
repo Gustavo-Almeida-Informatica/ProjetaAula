@@ -120,7 +120,7 @@ export default function Quiz() {
     if (endingAttemptRef.current) return;
     endingAttemptRef.current = true;
     clearTimers();
-    const saved = await savePromise;
+    const saved = scoreSnapshot === 0 ? true : await savePromise;
     if (saved) {
       toast.error(`Errou! Sua pontuação: ${scoreSnapshot}. O quiz reinicia!`);
       pendingWrongRef.current = null;
