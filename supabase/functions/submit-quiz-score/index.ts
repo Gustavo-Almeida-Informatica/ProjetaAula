@@ -95,18 +95,18 @@ Deno.serve(async (req) => {
       .eq("id", userId)
       .single();
 
-    const { error: insErr } = await admin.from("quiz_scores").insert({
-      user_id: userId,
-      user_name: profile?.full_name ?? "",
-      user_role: profile?.role ?? "aluno",
-      score,
+    const { data: savedScore, error: saveErr } = await admin.rpc("record_quiz_high_score", {
+      _user_id: userId,
+      _user_name: profile?.full_name ?? "",
+      _user_role: profile?.role ?? "aluno",
+      _score: score,
     });
-    if (insErr) {
-      console.error("Insert error", insErr);
+    if (saveErr) {
+      console.error("High score save error", saveErr);
       return json({ error: "Could not save score" }, 500);
     }
 
-    return json({ score, saved: true });
+    return json({ score, highScore: savedScore, saved: true });
   } catch (e) {
     console.error("submit-quiz-score error", e);
     return json({ error: "Internal error" }, 500);

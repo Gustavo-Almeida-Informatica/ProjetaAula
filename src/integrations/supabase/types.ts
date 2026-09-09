@@ -232,6 +232,15 @@ export type Database = {
         }[]
       }
       increment_post_view: { Args: { _post_id: string }; Returns: undefined }
+      record_quiz_high_score: {
+        Args: {
+          _score: number
+          _user_id: string
+          _user_name: string
+          _user_role: Database["public"]["Enums"]["user_role"]
+        }
+        Returns: number
+      }
     }
     Enums: {
       user_role: "aluno" | "professor"
