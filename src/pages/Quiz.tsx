@@ -8,6 +8,7 @@ import { Seo } from "@/components/Seo";
 import { toast } from "sonner";
 import { Trophy, RotateCcw, CheckCircle, XCircle, Zap, Square, ArrowRight, Sparkles, Cpu, Download, BookOpen, Home, LogIn, Brain } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { noCopyProps } from "@/lib/noCopy";
 
 interface LeaderboardEntry {
   user_name: string;
@@ -368,7 +369,9 @@ export default function Quiz() {
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
-                className="glass p-6"
+                {...noCopyProps}
+                tabIndex={-1}
+                className="glass p-6 select-none focus:outline-none"
               >
                 {current.dynamic && (
                   <div className="flex items-center gap-2 mb-3 text-xs text-primary">
