@@ -1,9 +1,9 @@
-import type { ClipboardEvent, KeyboardEvent, MouseEvent } from "react";
+import type { ClipboardEvent, KeyboardEvent, MouseEvent, SyntheticEvent } from "react";
 
 /**
  * Props que dificultam copiar o texto exibido (Quiz e Digitação):
- * bloqueia seleção, menu do botão direito e o atalho Ctrl/Cmd+C.
- * Aplicar apenas nas áreas de conteúdo — nunca no campo de digitação.
+ * bloqueia seleção (desktop e long-press no celular), menu do botão direito
+ * e o atalho Ctrl/Cmd+C. Aplicar apenas nas áreas de conteúdo.
  */
 export const noCopyProps = {
   className: "select-none",
@@ -15,5 +15,14 @@ export const noCopyProps = {
       e.preventDefault();
     }
   },
-  style: { WebkitUserSelect: "none", userSelect: "none" } as const,
+  // impede o long-press de iniciar seleção no celular
+  onSelectCapture: (e: SyntheticEvent) => e.preventDefault(),
+  style: {
+    WebkitUserSelect: "none",
+    userSelect: "none",
+    // iOS Safari: remove o balão "Copiar/Selecionar" no toque longo
+    WebkitTouchCallout: "none",
+    // Android Chrome: remove o realce azul do toque longo
+    WebkitTapHighlightColor: "transparent",
+  } as const,
 };
