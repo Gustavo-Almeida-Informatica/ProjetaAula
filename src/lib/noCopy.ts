@@ -15,6 +15,5 @@ export const noCopyProps = {
       e.preventDefault();
     }
   },
-  onDragStart: (e: MouseEvent) => e.preventDefault(),
   style: { WebkitUserSelect: "none", userSelect: "none" } as const,
 };
