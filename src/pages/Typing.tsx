@@ -401,7 +401,8 @@ function TestScreen({
 
       <div
         ref={areaRef}
-        className="max-h-48 overflow-y-auto p-4 rounded-xl bg-secondary/30 border border-border/50 leading-loose text-base"
+        {...noCopyProps}
+        className="max-h-48 overflow-y-auto p-4 rounded-xl bg-secondary/30 border border-border/50 leading-loose text-base select-none"
       >
         {words.map((w, i) => {
           const isCurrent = i === currentIndex && !finished;
