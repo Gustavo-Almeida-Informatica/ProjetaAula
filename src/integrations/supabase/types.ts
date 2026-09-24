@@ -180,6 +180,65 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_session_questions: {
+        Row: {
+          answered_at: string | null
+          is_correct: boolean | null
+          presented_at: string
+          question_id: string
+          session_id: string
+        }
+        Insert: {
+          answered_at?: string | null
+          is_correct?: boolean | null
+          presented_at?: string
+          question_id: string
+          session_id: string
+        }
+        Update: {
+          answered_at?: string | null
+          is_correct?: boolean | null
+          presented_at?: string
+          question_id?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_session_questions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_sessions: {
+        Row: {
+          created_at: string
+          failed_at: string | null
+          final_score: number | null
+          finished_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          failed_at?: string | null
+          final_score?: number | null
+          finished_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          failed_at?: string | null
+          final_score?: number | null
+          finished_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       typing_scores: {
         Row: {
           accuracy: number
