@@ -1,100 +1,65 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { ANSWER_TEXT, normalizeAnswer } from "./answers.ts";
 
-async function signHmac(payload: string, secret: string): Promise<string> {
-  const enc = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw",
-    enc.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
-  const bytes = new Uint8Array(sig);
-  let str = "";
-  for (const b of bytes) str += String.fromCharCode(b);
-  return btoa(str).replace(/=+$/, "");
-}
-
+/**
+ * Salva a pontuação de uma partida controlada pelo servidor (quiz-session).
+ * O navegador envia apenas o ID da partida; a pontuação é o número de
+ * perguntas distintas que foram apresentadas E respondidas corretamente,
+ * conforme validado no servidor. Cada partida só pode ser salva uma vez.
+ */
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return json({ error: "Unauthorized" }, 401);
-    }
+    if (!authHeader) return json({ error: "Unauthorized" }, 401);
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const ANON = Deno.env.get("SUPABASE_PUBLISHABLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY")!;
 
-    const userClient = createClient(SUPABASE_URL, ANON, {
-      global: { headers: { Authorization: authHeader } },
-    });
+    const userClient = createClient(SUPABASE_URL, ANON, { global: { headers: { Authorization: authHeader } } });
     const { data: userData, error: userErr } = await userClient.auth.getUser();
     if (userErr || !userData.user) return json({ error: "Unauthorized" }, 401);
     const userId = userData.user.id;
 
     const body = await req.json().catch(() => null);
-    const answers = body?.answers;
-    if (!Array.isArray(answers) || answers.length === 0 || answers.length > 2000) {
-      return json({ error: "Invalid payload" }, 400);
-    }
-
-    // Compute the score: count ALL correct answers (right/wrong may interleave).
-    // Static questions: lookup in ANSWER_KEY by id.
-    // Dynamic questions: id starts with "dyn_", entry must contain
-    //   { id, selected, correct, token } and the token must HMAC-match.
-    let score = 0;
-    const seen = new Set<string>();
-    for (const a of answers) {
-      const idRaw = a?.id;
-      const selected = Number(a?.selected);
-      if (idRaw === undefined || idRaw === null) continue;
-      const idStr = String(idRaw);
-      if (seen.has(idStr)) continue;
-      seen.add(idStr);
-
-      let isCorrect = false;
-      if (idStr.startsWith("dyn_")) {
-        if (!Number.isInteger(selected) || selected < 0 || selected > 3) continue;
-        const declaredCorrect = Number(a?.correct);
-        const token = typeof a?.token === "string" ? a.token : "";
-        if (!Number.isInteger(declaredCorrect) || declaredCorrect < 0 || declaredCorrect > 3) continue;
-        if (!token) continue;
-        const expected = await signHmac(`${idStr}|${declaredCorrect}`, SERVICE_ROLE);
-        if (expected !== token) continue;
-        isCorrect = selected === declaredCorrect;
-      } else {
-        // As alternativas são embaralhadas no cliente, então validamos pelo TEXTO.
-        const expectedText = ANSWER_TEXT[idStr];
-        const selectedText = typeof a?.selectedText === "string" ? a.selectedText : "";
-        if (expectedText === undefined || !selectedText) continue;
-        if (selectedText.length > 500) continue;
-        isCorrect = normalizeAnswer(selectedText) === normalizeAnswer(expectedText);
-      }
-
-      if (isCorrect) score += 1;
-    }
-
-
-    if (score <= 0) {
-      return json({ score: 0, saved: false });
-    }
-    if (score > 1000) score = 1000;
+    const sessionId = typeof body?.sessionId === "string" ? body.sessionId : "";
+    if (!/^[0-9a-f-]{36}$/i.test(sessionId)) return json({ error: "Invalid payload" }, 400);
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
-    const { data: profile } = await admin
-      .from("profiles")
-      .select("full_name, role")
-      .eq("id", userId)
-      .single();
+    const { data: session } = await admin
+      .from("quiz_sessions")
+      .select("id, user_id, finished_at, final_score")
+      .eq("id", sessionId)
+      .maybeSingle();
+    if (!session || session.user_id !== userId) return json({ error: "Invalid session" }, 403);
 
+    // Salvamento repetido da mesma partida: não conta de novo.
+    if (session.finished_at) {
+      return json({ score: session.final_score ?? 0, saved: true, duplicate: true });
+    }
+
+    const { count } = await admin
+      .from("quiz_session_questions")
+      .select("question_id", { count: "exact", head: true })
+      .eq("session_id", sessionId)
+      .eq("is_correct", true);
+    let score = count ?? 0;
+    if (score > 1000) score = 1000;
+
+    // Fecha a partida de forma atômica (só o primeiro pedido vence).
+    const { data: closed } = await admin
+      .from("quiz_sessions")
+      .update({ finished_at: new Date().toISOString(), final_score: score })
+      .eq("id", sessionId)
+      .is("finished_at", null)
+      .select("id");
+    if (!closed || closed.length === 0) return json({ score, saved: true, duplicate: true });
+
+    if (score <= 0) return json({ score: 0, saved: false });
+
+    const { data: profile } = await admin.from("profiles").select("full_name, role").eq("id", userId).single();
     const { data: savedScore, error: saveErr } = await admin.rpc("record_quiz_high_score", {
       _user_id: userId,
       _user_name: profile?.full_name ?? "",
@@ -103,6 +68,8 @@ Deno.serve(async (req) => {
     });
     if (saveErr) {
       console.error("High score save error", saveErr);
+      // Reabre para permitir nova tentativa de salvar.
+      await admin.from("quiz_sessions").update({ finished_at: null, final_score: null }).eq("id", sessionId);
       return json({ error: "Could not save score" }, 500);
     }
 
@@ -114,8 +81,5 @@ Deno.serve(async (req) => {
 });
 
 function json(data: unknown, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
+  return new Response(JSON.stringify(data), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 }
