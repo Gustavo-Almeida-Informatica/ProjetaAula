@@ -49,6 +49,7 @@ export default function Quiz() {
   const endingAttemptRef = useRef(false);
   const fetchingRef = useRef(false);
   const usedTopicsRef = useRef<string[]>([]);
+  const lastCorrectRef = useRef(false);
   const sessionRef = useRef<Promise<string | null> | null>(null);
   const presentRef = useRef<Map<string, Promise<boolean>>>(new Map());
 
@@ -285,6 +286,7 @@ export default function Quiz() {
 
     setShowResult(true);
     const isCorrect = serverCorrect;
+    lastCorrectRef.current = isCorrect;
     const DELAY_MS = 5000;
     setCountdown(Math.ceil(DELAY_MS / 1000));
     tickRef.current = window.setInterval(() => {
@@ -318,7 +320,7 @@ export default function Quiz() {
 
   const handleSkip = async () => {
     if (!showResult) return;
-    const wasCorrect = selected === questions[currentIndex].correct;
+    const wasCorrect = lastCorrectRef.current;
     clearTimers();
     if (wasCorrect) {
       goNext();
