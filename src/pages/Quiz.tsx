@@ -49,6 +49,34 @@ export default function Quiz() {
   const endingAttemptRef = useRef(false);
   const fetchingRef = useRef(false);
   const usedTopicsRef = useRef<string[]>([]);
+  const lastCorrectRef = useRef(false);
+  const sessionRef = useRef<Promise<string | null> | null>(null);
+  const presentRef = useRef<Map<string, Promise<boolean>>>(new Map());
+
+  const newSession = () => {
+    presentRef.current = new Map();
+    sessionRef.current = (async () => {
+      const { data, error } = await supabase.functions.invoke("quiz-session", { body: { action: "start" } });
+      if (error || !data?.sessionId) { console.error("session start failed", error); return null; }
+      return data.sessionId as string;
+    })();
+  };
+
+  const presentQuestion = (q: PlayQuestion): Promise<boolean> => {
+    const key = String(q.id);
+    const existing = presentRef.current.get(key);
+    if (existing) return existing;
+    const p = (async () => {
+      const sessionId = await sessionRef.current;
+      if (!sessionId) return false;
+      const { error } = await supabase.functions.invoke("quiz-session", {
+        body: { action: "present", sessionId, questionId: key, token: q.token },
+      });
+      return !error;
+    })();
+    presentRef.current.set(key, p);
+    return p;
+  };
 
   const clearTimers = () => {
     if (advanceTimerRef.current) { window.clearTimeout(advanceTimerRef.current); advanceTimerRef.current = null; }
@@ -67,13 +95,20 @@ export default function Quiz() {
     answersRef.current = [];
     usedTopicsRef.current = [];
     fetchingRef.current = false;
+    newSession();
   }, []);
 
   useEffect(() => {
+    if (!user) return;
     startQuiz();
     fetchLeaderboard();
     return () => clearTimers();
-  }, [startQuiz]);
+  }, [startQuiz, user?.id]);
+
+  useEffect(() => {
+    const q = questions[currentIndex];
+    if (user && q && sessionRef.current) void presentQuestion(q);
+  }, [questions, currentIndex, user]);
 
   const fetchLeaderboard = async () => {
     const { data } = await supabase
@@ -98,8 +133,13 @@ export default function Quiz() {
     if (saveInFlightRef.current) return saveInFlightRef.current;
 
     const request = (async () => {
+      const sessionId = await sessionRef.current;
+      if (!sessionId) {
+        toast.error("Não foi possível salvar sua pontuação. Tente novamente.");
+        return false;
+      }
       const { error } = await supabase.functions.invoke("submit-quiz-score", {
-        body: { answers: answersSnapshot },
+        body: { sessionId },
       });
       if (error) {
         console.error("Score save failed", error);
@@ -222,18 +262,22 @@ export default function Quiz() {
 
     const q = questions[currentIndex];
 
-    // Dynamic questions do not carry the answer key; ask the server to reveal
-    // it only now that the player committed to an option.
+    // A resposta é validada no servidor (partida controlada por quiz-session).
     let correctIndex = q.correct;
-    if (q.dynamic && correctIndex === undefined) {
-      const { data, error } = await supabase.functions.invoke("verify-quiz-answer", {
-        body: { id: q.id, token: q.token, selected: optionIndex },
-      });
-      if (error || !data || typeof data.correct !== "number") {
-        setSelected(null);
-        toast.error("Não foi possível validar a resposta. Tente novamente.");
-        return;
-      }
+    const sessionId = await sessionRef.current;
+    const presented = sessionId ? await presentQuestion(q) : false;
+    const { data, error } = presented
+      ? await supabase.functions.invoke("quiz-session", {
+          body: { action: "answer", sessionId, questionId: String(q.id), token: q.token, selected: optionIndex, selectedText: q.options[optionIndex] },
+        })
+      : { data: null, error: new Error("not presented") };
+    if (error || !data || typeof data.isCorrect !== "boolean") {
+      setSelected(null);
+      toast.error("Não foi possível validar a resposta. Tente novamente.");
+      return;
+    }
+    const serverCorrect: boolean = data.isCorrect;
+    if (q.dynamic && typeof data.correct === "number") {
       correctIndex = data.correct as number;
       setQuestions((prev) =>
         prev.map((item, i) => (i === currentIndex ? { ...item, correct: correctIndex } : item))
@@ -241,7 +285,8 @@ export default function Quiz() {
     }
 
     setShowResult(true);
-    const isCorrect = optionIndex === correctIndex;
+    const isCorrect = serverCorrect;
+    lastCorrectRef.current = isCorrect;
     const DELAY_MS = 5000;
     setCountdown(Math.ceil(DELAY_MS / 1000));
     tickRef.current = window.setInterval(() => {
@@ -275,7 +320,7 @@ export default function Quiz() {
 
   const handleSkip = async () => {
     if (!showResult) return;
-    const wasCorrect = selected === questions[currentIndex].correct;
+    const wasCorrect = lastCorrectRef.current;
     clearTimers();
     if (wasCorrect) {
       goNext();
