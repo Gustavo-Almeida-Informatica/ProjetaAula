@@ -81,7 +81,7 @@ export default function About() {
     <div className="min-h-screen pt-16 pb-12">
       <Seo
         title="Sobre o Projeto — Projeta Aula"
-        description="Conheça a orientação, o objetivo e a equipe por trás do Projeta Aula, uma ferramenta educacional de informática básica para alunos do CETEP."
+        description="Conheça a equipe e o objetivo do Projeta Aula: informática para todos, especialmente quem tem pouco acesso a cursos e materiais."
         path="/sobre"
       />
 
@@ -154,13 +154,13 @@ export default function About() {
           className="glass p-8 md:p-10 max-w-3xl mx-auto space-y-6"
         >
           <p className="text-sm md:text-base text-foreground leading-relaxed">
-            Este projeto foi criado por Gustavo, Harry, José Antônio e Max e tem como finalidade orientar pessoas que estudam na área de informática. O site, chamado Projeta Aula, foi desenvolvido como uma ferramenta educacional voltada para alunos do CETEP que desejam aprender ou revisar os conceitos fundamentais da informática básica de forma clara, organizada e acessível.
+            O Projeta Aula foi criado por Gustavo, Harry, José Antônio e Max como um trabalho de conclusão de curso no CETEP. O site é para todas as pessoas que querem aprender informática, especialmente quem tem pouco acesso a cursos e materiais. Aqui, qualquer pessoa pode aprender ou revisar os conceitos básicos de forma clara, organizada e acessível.
           </p>
 
           <div>
             <h2 className="font-display text-lg font-bold text-foreground mb-2">Objetivo do site</h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              O propósito central do Projeta Aula é democratizar o acesso ao conhecimento em informática, reunindo em um só lugar os principais conteúdos que costumam ser trabalhados em aulas introdutórias sobre computação. Em vez de depender apenas de explicações em sala de aula ou de materiais dispersos, os estudantes contam com uma plataforma única onde podem estudar no seu próprio ritmo, revisitar os conteúdos quantas vezes forem necessárias e testar seus conhecimentos de maneira prática.
+              O objetivo do Projeta Aula é facilitar o acesso ao conhecimento para todas as pessoas que querem aprender informática, especialmente quem tem pouco acesso a cursos e materiais. Reunimos os conteúdos básicos em um só lugar, com explicações simples. Cada pessoa pode estudar no seu próprio ritmo, voltar aos assuntos sempre que precisar e testar o que aprendeu na prática.
             </p>
           </div>
 
@@ -223,7 +223,7 @@ export default function About() {
           <div>
             <h2 className="font-display text-lg font-bold text-foreground mb-2">Considerações finais</h2>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              De forma geral, o Projeta Aula funciona como um verdadeiro guia de estudos para quem está começando na área de informática. Combinando teoria e prática por meio do quiz, do teste de digitação e da troca com a comunidade, o site cumpre bem seu papel de orientar e apoiar o aprendizado dos alunos do CETEP, tornando o processo de estudo mais acessível, interativo e organizado.
+              O Projeta Aula é um guia para todas as pessoas que querem aprender informática, especialmente quem tem pouco acesso a cursos e materiais. Com os conteúdos, o quiz, o teste de digitação e a troca com a comunidade, queremos apoiar quem está começando e tornar o aprendizado mais acessível, prático e organizado.
             </p>
           </div>
         </motion.div>

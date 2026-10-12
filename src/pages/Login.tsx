@@ -177,7 +177,7 @@ export default function Login() {
     <main className="min-h-screen flex items-center justify-center p-4 bg-background relative">
       <Seo
         title="Entrar — Projeta Aula"
-        description="Acesse sua conta de aluno ou professor do Projeta Aula para estudar informática básica do CETEP."
+        description="Entre no Projeta Aula, uma plataforma de informática para todos, para participar da comunidade e acompanhar seus resultados no quiz e na digitação."
         path="/login"
       />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
@@ -188,7 +188,7 @@ export default function Login() {
       >
         <div className="text-center">
           <h1 className="font-display text-2xl font-bold gradient-warm-text">Projeta Aula</h1>
-          <p className="text-muted-foreground text-xs mt-2">Informática para reforçar seu conhecimento no CETEP</p>
+          <p className="text-muted-foreground text-xs mt-2">Informática para todos, do básico à prática</p>
         </div>
 
         <button
