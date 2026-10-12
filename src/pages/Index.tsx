@@ -72,8 +72,8 @@ export default function Index() {
   return (
     <div className="min-h-screen pt-16 pb-12">
       <Seo
-        title="Projeta Aula — Informática Básica para o CETEP"
-        description="Aprenda informática de um jeito fácil: hardware, software, história dos computadores, conectores e quiz interativo."
+        title="Projeta Aula — Informática para todos"
+        description="Informática para todos, especialmente quem tem pouco acesso a cursos e materiais. Aprenda hardware, software, história, conectores e pratique com o quiz."
         path="/"
       />
       {/* Hero */}
@@ -84,7 +84,7 @@ export default function Index() {
           transition={{ duration: 0.6 }}
         >
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 bg-primary/8 border border-primary/15 text-primary text-xs font-medium">
-            Conteúdo de Informática do CETEP
+            Informática para todos
           </div>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight">
             <span className="gradient-warm-text">Projeta</span>
@@ -263,7 +263,7 @@ export default function Index() {
       {/* Footer */}
       <footer className="container py-8 border-t border-border/50 text-center">
         <p className="text-xs text-muted-foreground">
-          © 2025 Projeta Aula — CETEP. Desenvolvido por Gustavo, Max, Harry e José.
+          © 2025 Projeta Aula — Informática para todos
         </p>
       </footer>
     </div>

@@ -1,8 +1,8 @@
-Projeta Aula — Informática Básica no CETEP
-O Projeta Aula é uma plataforma educacional desenvolvida para reforçar o conhecimento de informática básica dos alunos do CETEP. O projeto busca oferecer um aprendizado fácil e divertido, abordando desde conceitos fundamentais de hardware até a interação prática com sistemas e comunidades.
+Projeta Aula — Informática para todos
+O Projeta Aula é uma plataforma educacional para todas as pessoas que querem aprender informática, especialmente quem tem pouco acesso a cursos e materiais. Criado como trabalho de conclusão de curso no CETEP, o projeto oferece um aprendizado simples e acessível, desde os conceitos básicos de hardware até a prática com programas e a troca de conhecimento na comunidade.
 
 🚀 Objetivo do Projeto
-A plataforma visa centralizar conteúdos essenciais para a formação técnica, permitindo que os estudantes revisem matérias, testem seus conhecimentos e interajam entre si para sanar dúvidas.
+A plataforma reúne conteúdos básicos de informática em um só lugar, permitindo que qualquer pessoa estude no seu ritmo, revise assuntos, teste seus conhecimentos e compartilhe dúvidas com a comunidade.
 
 🛠️ Funcionalidades Principais
 História: Uma seção dedicada à evolução dos computadores ao longo do tempo.

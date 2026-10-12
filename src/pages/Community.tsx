@@ -381,11 +381,11 @@ export default function Community() {
         <AnimatePresence>
           {showNew && (
             <motion.form
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
+              initial={{ opacity: 0, height: 0, overflow: "hidden" }}
+              animate={{ opacity: 1, height: "auto", overflow: "hidden", transitionEnd: { overflow: "visible" } }}
+              exit={{ opacity: 0, height: 0, overflow: "hidden", transitionEnd: { overflow: "hidden" } }}
               onSubmit={handlePost}
-              className="glass p-5 mb-6 space-y-3 overflow-hidden"
+              className="glass relative z-30 p-5 mb-6 space-y-3"
             >
               <input
                 type="text"
