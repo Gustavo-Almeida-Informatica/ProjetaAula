@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Seo } from "@/components/Seo";
+import ImageLightbox, { type LightboxImage } from "@/components/ImageLightbox";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Zap, MonitorPlay, Usb, HardDrive, Wifi, Volume2 } from "lucide-react";
@@ -167,6 +169,7 @@ export const galleryContent: Record<string, GalleryItem[]> = {
 };
 
 export default function Gallery() {
+  const [lightboxImage, setLightboxImage] = useState<LightboxImage | null>(null);
   const [params] = useSearchParams();
   const catParam = params.get("cat");
   const itemParam = params.get("item");
@@ -229,14 +232,20 @@ export default function Gallery() {
               transition={{ delay: i * 0.1 }}
               className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
             >
-              <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setLightboxImage({ src: item.image, alt: item.title })}
+                aria-label={`Ampliar imagem: ${item.title}`}
+                className="mb-4 block w-full h-auto p-0 rounded-lg overflow-hidden aspect-video bg-secondary cursor-zoom-in"
+              >
                 <img
                   src={item.image}
                   alt={item.title}
                   loading="lazy"
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </Button>
               <h2 className="font-display text-base font-bold text-foreground mb-2">{item.title}</h2>
               <p className="text-sm text-muted-foreground mb-4">{item.desc}</p>
               <div className="space-y-2">
@@ -251,6 +260,7 @@ export default function Gallery() {
           ))}
         </motion.div>
       </div>
+      <ImageLightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
     </div>
   );
 }

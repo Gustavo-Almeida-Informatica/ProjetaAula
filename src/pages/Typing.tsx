@@ -545,6 +545,9 @@ function RankingScreen({ onBack }: { onBack: () => void }) {
       <p className="text-xs text-muted-foreground -mt-3">
         Pontuação = PPM × precisão, para valorizar velocidade e acerto juntos.
       </p>
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        PPM = Palavras Por Minuto: quantas palavras corretas você digita em 1 minuto. Quanto maior, mais rápido você digita. A pontuação do ranking é PPM × precisão (%), então velocidade e acerto contam juntos.
+      </p>
 
       {loading ? (
         <p className="text-sm text-muted-foreground">Carregando…</p>

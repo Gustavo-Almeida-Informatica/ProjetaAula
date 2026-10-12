@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
 import { Seo } from "@/components/Seo";
+import ImageLightbox, { type LightboxImage } from "@/components/ImageLightbox";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
@@ -385,6 +387,7 @@ export default function Hardware() {
   const [params] = useSearchParams();
   const itemParam = params.get("item");
   const [searchQuery, setSearchQuery] = useState(params.get("q") ?? "");
+  const [lightboxImage, setLightboxImage] = useState<LightboxImage | null>(null);
 
   useScrollToItem(itemParam, []);
 
@@ -457,14 +460,20 @@ export default function Hardware() {
                 className="glass p-6 hover:border-primary/20 transition-all scroll-mt-24 rounded-xl border border-transparent"
               >
                 {topic.image && (
-                  <div className="mb-4 rounded-lg overflow-hidden aspect-video bg-secondary">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => { if (topic.image) setLightboxImage({ src: topic.image, alt: topic.title }); }}
+                    aria-label={`Ampliar imagem: ${topic.title}`}
+                    className="mb-4 block w-full h-auto p-0 rounded-lg overflow-hidden aspect-video bg-secondary cursor-zoom-in"
+                  >
                     <img
                       src={topic.image}
                       alt={topic.title}
                       loading="lazy"
                       className="w-full h-full object-cover"
                     />
-                  </div>
+                  </Button>
                 )}
                 <h2 className="font-display text-base font-bold text-foreground mb-2">
                   {topic.title}
@@ -483,6 +492,7 @@ export default function Hardware() {
           </div>
         )}
       </div>
+      <ImageLightbox image={lightboxImage} onClose={() => setLightboxImage(null)} />
     </div>
   );
 }
