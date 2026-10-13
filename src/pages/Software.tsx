@@ -873,71 +873,6 @@ export const content: Record<string, ContentSection[]> = {
       ],
     },
   ],
-  drivers: [
-    {
-      title: "O que são Drivers?",
-      desc: "Drivers são programas que fazem o Windows 'conversar' com as peças do computador. Sem eles, o PC não reconhece impressora, placa de vídeo, etc.",
-      items: [
-        "O Windows instala os drivers mais comuns sozinho",
-        "Se algo não funcionar, pode ser driver faltando",
-        "Exemplos: driver de vídeo, áudio, impressora, Wi-Fi",
-        "Gerenciador de Dispositivos mostra se tem algo com problema",
-      ],
-    },
-    {
-      title: "O que é o BIOS/UEFI?",
-      desc: "É o primeiro programa que aparece quando você liga o PC, antes mesmo do Windows carregar. Ele testa se tudo está funcionando.",
-      items: [
-        "Para acessar: aperte Del, F2 ou F12 ao ligar o PC",
-        "Mostra informações sobre hardware instalado",
-        "Permite escolher de onde o PC inicia (HD, pendrive, DVD)",
-        "Normalmente você não precisa mexer no BIOS",
-        "POST (Power-On Self Test): teste automático que o BIOS faz ao ligar para verificar se as peças estão OK",
-      ],
-    },
-  ],
-  logica: [
-    {
-      title: "O que é um Algoritmo?",
-      desc: "Algoritmo é uma 'receita' — uma lista de passos organizados para resolver um problema. A receita de um bolo é um algoritmo!",
-      items: [
-        "Sequência de passos: faça isso, depois aquilo",
-        "Exemplo: acordar → escovar dentes → tomar café",
-        "Na programação, o computador segue esses passos",
-        "É a base de todo programa e aplicativo",
-      ],
-    },
-    {
-      title: "Variáveis",
-      desc: "Variáveis são como 'caixinhas' que guardam informações no programa. Cada caixa tem um nome e guarda um valor.",
-      items: [
-        "Exemplo: nome = \"Maria\" (guarda um texto)",
-        "Exemplo: idade = 25 (guarda um número)",
-        "Você pode mudar o valor a qualquer momento",
-        "Use nomes que fazem sentido: 'nota', 'total', 'nome'",
-      ],
-    },
-    {
-      title: "Condições (SE / SENÃO)",
-      desc: "O programa toma decisões: SE acontecer isso, faça aquilo. SENÃO, faça outra coisa.",
-      items: [
-        "SE (nota >= 7) ENTÃO 'Aprovado'",
-        "SENÃO 'Reprovado'",
-        "É como uma bifurcação na estrada",
-        "O computador escolhe o caminho baseado na condição",
-      ],
-    },
-    {
-      title: "Repetição (Loops)",
-      desc: "Loops fazem o computador repetir uma ação várias vezes sem você precisar escrever tudo de novo.",
-      items: [
-        "PARA i de 1 até 10: escreva i (conta de 1 a 10)",
-        "ENQUANTO houver alunos: chame o próximo",
-        "Útil para processar listas e dados grandes",
-        "Cuidado: se a condição nunca parar, o loop é infinito!",
-      ],
-    },
-  ],
   seguranca: [
     {
       title: "Dicas de Segurança no Computador",
@@ -963,6 +898,28 @@ export const content: Record<string, ContentSection[]> = {
     },
   ],
 };
+
+const COMING_SOON_TABS = ["drivers", "logica"];
+
+function ComingSoonBlock() {
+  const [videoFailed, setVideoFailed] = useState(false);
+  return (
+    <div className="text-center py-10 space-y-6">
+      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">(em breve)</h2>
+      <p className="text-muted-foreground text-sm">Este conteúdo está sendo preparado.</p>
+      {!videoFailed && (
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          src="/videos/em-breve.mp4"
+          onError={() => setVideoFailed(true)}
+          className="w-full max-w-2xl mx-auto rounded-xl"
+        />
+      )}
+    </div>
+  );
+}
 
 export default function Software() {
   const [params] = useSearchParams();
@@ -995,10 +952,13 @@ export default function Software() {
     );
   };
 
+  const isComingSoon = COMING_SOON_TABS.includes(activeTab);
   const hasResults =
     activeTab === "programas"
       ? filteredPrograms.length > 0
-      : filteredContent(content[activeTab]).length > 0;
+      : isComingSoon
+        ? true
+        : filteredContent(content[activeTab]).length > 0;
 
   return (
     <div className="min-h-screen pt-16 pb-12">
@@ -1163,6 +1123,8 @@ export default function Software() {
                 </div>
               </div>
             </div>
+          ) : isComingSoon ? (
+            <ComingSoonBlock />
           ) : (
             <div className="space-y-5">
               {filteredContent(content[activeTab])?.map((section) => (

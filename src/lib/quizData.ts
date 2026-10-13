@@ -188,11 +188,11 @@ export function resolveContentLink(q: QuizQuestion): ContentLink | null {
   if (has("ccleaner")) return SW("manutencao", "ccleaner-limpeza");
   if (has("desfragmenta", "defraggler")) return SW("manutencao", "defraggler-desfragmentacao");
   if (has("compact", "zip", "rar", ".7z")) return SW("manutencao", "compactacao-de-arquivos");
-  if (has("driver")) return SW("drivers", "o-que-sao-drivers");
-  if (has("algoritmo")) return SW("logica", "o-que-e-um-algoritmo");
-  if (has("variável", "variavel")) return SW("logica", "variaveis");
-  if (has("se/senão", "se / senão", "se senao", "condi")) return SW("logica", "condicoes-se-senao");
-  if (has("loop", "repetição", "repeticao")) return SW("logica", "repeticao-loops");
+  if (has("driver")) return SW("drivers");
+  if (has("algoritmo")) return SW("logica");
+  if (has("variável", "variavel")) return SW("logica");
+  if (has("se/senão", "se / senão", "se senao", "condi")) return SW("logica");
+  if (has("loop", "repetição", "repeticao")) return SW("logica");
   if (has("phishing")) return SW("seguranca", "o-que-e-phishing");
   if (has("senha", "antivírus", "antivirus", "backup", "wi-fi público", "wifi público")) return SW("seguranca", "dicas-de-seguranca-no-computador");
   if (has("gerenciador de tarefas", "ctrl+shift+esc")) return SW("windows", "gerenciador-de-tarefas");
