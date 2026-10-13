@@ -467,7 +467,6 @@ export const quizQuestions: QuizQuestion[] = [
   { id: 149, category: "Navegadores", question: "O que são extensões de navegador?", options: ["Atualizações obrigatórias enviadas pelo desenvolvedor", "Pequenos programas que adicionam funções ao navegador", "Cabos físicos que ampliam o sinal da rede sem fio", "Vírus que se instalam automaticamente em segundo plano"], correct: 1, explanation: "Extensões são pequenos programas instalados no navegador que adicionam funcionalidades, como bloqueador de anúncios, tradutor ou gerenciador de senhas." },
   { id: 150, category: "Programas", question: "Para que serve o aplicativo Telegram?", options: ["Apenas ligações de voz como o telefone fixo", "Mensagens, ligações, grupos e canais com muita capacidade", "Edição de fotos com filtros estilo redes sociais", "Loja de aplicativos concorrente da Play Store"], correct: 1, explanation: "O Telegram é um mensageiro com foco em velocidade e segurança, suportando grupos enormes, canais públicos, bots e envio de arquivos grandes." },
 
-  // ===== PERGUNTAS SOBRE O PROJETO PROJETA AULA — alternativas equilibradas e respostas variadas =====
 
 
   // ===== PERGUNTAS SOBRE PROGRAMAS ESSENCIAIS — utilidade dos softwares =====
@@ -542,7 +541,7 @@ export const quizQuestions: QuizQuestion[] = [
   { id: 413, category: "História", question: "Qual rede social fez enorme sucesso no Brasil entre 2004 e 2014, do Google?", options: ["Hi5, popular entre adolescentes do Sudeste brasileiro", "Orkut, com mais da metade dos usuários mundiais sendo brasileiros", "Friendster, usada em comunidades universitárias do país", "MySpace, focada em divulgação de bandas independentes"], correct: 1, explanation: "O Orkut, do Google, dominou o Brasil entre 2004 e 2014 — chegamos a ter mais da metade dos usuários mundiais." },
   { id: 414, category: "História", question: "Em que ano o WhatsApp foi fundado?", options: ["2004, mesmo ano do Facebook por Mark Zuckerberg", "2009, antes de ser comprado pelo Facebook em 2014", "2012, junto com o boom dos smartphones Android baratos", "2016, após a Meta unificar Facebook, Instagram e WhatsApp"], correct: 1, explanation: "O WhatsApp foi fundado em 2009. Foi comprado pelo Facebook (hoje Meta) em 2014 por US$ 19 bilhões." },
 
-  // ===== NOVAS QUESTÕES (2026): Conectores/Cabos, Comunidade, Perfil, História extra =====
+  // ===== NOVAS QUESTÕES (2026): Conectores/Cabos e História extra =====
 
   // Cabos — Energia
   { id: 500, category: "Cabos", question: "Qual é o conector fêmea padrão do cabo de força do PC que se encaixa na fonte?", options: ["IEC C13, popularmente chamado de 'rabo de porco'", "Plugue NEMA 5-15, típico das tomadas americanas", "Conector Molex, usado internamente para HDs antigos", "Adaptador P4, comum em fontes de notebook"], correct: 0, explanation: "O cabo de força do desktop termina em um conector IEC C13 (o 'rabo de porco') que encaixa na fonte de alimentação." },
@@ -566,9 +565,7 @@ export const quizQuestions: QuizQuestion[] = [
   { id: 510, category: "Cabos", question: "O que é o conector P2 (também chamado de 3,5 mm) usado em fones e caixinhas de som?", options: ["Um plugue óptico digital feito de fibra plástica", "Um mini-jack analógico com 3,5 mm de diâmetro", "Um conector USB específico para dispositivos de áudio", "Um plugue coaxial usado apenas em home theaters"], correct: 1, explanation: "O P2 é o mini-jack analógico de 3,5 mm — padrão em fones, caixinhas e placas de som de computador." },
   { id: 511, category: "Cabos", question: "Qual é a diferença entre um plugue P2 estéreo e um P2 mono?", options: ["O estéreo tem dois anéis (esquerdo/direito); o mono tem apenas um", "O estéreo é mais grosso e usa 6,3 mm de diâmetro", "O mono transmite áudio com mais qualidade do que o estéreo", "O estéreo é digital e o mono é analógico convencional"], correct: 0, explanation: "O P2 estéreo tem dois anéis pretos separando canal esquerdo e direito; o mono tem apenas um anel, um canal só." },
 
-  // Comunidade
 
-  // Perfil / Login
 
   // História extra
   { id: 540, category: "História", question: "Em que cidade fica o Polo Industrial que fabrica boa parte da eletrônica brasileira?", options: ["Curitiba, no Sul do país", "Manaus, no coração da Amazônia", "Campinas, no interior paulista", "Recife, no Nordeste brasileiro"], correct: 1, explanation: "O Polo Industrial de Manaus concentra a produção de eletrônicos no Brasil, incluindo celulares e TVs." },

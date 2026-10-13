@@ -338,7 +338,7 @@ export default function Quiz() {
       <div className="min-h-screen pt-16 pb-12 flex items-center">
         <Seo
           title="Quiz Infinito de Informática | Projeta Aula"
-          description="Faça login para começar o quiz infinito de informática com mais de 150 questões."
+          description="Faça login para começar o quiz infinito de informática com mais de 200 questões."
           path="/quiz"
         />
         <div className="container max-w-lg">
@@ -368,13 +368,13 @@ export default function Quiz() {
     <div className="min-h-screen pt-16 pb-12">
       <Seo
         title="Quiz Infinito de Informática | Projeta Aula"
-        description="Mais de 150 questões aleatórias de informática, com geração dinâmica por IA quando o banco acaba. Teste seus conhecimentos."
+        description="Mais de 200 questões aleatórias de informática, com geração dinâmica por IA quando o banco acaba. Teste seus conhecimentos."
         path="/quiz"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "LearningResource",
           name: "Quiz Infinito de Informática",
-          description: "Quiz interativo com mais de 150 questões aleatórias sobre hardware, software, Windows 11, história, Brasil, smartphones, IA e redes sociais — com geração dinâmica de novas perguntas por IA.",
+          description: "Quiz interativo com mais de 200 questões aleatórias sobre hardware, software, Windows 11, história, Brasil, smartphones, IA e redes sociais — com geração dinâmica de novas perguntas por IA.",
           learningResourceType: "Quiz",
           educationalLevel: "Beginner",
           inLanguage: "pt-BR",
