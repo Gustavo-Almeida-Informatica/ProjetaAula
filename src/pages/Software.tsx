@@ -1123,6 +1123,8 @@ export default function Software() {
                 </div>
               </div>
             </div>
+          ) : isComingSoon ? (
+            <ComingSoonBlock />
           ) : (
             <div className="space-y-5">
               {filteredContent(content[activeTab])?.map((section) => (
