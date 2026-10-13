@@ -2,7 +2,7 @@
 // Used to ground the AI when generating dynamic quiz questions so they
 // stay strictly based on what the site actually teaches.
 export const SITE_CORPUS = `
-PROJETA AULA — Conteúdo educativo de informática (CETEP, Brasil). Linguagem acessível para iniciantes.
+Conteúdo educativo de informática: Hardware, História, Software e Cabos/Conectores. Linguagem acessível para iniciantes.
 
 ==== HARDWARE ====
 CPU: cérebro do PC; mais GHz = mais rápido; núcleos; cache L1/L2/L3; precisa de cooler. Exemplos: Intel Core i3/i5/i7/i9, AMD Ryzen.
@@ -93,6 +93,4 @@ Senha forte: 12+ caracteres mistos. Backup = cópia. Wi-Fi público é arriscado
 ==== LÓGICA ====
 Algoritmo (passos), variável (caixinha), SE/SENÃO (decisão), Loop (repetição); loop infinito trava.
 
-==== EQUIPE / SITE ====
-4 devs: Gustavo, Max, Harry, José (CETEP). Perfis Aluno (🎓) e Professor (👨‍🏫). Login e-mail/senha + Google OAuth. Quiz Infinito: errou volta do zero. Ranking guarda só o recorde. Tema escuro com laranja/âmbar e glassmorphism.
 `;

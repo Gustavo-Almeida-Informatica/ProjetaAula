@@ -470,12 +470,12 @@ export default function Quiz() {
                       const qs = params.toString();
                       const to = link.path + (qs ? `?${qs}` : "");
                       const Icon = link.path === "/hardware" ? Cpu
-                        : link.path === "/history" ? BookOpen
+                        : link.path === "/historia" ? BookOpen
                         : link.path === "/" ? Home
                         : Download;
                       const label = link.label
                         ?? (link.path === "/hardware" ? "Veja no guia de Hardware"
-                          : link.path === "/history" ? "Leia na linha do tempo"
+                          : link.path === "/historia" ? "Leia na linha do tempo"
                           : link.path === "/" ? "Ver no site"
                           : "Conheça os Programas Essenciais");
                       return (

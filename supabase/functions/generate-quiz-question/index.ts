@@ -24,14 +24,7 @@ const CATEGORIES = [
   "Hardware",
   "Software",
   "História",
-  "Brasil",
-  "Smartphones",
-  "IA",
-  "Redes Sociais",
-  "Windows",
-  "Periféricos",
-  "Conectores",
-  "Segurança",
+  "Cabos e Conectores",
 ];
 
 function pickCategory(): string {
@@ -86,7 +79,7 @@ REGRAS OBRIGATÓRIAS:
 PÁGINAS DO SITE e SEÇÕES VÁLIDAS para contentLink:
 - /hardware (item opcional): processador-cpu, memoria-ram, armazenamento-hd-e-ssd, cooler-ventilador, fonte-de-alimentacao, placa-mae, placa-de-video-gpu, perifericos, gabinete, placa-de-som, placa-de-rede-nic, placa-fax-modem, flat-cable-cabos-internos, teclado-detalhado, mouse-detalhado, monitor-detalhado, impressora-tipos, scanner-detalhado, webcam, kit-multimidia, bios-cmos-post-detalhado, interfaces-e-portas, slots-de-barramento, chipsets-ponte-norte-e-ponte-sul, memorias-avancadas-sdram-ddr2-ddr3, raid-redundant-array-of-independent-disks, sistemas-numericos-binario-bits-e-bytes
 - /software (tab obrigatória entre: windows, programas, explorador, manutencao, drivers, logica, seguranca; item opcional como slug-em-kebab-case do tópico)
-- /history (item opcional): valvulas-termoionicas-eniac-e-edvac, transistores, circuitos-integrados-chips, vlsi-e-computadores-pessoais-pc, ulsi-internet-smartphones-e-ia, patinho-feio-1972, cobra-1974, reserva-de-mercado-1984-1992, internet-no-brasil-1995, polo-industrial-de-manaus, pix-2020, motorola-dynatac-1983, nokia-3310-2000, blackberry-2003, iphone-2007, android-2008, 5g-2019, deep-blue-1997, alphago-2016, gpt-3-2020, chatgpt-2022, geracao-de-imagens, ia-multimodal-2024, icq-e-msn-messenger, orkut-2004-2014, facebook-2004, youtube-2005, whatsapp-2009, tiktok-2016
+- /historia (item opcional): valvulas-termoionicas-eniac-e-edvac, transistores, circuitos-integrados-chips, vlsi-e-computadores-pessoais-pc, ulsi-internet-smartphones-e-ia, patinho-feio-1972, cobra-1974, reserva-de-mercado-1984-1992, internet-no-brasil-1995, polo-industrial-de-manaus, pix-2020, motorola-dynatac-1983, nokia-3310-2000, blackberry-2003, iphone-2007, android-2008, 5g-2019, deep-blue-1997, alphago-2016, gpt-3-2020, chatgpt-2022, geracao-de-imagens, ia-multimodal-2024, icq-e-msn-messenger, orkut-2004-2014, facebook-2004, youtube-2005, whatsapp-2009, tiktok-2016
 
 FORMATO EXATO (JSON):
 {"question":"...","options":["...","...","...","..."],"correct":2,"explanation":"...","contentLink":{"path":"/hardware","item":"processador-cpu"}}`;
@@ -95,6 +88,7 @@ FORMATO EXATO (JSON):
 ${SITE_CORPUS}
 
 Categoria sugerida: ${category}
+IMPORTANTE: gere perguntas SOMENTE sobre conteúdo de informática (Hardware, História da computação, Software, Cabos e Conectores). NUNCA pergunte sobre o próprio site, projeto, equipe, perfil, login, comunidade, quiz ou ranking.
 ${avoid.length ? `Evite perguntas sobre estes tópicos já usados nesta sessão: ${avoid.join("; ")}` : ""}
 
 Gere AGORA UMA única questão nova de quiz seguindo todas as regras.`;
@@ -164,7 +158,7 @@ Gere AGORA UMA única questão nova de quiz seguindo todas as regras.`;
     if (!explanation) return json({ error: "missing_explanation" }, 502);
 
     // Validate contentLink (allowlist)
-    const ALLOWED_PATHS = new Set(["/hardware", "/software", "/history", "/"]);
+    const ALLOWED_PATHS = new Set(["/hardware", "/software", "/historia"]);
     const ALLOWED_TABS = new Set(["windows", "programas", "explorador", "manutencao", "drivers", "logica", "seguranca"]);
     const slugRe = /^[a-z0-9-]{1,80}$/;
     let contentLink: { path: string; item?: string; tab?: string } | undefined;
