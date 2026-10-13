@@ -45,7 +45,9 @@ function build(): SearchItem[] {
   );
 
   Object.entries(softwareContent).forEach(([tabId, sections]) =>
-    sections.forEach((s) =>
+    sections.forEach((s) => {
+      // Abas "em breve" (Drivers e BIOS, Lógica Básica) não têm conteúdo indexado
+      if (tabId === "drivers" || tabId === "logica") return;
       items.push({
         title: s.title,
         desc: s.desc,
