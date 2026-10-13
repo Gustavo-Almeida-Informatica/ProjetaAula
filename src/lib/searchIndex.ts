@@ -54,8 +54,8 @@ function build(): SearchItem[] {
         category: "Software",
         route: `/software?tab=${tabId}&item=${slugify(s.title)}`,
         badgeClass: badgeClasses.Software,
-      }),
-    ),
+      });
+    }),
   );
 
   historyTimeline.forEach((t) =>
