@@ -899,6 +899,28 @@ export const content: Record<string, ContentSection[]> = {
   ],
 };
 
+const COMING_SOON_TABS = ["drivers", "logica"];
+
+function ComingSoonBlock() {
+  const [videoFailed, setVideoFailed] = useState(false);
+  return (
+    <div className="text-center py-10 space-y-6">
+      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">(em breve)</h2>
+      <p className="text-muted-foreground text-sm">Este conteúdo está sendo preparado.</p>
+      {!videoFailed && (
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          src="/videos/em-breve.mp4"
+          onError={() => setVideoFailed(true)}
+          className="w-full max-w-2xl mx-auto rounded-xl"
+        />
+      )}
+    </div>
+  );
+}
+
 export default function Software() {
   const [params] = useSearchParams();
   const initialQ = params.get("q") ?? "";
@@ -930,10 +952,13 @@ export default function Software() {
     );
   };
 
+  const isComingSoon = COMING_SOON_TABS.includes(activeTab);
   const hasResults =
     activeTab === "programas"
       ? filteredPrograms.length > 0
-      : filteredContent(content[activeTab]).length > 0;
+      : isComingSoon
+        ? true
+        : filteredContent(content[activeTab]).length > 0;
 
   return (
     <div className="min-h-screen pt-16 pb-12">
