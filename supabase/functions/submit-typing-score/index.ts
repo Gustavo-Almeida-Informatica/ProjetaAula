@@ -7,6 +7,15 @@ import { getTypingText, stripDiacritics } from "./texts.ts";
  * wpm / accuracy / points server-side. Clients can no longer report
  * their own numbers to the leaderboard.
  */
+const enc = new TextEncoder();
+async function hmac(secret: string, payload: string) {
+  const key = await crypto.subtle.importKey(
+    "raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
+  return Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -30,6 +39,14 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const textId = String(body?.textId ?? "");
+
+    // Step 1: the server records when the test started (signed token).
+    if (body?.action === "start") {
+      if (!getTypingText(textId)) return json({ error: "Invalid text" }, 400);
+      const payload = `${userId}.${textId}.${Date.now()}`;
+      const sig = await hmac(SERVICE_ROLE, payload);
+      return json({ token: `${payload}.${sig}` });
+    }
     const typedRaw = String(body?.typed ?? "");
     const elapsedSecondsRaw = Number(body?.elapsedSeconds);
     const accents = body?.accents !== false;
@@ -41,10 +58,24 @@ Deno.serve(async (req) => {
       return json({ error: "Invalid payload" }, 400);
     }
 
-    // The test always runs within the text's time budget; clamp to it so a
-    // client cannot claim an absurdly short duration.
+    // Step 2: elapsed time is measured by the server from the signed start
+    // token, so a client cannot claim an artificially short duration.
+    const token = String(body?.startToken ?? "");
+    const parts = token.split(".");
+    if (parts.length !== 4) return json({ error: "Invalid session" }, 400);
+    const [tUser, tText, tStart, tSig] = parts;
+    const expected = await hmac(SERVICE_ROLE, `${tUser}.${tText}.${tStart}`);
+    const startedAt = Number(tStart);
+    if (tSig !== expected || tUser !== userId || tText !== textId || !Number.isFinite(startedAt)) {
+      return json({ error: "Invalid session" }, 400);
+    }
+    const serverElapsed = (Date.now() - startedAt) / 1000;
+    if (serverElapsed > text.estimatedSeconds + 600) {
+      return json({ error: "Session expired" }, 400);
+    }
+    // Small tolerance for network latency; never shorter than the client's own timer.
     const elapsed = Math.min(
-      Math.max(Math.round(elapsedSecondsRaw), 1),
+      Math.max(Math.round(Math.max(serverElapsed - 2, elapsedSecondsRaw)), 1),
       text.estimatedSeconds,
     );
 

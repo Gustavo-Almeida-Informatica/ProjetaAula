@@ -23,7 +23,11 @@ export default defineTool({
       .order("created_at", { ascending: false })
       .limit(limit ?? 10);
     if (hashtag) query = query.contains("hashtags", [hashtag.replace(/^#/, "")]);
-    if (search) query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%`);
+    if (search) {
+      // Remove PostgREST filter syntax so the text can only be matched literally.
+      const safe = search.replace(/[,()"\\%*:.]/g, " ").replace(/\s+/g, " ").trim();
+      if (safe) query = query.or(`title.ilike."%${safe}%",content.ilike."%${safe}%"`);
+    }
     const { data, error } = await query;
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     return {
