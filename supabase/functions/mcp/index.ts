@@ -99,7 +99,10 @@ var list_posts_default = defineTool2({
     const supabase = supabaseForUser(ctx);
     let query = supabase.from("community_posts").select("id, title, content, hashtags, user_name, user_role, likes_count, views_count, created_at").order("created_at", { ascending: false }).limit(limit ?? 10);
     if (hashtag) query = query.contains("hashtags", [hashtag.replace(/^#/, "")]);
-    if (search) query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%`);
+    if (search) {
+      const safe = search.replace(/[,()"\\%*:.]/g, " ").replace(/\s+/g, " ").trim();
+      if (safe) query = query.or(`title.ilike."%${safe}%",content.ilike."%${safe}%"`);
+    }
     const { data, error } = await query;
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     return {
