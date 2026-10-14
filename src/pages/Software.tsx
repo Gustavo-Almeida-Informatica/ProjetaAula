@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
 import { Seo } from "@/components/Seo";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import emBreveVideo from "@/assets/em-breve.mp4.asset.json";
 import { useSearchParams } from "react-router-dom";
 import {
   Monitor, Download, Settings, Code, Shield, FolderOpen, Wrench, ExternalLink,
@@ -902,21 +903,54 @@ export const content: Record<string, ContentSection[]> = {
 const COMING_SOON_TABS = ["drivers", "logica"];
 
 function ComingSoonBlock() {
-  const [videoFailed, setVideoFailed] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Tenta tocar com som. Se o navegador bloquear o autoplay com som,
+    // toca mudo e liga o som na primeira interação da pessoa.
+    const unlockSound = () => {
+      video.muted = false;
+    };
+    const tryPlayWithSound = async () => {
+      video.muted = false;
+      try {
+        await video.play();
+      } catch {
+        video.muted = true;
+        try {
+          await video.play();
+        } catch {
+          // Sem autoplay possível; a primeira interação tenta de novo.
+        }
+        const events = ["pointerdown", "touchstart", "keydown"] as const;
+        const onFirstInteraction = () => {
+          unlockSound();
+          void video.play().catch(() => {});
+          events.forEach((e) => document.removeEventListener(e, onFirstInteraction));
+        };
+        events.forEach((e) => document.addEventListener(e, onFirstInteraction));
+      }
+    };
+    void tryPlayWithSound();
+  }, []);
+
   return (
     <div className="text-center py-10 space-y-6">
       <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">(em breve)</h2>
       <p className="text-muted-foreground text-sm">Este conteúdo está sendo preparado.</p>
-      {!videoFailed && (
-        <video
-          controls
-          playsInline
-          preload="metadata"
-          src="/videos/em-breve.mp4"
-          onError={() => setVideoFailed(true)}
-          className="w-full max-w-2xl mx-auto rounded-xl"
-        />
-      )}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        playsInline
+        preload="auto"
+        src={emBreveVideo.url}
+        aria-label="Vídeo de apresentação do conteúdo em preparação"
+        className="w-full max-w-2xl mx-auto rounded-xl"
+      />
     </div>
   );
 }
