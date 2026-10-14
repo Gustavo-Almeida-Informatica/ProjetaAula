@@ -281,6 +281,7 @@ function TestScreen({
   const areaRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const startTokenRef = useRef<Promise<string | null> | null>(null);
 
   const words = useMemo(() => text.content.split(" "), [text]);
 
@@ -321,7 +322,16 @@ function TestScreen({
     // Normaliza quebras de linha e espaços repetidos para que cada palavra
     // digitada continue alinhada com a palavra correspondente do texto alvo.
     const clean = value.replace(/[\r\n\t]+/g, " ").replace(/ {2,}/g, " ").replace(/^ +/, "");
-    if (!started && clean.length > 0) setStarted(true);
+    if (!started && clean.length > 0) {
+      setStarted(true);
+      // O servidor registra o início do teste para medir o tempo real.
+      if (userId) {
+        startTokenRef.current = supabase.functions
+          .invoke("submit-typing-score", { body: { action: "start", textId: text.id } })
+          .then(({ data }) => (data?.token as string) ?? null)
+          .catch(() => null);
+      }
+    }
     setTyped(clean);
     if (clean.split(" ").slice(0, -1).length >= words.length) setFinished(true);
   };
@@ -352,8 +362,10 @@ function TestScreen({
     if (!userId || saved) return;
     // O resultado é recalculado no servidor a partir do texto digitado:
     // o cliente não envia PPM/precisão/pontos.
+    const startToken = startTokenRef.current ? await startTokenRef.current : null;
     const { data, error } = await supabase.functions.invoke("submit-typing-score", {
       body: {
+        startToken,
         textId: text.id,
         typed,
         elapsedSeconds: Math.max(1, text.estimatedSeconds - remaining),
@@ -378,6 +390,7 @@ function TestScreen({
     setStarted(false);
     setFinished(false);
     setSaved(false);
+    startTokenRef.current = null;
     setRemaining(next.estimatedSeconds);
     inputRef.current?.focus();
   };
