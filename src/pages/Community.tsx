@@ -94,7 +94,8 @@ export default function Community() {
     const seenKey = "projeta-aula:viewed-posts";
     const seen = new Set<string>(JSON.parse(sessionStorage.getItem(seenKey) || "[]"));
     const fresh = list.filter((p) => !seen.has(p.id) && !viewedRef.current.has(p.id));
-    if (fresh.length > 0) {
+    const { data: sess } = await supabase.auth.getSession();
+    if (fresh.length > 0 && sess.session) {
       fresh.forEach((p) => {
         seen.add(p.id);
         viewedRef.current.add(p.id);
