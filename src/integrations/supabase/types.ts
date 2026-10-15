@@ -290,6 +290,23 @@ export type Database = {
           role: Database["public"]["Enums"]["user_role"]
         }[]
       }
+      get_quiz_leaderboard: {
+        Args: { _limit?: number }
+        Returns: {
+          score: number
+          user_name: string
+          user_role: Database["public"]["Enums"]["user_role"]
+        }[]
+      }
+      get_typing_leaderboard: {
+        Args: { _limit?: number }
+        Returns: {
+          accuracy: number
+          points: number
+          user_name: string
+          wpm: number
+        }[]
+      }
       increment_post_view: { Args: { _post_id: string }; Returns: undefined }
       record_quiz_high_score: {
         Args: {
