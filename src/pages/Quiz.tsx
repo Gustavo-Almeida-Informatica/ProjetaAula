@@ -111,20 +111,11 @@ export default function Quiz() {
   }, [questions, currentIndex, user]);
 
   const fetchLeaderboard = async () => {
-    const { data } = await supabase
-      .from("quiz_scores")
-      .select("user_name, user_role, score, user_id")
-      .order("score", { ascending: false });
+    const { data } = await supabase.rpc("get_quiz_leaderboard", { _limit: 10 });
     if (data) {
-      const bestByUser = new Map<string, LeaderboardEntry>();
-      for (const row of data) {
-        const key = row.user_id || row.user_name;
-        if (!bestByUser.has(key) || row.score > bestByUser.get(key)!.score) {
-          bestByUser.set(key, { user_name: row.user_name, user_role: row.user_role, score: row.score });
-        }
-      }
-      const sorted = Array.from(bestByUser.values()).sort((a, b) => b.score - a.score).slice(0, 10);
-      setLeaderboard(sorted);
+      setLeaderboard(
+        data.map((row) => ({ user_name: row.user_name, user_role: row.user_role, score: row.score })),
+      );
     }
   };
 

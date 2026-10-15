@@ -526,15 +526,11 @@ function RankingScreen({ onBack }: { onBack: () => void }) {
 
   useEffect(() => {
     supabase
-      .from("typing_scores")
-      .select("user_id, user_name, wpm, accuracy, points")
-      .order("points", { ascending: false })
-      .limit(200)
+      .rpc("get_typing_leaderboard", { _limit: 50 })
       .then(({ data }) => {
         const best = new Map<string, RankRow>();
         (data ?? []).forEach((r) => {
-          const key = r.user_id || r.user_name;
-          if (!best.has(key)) best.set(key, r as RankRow);
+          if (!best.has(r.user_name)) best.set(r.user_name, r as RankRow);
         });
         setRows([...best.values()].sort((a, b) => b.points - a.points).slice(0, 50));
         setLoading(false);
@@ -580,7 +576,7 @@ function RankingScreen({ onBack }: { onBack: () => void }) {
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={r.user_id + i} className="border-t border-border/40">
+                <tr key={r.user_name + i} className="border-t border-border/40">
                   <td className="py-2 pr-3">
                     <span
                       className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-xs font-bold ${medal(i)}`}

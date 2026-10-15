@@ -18,16 +18,8 @@ export default defineTool({
     const supabase = supabaseForUser(ctx);
     const query =
       board === "quiz"
-        ? supabase
-            .from("quiz_scores")
-            .select("user_name, user_role, score, created_at")
-            .order("score", { ascending: false })
-            .limit(limit ?? 10)
-        : supabase
-            .from("typing_scores")
-            .select("user_name, wpm, accuracy, points, created_at")
-            .order("points", { ascending: false })
-            .limit(limit ?? 10);
+        ? supabase.rpc("get_quiz_leaderboard", { _limit: limit ?? 10 })
+        : supabase.rpc("get_typing_leaderboard", { _limit: limit ?? 10 });
     const { data, error } = await query;
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     return {
