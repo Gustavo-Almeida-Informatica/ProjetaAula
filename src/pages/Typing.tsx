@@ -576,7 +576,7 @@ function RankingScreen({ onBack }: { onBack: () => void }) {
             </thead>
             <tbody>
               {rows.map((r, i) => (
-                <tr key={r.user_id + i} className="border-t border-border/40">
+                <tr key={r.user_name + i} className="border-t border-border/40">
                   <td className="py-2 pr-3">
                     <span
                       className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-xs font-bold ${medal(i)}`}
