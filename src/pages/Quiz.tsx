@@ -268,8 +268,15 @@ export default function Quiz() {
       return;
     }
     const serverCorrect: boolean = data.isCorrect;
+    if (!q.dynamic && typeof data.correctText === "string") {
+      const norm = (t: string) => t.normalize("NFC").trim().toLowerCase();
+      const idx = q.options.findIndex((o) => norm(o) === norm(data.correctText));
+      if (idx >= 0) correctIndex = idx;
+    }
     if (q.dynamic && typeof data.correct === "number") {
       correctIndex = data.correct as number;
+    }
+    if (correctIndex !== q.correct) {
       setQuestions((prev) =>
         prev.map((item, i) => (i === currentIndex ? { ...item, correct: correctIndex } : item))
       );

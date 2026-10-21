@@ -99,6 +99,7 @@ Deno.serve(async (req) => {
 
       let isCorrect = false;
       let correct: number | undefined;
+      let correctText: string | undefined;
       if (isDynamic) {
         const selected = Number(body?.selected);
         const c = await dynamicCorrect(questionId, token, SERVICE_ROLE);
@@ -109,6 +110,7 @@ Deno.serve(async (req) => {
         const selectedText = typeof body?.selectedText === "string" ? body.selectedText : "";
         if (!selectedText || selectedText.length > 500) return json({ error: "Invalid answer" }, 400);
         isCorrect = normalizeAnswer(selectedText) === normalizeAnswer(ANSWER_TEXT[questionId]);
+        correctText = ANSWER_TEXT[questionId];
       }
 
       // Marca como respondida só se ainda não estava (evita corrida/duplo envio).
@@ -124,7 +126,7 @@ Deno.serve(async (req) => {
       if (!isCorrect) {
         await admin.from("quiz_sessions").update({ failed_at: new Date().toISOString() }).eq("id", sessionId).is("failed_at", null);
       }
-      return json({ isCorrect, correct });
+      return json({ isCorrect, correct, correctText });
     }
 
     return json({ error: "Unknown action" }, 400);
