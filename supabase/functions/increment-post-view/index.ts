@@ -39,12 +39,15 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    // Cada usuário conta no máximo 1 visualização por post.
+    let updated = 0;
     for (const id of ids) {
-      const { error } = await admin.rpc("increment_post_view", { _post_id: id });
-      if (error) console.error("increment_post_view error", id, error.message);
+      const { data, error } = await admin.rpc("increment_post_view_once", { _post_id: id, _user_id: userData.user.id });
+      if (error) console.error("increment_post_view_once error", id, error.message);
+      else if (data === true) updated++;
     }
 
-    return json({ updated: ids.length });
+    return json({ updated });
   } catch (e) {
     console.error("increment-post-view error", e);
     return json({ error: "Internal error" }, 500);
