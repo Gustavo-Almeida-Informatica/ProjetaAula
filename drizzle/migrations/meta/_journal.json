@@ -22,6 +22,13 @@
       "when": 1792106808383,
       "tag": "0002_restrict_score_tables_and_add_leaderboard_rpcs",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792560128926,
+      "tag": "0003_migration",
+      "breakpoints": true
     }
   ]
 }

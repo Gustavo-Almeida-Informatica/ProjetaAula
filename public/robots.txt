@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://projetoaula.lovable.app/sitemap.xml
+Sitemap: https://projetaaula.lovable.app/sitemap.xml

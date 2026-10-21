@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { matchesSearch } from "@/lib/textSearch";
 import ScrollToTop from "@/components/ScrollToTop";
 import { SearchBar } from "@/components/SearchBar";
 import { Seo } from "@/components/Seo";
@@ -973,16 +974,14 @@ export default function Software() {
 
   const filteredPrograms = programs.filter(
     (prog) =>
-      prog.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prog.desc.toLowerCase().includes(searchQuery.toLowerCase())
+      matchesSearch(searchQuery, prog.name, prog.desc)
   );
 
   const filteredContent = (tabContent: ContentSection[] | undefined) => {
     if (!tabContent) return [];
     return tabContent.filter(
       (section) =>
-        section.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        section.desc.toLowerCase().includes(searchQuery.toLowerCase())
+        matchesSearch(searchQuery, section.title, section.desc)
     );
   };
 
@@ -1127,8 +1126,8 @@ export default function Software() {
                   {programCategories
                     .filter((cat) =>
                       !searchQuery ||
-                      cat.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                      cat.programs.some((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                      matchesSearch(searchQuery, cat.label) ||
+                      cat.programs.some((p) => matchesSearch(searchQuery, p.name))
                     )
                     .map((cat) => (
                       <div key={cat.id} className="glass p-4 rounded-xl border border-transparent hover:border-primary/20 transition-all">

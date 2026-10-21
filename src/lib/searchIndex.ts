@@ -3,6 +3,8 @@ import { programs as softwarePrograms, content as softwareContent } from "@/page
 import { timeline as historyTimeline, peripherals as historyPeripherals } from "@/pages/History";
 import { galleryContent } from "@/pages/Gallery";
 import { slugify } from "@/lib/slug";
+import { matchesSearch } from "@/lib/textSearch";
+export { normalizeSearch, matchesSearch } from "@/lib/textSearch";
 
 export type SearchCategory = "Hardware" | "Software" | "História" | "Conectores";
 
@@ -101,6 +103,6 @@ export function searchAll(query: string, limit = 30): SearchItem[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   return searchIndex
-    .filter((it) => it.title.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q))
+    .filter((it) => matchesSearch(q, it.title, it.desc))
     .slice(0, limit);
 }
