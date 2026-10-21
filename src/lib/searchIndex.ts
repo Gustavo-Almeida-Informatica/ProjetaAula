@@ -4,6 +4,16 @@ import { timeline as historyTimeline, peripherals as historyPeripherals } from "
 import { galleryContent } from "@/pages/Gallery";
 import { slugify } from "@/lib/slug";
 
+/** Minúsculas e sem acentos: "Memória" e "memoria" ficam iguais. */
+export function normalizeSearch(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+export function matchesSearch(query: string, ...fields: string[]): boolean {
+  const q = normalizeSearch(query);
+  return !q || fields.some((f) => normalizeSearch(f).includes(q));
+}
+
 export type SearchCategory = "Hardware" | "Software" | "História" | "Conectores";
 
 export interface SearchItem {
@@ -101,6 +111,6 @@ export function searchAll(query: string, limit = 30): SearchItem[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   return searchIndex
-    .filter((it) => it.title.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q))
+    .filter((it) => matchesSearch(q, it.title, it.desc))
     .slice(0, limit);
 }

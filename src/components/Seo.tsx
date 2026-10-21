@@ -7,7 +7,7 @@ interface SeoProps {
   jsonLd?: Record<string, unknown>;
 }
 
-const BASE_URL = "https://projetoaula.lovable.app";
+const BASE_URL = "https://projetaaula.lovable.app";
 
 export function Seo({ title, description, path, jsonLd }: SeoProps) {
   const url = `${BASE_URL}${path}`;

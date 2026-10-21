@@ -273,6 +273,7 @@ export default function Quiz() {
       const idx = q.options.findIndex((o) => norm(o) === norm(data.correctText));
       if (idx >= 0) correctIndex = idx;
     }
+    if (serverCorrect && correctIndex === undefined) correctIndex = optionIndex;
     if (q.dynamic && typeof data.correct === "number") {
       correctIndex = data.correct as number;
     }
