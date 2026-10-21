@@ -3,16 +3,8 @@ import { programs as softwarePrograms, content as softwareContent } from "@/page
 import { timeline as historyTimeline, peripherals as historyPeripherals } from "@/pages/History";
 import { galleryContent } from "@/pages/Gallery";
 import { slugify } from "@/lib/slug";
-
-/** Minúsculas e sem acentos: "Memória" e "memoria" ficam iguais. */
-export function normalizeSearch(s: string): string {
-  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-}
-
-export function matchesSearch(query: string, ...fields: string[]): boolean {
-  const q = normalizeSearch(query);
-  return !q || fields.some((f) => normalizeSearch(f).includes(q));
-}
+import { matchesSearch } from "@/lib/textSearch";
+export { normalizeSearch, matchesSearch } from "@/lib/textSearch";
 
 export type SearchCategory = "Hardware" | "Software" | "História" | "Conectores";
 

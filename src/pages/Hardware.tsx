@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
 import { slugify } from "@/lib/slug";
+import { matchesSearch } from "@/lib/textSearch";
 import { useScrollToItem } from "@/hooks/useScrollToItem";
 
 import cpuImg from "@/assets/hw-cpu.jpg";
@@ -393,8 +394,7 @@ export default function Hardware() {
 
   const filteredTopics = topics.filter(
     (topic) =>
-      topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      topic.desc.toLowerCase().includes(searchQuery.toLowerCase())
+      matchesSearch(searchQuery, topic.title, topic.desc)
   );
 
   return (
