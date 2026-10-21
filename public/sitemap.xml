@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://projetoaula.lovable.app/</loc>
+    <loc>https://projetaaula.lovable.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/login</loc>
+    <loc>https://projetaaula.lovable.app/login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/historia</loc>
+    <loc>https://projetaaula.lovable.app/historia</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/hardware</loc>
+    <loc>https://projetaaula.lovable.app/hardware</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/software</loc>
+    <loc>https://projetaaula.lovable.app/software</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/galeria</loc>
+    <loc>https://projetaaula.lovable.app/galeria</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/quiz</loc>
+    <loc>https://projetaaula.lovable.app/quiz</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/comunidade</loc>
+    <loc>https://projetaaula.lovable.app/comunidade</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/digitacao</loc>
+    <loc>https://projetaaula.lovable.app/digitacao</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/sobre</loc>
+    <loc>https://projetaaula.lovable.app/sobre</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://projetoaula.lovable.app/perfil</loc>
+    <loc>https://projetaaula.lovable.app/perfil</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
