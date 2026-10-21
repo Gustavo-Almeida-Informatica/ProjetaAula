@@ -120,6 +120,24 @@ export type Database = {
           },
         ]
       }
+      post_views: {
+        Row: {
+          post_id: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          post_id: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          post_id?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -308,6 +326,10 @@ export type Database = {
         }[]
       }
       increment_post_view: { Args: { _post_id: string }; Returns: undefined }
+      increment_post_view_once: {
+        Args: { _post_id: string; _user_id: string }
+        Returns: boolean
+      }
       record_quiz_high_score: {
         Args: {
           _score: number
