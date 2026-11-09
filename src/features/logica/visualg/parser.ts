@@ -253,7 +253,7 @@ class Parser {
     const subs = new Map<string, Sub>();
     for (;;) {
       if (this.isKw("var")) { this.next(); continue; }
-      if (this.cur.type === "id") { globals.push(this.parseDecl()); continue; }
+      if ((this.cur as Token).type === "id") { globals.push(this.parseDecl()); continue; }
       if (this.isKw("procedimento") || this.isKw("funcao")) {
         const sub = this.parseSub();
         if (subs.has(sub.name)) throw new VisualgError(sub.line, `Já existe uma sub-rotina chamada "${sub.name}".`);

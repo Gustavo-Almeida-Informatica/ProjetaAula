@@ -255,7 +255,7 @@ export class Interpreter {
               yield* this.assign(t, parsed.value);
               break;
             }
-            error = parsed.error;
+            error = (parsed as { ok: false; error: string }).error;
           }
         }
         return;
@@ -649,7 +649,7 @@ export class VisualgMachine {
     try {
       const r = input === undefined ? this.gen.next("") : this.gen.next(input);
       if (r.done) { this.gen = null; return { status: "done" }; }
-      return { status: "input", request: r.value };
+      return { status: "input", request: r.value as InputRequest };
     } catch (e) {
       this.gen = null;
       if (e instanceof VisualgError) return { status: "error", line: e.line, message: e.message };
