@@ -52,7 +52,6 @@ export function VisualgLab({ code, setCode, instructions }: { code: string; setC
     e.preventDefault();
     const m = mRef.current; if (!m) return;
     const v = typed; setTyped("");
-    m.output += v + "\n";
     handle(m, m.step(v));
   };
 
