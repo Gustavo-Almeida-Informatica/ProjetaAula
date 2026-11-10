@@ -56,6 +56,33 @@ export type Database = {
         }
         Relationships: []
       }
+      logica_progress: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          kind: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          kind: string
+          score?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          kind?: string
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           content: string
